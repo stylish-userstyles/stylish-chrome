@@ -355,7 +355,7 @@ function changePref(event) {
 }
 
 function loadPrefs() {
-	["show-badge"].forEach(function(id) {
+	["show-badge", "smart-indent"].forEach(function(id) {
 		var value = localStorage[id];
 		var el = document.getElementById(id);
 		if (isCheckbox(el)) {
@@ -376,5 +376,6 @@ tE("check-all-updates", "checkAllUpdates");
 tE("add-style-label", "addStyleLabel");
 tE("options-heading", "optionsHeading");
 tE("show-badge-label", "prefShowBadge");
+tE("smart-indent-label", "prefSmartIndent");
 
 document.getElementById("check-all-updates").addEventListener("click", checkUpdateAll, false);
