@@ -18,7 +18,8 @@ function setupCodeMirror(textarea) {
   var cm = CodeMirror.fromTextArea(textarea, {
     mode: 'css',
     lineNumbers: true,
-    lineWrapping: true
+    lineWrapping: true,
+    smartIndent: localStorage["smart-indent"] == "true"
   });
   editors.push(cm);
 }
