@@ -1,11 +1,5 @@
 "use strict";
 
-// var observer = {observeContent: true, observeLoad: false};
-var observer = {
-	observeContent: localStorage["observer.observeFrameContent"] === "true",
-	observeLoad: localStorage["observer.observeFrameLoad"] === "true"
-};
-
 function copyStyles(doc) {
 	var styles = document.querySelectorAll('STYLE.stylish'),
 		head = doc.documentElement;
@@ -104,8 +98,6 @@ var iframeObserver = new MutationObserver(function(mutations) {
 				Array.prototype.forEach.call(styles, function(style) {
 					head.appendChild( doc.importNode(style, true) );
 				});
-
-				if (observer.observeContent) addContentObserver(f);
 			});
 		}
 
@@ -115,62 +107,3 @@ var iframeObserver = new MutationObserver(function(mutations) {
 	}
 });
 iframeObserver.observe(document, {childList: true, subtree: true});
-
-// monitor IFRAME documentElement and its immediate children
-var contentObservers = [];
-function addContentObserver(frame) {
-	var now = new Date(),
-		doc = frame.contentDocument,
-		observer;
-	if (frame.hasAttribute("Eek")) {
-		console.log("%caddContentObserver %s: already observing Eek=%s", "color:purple", now.toTimeString().substr(0,8), frame.getAttribute("Eek"));
-	} else {
-		frame.setAttribute("Eek", contentObservers.length);
-
-		// observer html > * changes
-		observer = new MutationObserver(simpleObserver);
-		contentObservers.push(observer);
-		observer.observe(doc.documentElement, {childList: true, subtree: false});
-
-		// observer html changes
-		observer = new MutationObserver(simpleObserver);
-		contentObservers.push(observer);
-		observer.observe(doc, {childList: true, subtree: false});		
-	}
-}
-
-function simpleObserver(mutations) {
-	var str = "",
-		now = new Date(),
-		added = [],
-		removed = [],
-		doc, head;
-	mutations.forEach(function(mutation) {
-		if ("childList" === mutation.type) {
-			// reporter - added STYLEs aren't of practical interest
-			Array.prototype.forEach.call(mutation.addedNodes, function(node) {
-				console.log('%csimpleObserver %s: added %s id="%s" observer="%s"', "color:purple", now.toTimeString().substr(0,8), node.tagName, node.id, node.ownerDocument.defaultView.frameElement.getAttribute('Eek'));
-			});
-			//
-			Array.prototype.forEach.call(mutation.removedNodes, function(node) {
-					console.log('%csimpleObserver %s: removed %s id="%s" observer="%s"', "color:purple", now.toTimeString().substr(0,8), node.tagName, node.id, node.ownerDocument.defaultView.frameElement.getAttribute('Eek'));
-			});
-		}
-	});
-}
-
-// Monitor IFRAME.onLoad for reloaded IFRAME content (and srcdoc)
-function iframeOnLoad(event) {
-	var doc,
-		now = new Date();
-
-	if ("IFRAME" === event.target.tagName) {
-		try {doc = event.target.contentDocument} catch (e) {return}
-		console.log("%ciframeOnLoad %s: src=%s, documentURI=%s", "color:purple", now.toTimeString().substr(0,8), event.target.src, event.target.contentDocument.documentURI);
-		if (!doc.querySelector(".stylish")) {
-			console.log("%cload %s: copying styles", "color:purple", now.toTimeString().substr(0,8));
-			copyStyles(doc);
-		}
-	}
-}
-if (observer.observeLoad) document.addEventListener("load", iframeOnLoad, true);
