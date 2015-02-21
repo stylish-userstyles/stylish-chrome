@@ -22,9 +22,9 @@
 		{
 			"matches": ["http://*/*", "https://*/*", "file:///*"],
 			"run_at": "document_start",
-			"match_about_blank": true,
+			"match_about_blank": false,
 			"all_frames": true,
-			"js": ["apply.js"]
+			"js": ["apply.js", "observers.js"]
 		},
 		{
 			"matches": ["http://userstyles.org/*", "https://userstyles.org/*"],
