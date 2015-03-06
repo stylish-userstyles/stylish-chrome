@@ -144,7 +144,7 @@ function changePref(event) {
 // Accepts a hash of pref name to default value
 function loadPrefs(prefs) {
 	for (var id in prefs) {
-		var value = this.prefs.getPref(id);
+		var value = this.prefs.getPref(id, prefs[id]);
 		var el = document.getElementById(id);
 		if (isCheckbox(el)) {
 			el.checked = value;
@@ -198,7 +198,7 @@ var prefs = {
 	setPref: function(key, value) {
 		if (!(key in this)) console.warn(this.NO_DEFAULT_PREFERENCE, key);
 		if (value === undefined) localStorage.removeItem(key);
-		else localStorage.setItem(key, JSON.stringify(value));
+		else localStorage.setItem(key, "string" === typeof value ? value : JSON.stringify(value));
 
 		notifyAllTabs({method: "prefChanged", prefName: key, value: value});
 	},
