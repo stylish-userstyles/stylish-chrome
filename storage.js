@@ -144,7 +144,7 @@ function changePref(event) {
 // Accepts a hash of pref name to default value
 function loadPrefs(prefs) {
 	for (var id in prefs) {
-		var value = this.prefs.getPref(id);
+		var value = this.prefs.getPref(id, prefs[id]);
 		var el = document.getElementById(id);
 		if (isCheckbox(el)) {
 			el.checked = value;
