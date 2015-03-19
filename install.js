@@ -134,3 +134,34 @@ function getResource(url, callback) {
 		xhr.send();
 	}
 }
+
+
+if (/https?:\/\/userstyles.org\/styles\/\d+\/edit/.test(document.documentURI)
+//  && prefs.getPref("userstyles.useEditor", false)
+  && window.CodeMirror
+  && document.getElementById("css")) {
+	document.documentElement.appendChild(document.createElement("style"))
+	  .textContent =
+".CodeMirror {\n\
+    font-size: 13.333px;\n\
+    border: thin solid #aaa;\n\
+}\n\
+.CodeMirror.focus {\n\
+  outline: -webkit-focus-ring-color auto 5px !important;\n\
+}\n\
+";
+	var cm = CodeMirror.fromTextArea(document.getElementById("css"), {
+		mode: 'css',
+		lineNumbers: true,
+		lineWrapping: true,
+		foldGutter: true,
+		gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+		smartIndent: true
+	});
+	cm.on("focus", function(cm) {
+		cm.getWrapperElement().classList.add("focus");
+	});
+	cm.on("blur", function(cm) {
+		cm.getWrapperElement().classList.remove("focus");
+	});
+}
