@@ -100,6 +100,7 @@ function initCodeMirror() {
 		matchBrackets: true,
 		lint: CodeMirror.lint.css,
 		keyMap: "sublime",
+		theme: "default",
 		extraKeys: {"Ctrl-Space": "autocomplete"}
 	}
 	mergeOptions(stylishOptions, CM.defaults);
@@ -149,24 +150,63 @@ function initCodeMirror() {
 		keymapControl.appendChild(document.createElement("option")).textContent = map;
 	});
 
+	document.head.insertAdjacentHTML("beforeend", '<link id="cm-theme" rel="stylesheet">');
+	var themeControl = document.getElementById("editor.theme");
+	// show current option temporarily...
+	themeControl.appendChild(document.createElement("option")).textContent = prefs.getPref("editor.theme");
+	// ...until the list is populated to avoid flicker
+	chrome.runtime.getPackageDirectoryEntry(function(rootDir) {
+		rootDir.getDirectory("codemirror/theme", {create: false}, function(themeDir) {
+			themeDir.createReader().readEntries(function(entries) {
+				var selected = themeControl.value;
+				themeControl.firstElementChild.textContent = "default";
+				for (var e in entries) {
+					if (entries[e].isFile) {
+						var theme = entries[e].name.replace(/\.css$/, "");
+						themeControl.appendChild(document.createElement("option")).textContent = theme;
+						if (theme == selected) {
+							themeControl.selectedIndex = themeControl.children.length - 1;
+						}
+					}
+				}
+			});
+		});
+	});
+
 	var controlPrefs = {},
-	    controlOptions = ["smartIndent", "indentWithTabs", "tabSize", "keyMap", "lineWrapping"];
+	    controlOptions = ["smartIndent", "indentWithTabs", "tabSize", "keyMap", "lineWrapping", "theme"];
 	controlOptions.forEach(function(option) {
 		controlPrefs["editor." + option] = CM.defaults[option];
 		tE(option + "-label", "cm_" + option);
 	});
 	loadPrefs(controlPrefs);
-
 }
 initCodeMirror();
 
 function acmeEventListener(event) {
 	var option = event.target.dataset.option;
-	console.log("acmeEventListener heard %s on %s", event.type, event.target.id);
-	if (!option) console.error("acmeEventListener: no 'cm_option' %O", event.target);
-	else CodeMirror.setOption(option, event.target[isCheckbox(event.target) ? "checked" : "value"]);
-
-	if ("tabSize" === option) CodeMirror.setOption("indentUnit", CodeMirror.getOption("tabSize"));
+	//console.log("acmeEventListener heard %s on %s", event.type, event.target.id);
+	if (!option) {
+		console.error("acmeEventListener: no 'cm_option' %O", event.target);
+		return;
+	}
+	var value = event.target.checked || event.target.value;
+	CodeMirror.setOption(option, value);
+	switch (option) {
+		case "tabSize":
+			CodeMirror.setOption("indentUnit", value);
+			break;
+		case "theme":
+			document.getElementById("cm-theme").href = value == "default" ? "" : "codemirror/theme/" + value + ".css";
+			// TODO: find a more precise way of queueing CodeMirror refresh
+			setTimeout(function() {
+				editors.forEach(function(cm) { cm.refresh(); });
+			}, 10);
+			setTimeout(function() {
+				editors.forEach(function(cm) { cm.display.gutters.style.setProperty("left","0"); });
+			}, 20);
+			break;
+	}
 }
 
 // replace given textarea with the CodeMirror editor
