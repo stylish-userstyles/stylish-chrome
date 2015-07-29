@@ -229,7 +229,7 @@
       if (state.options.tooltips != false)
         CodeMirror.on(cm.getWrapperElement(), "mouseover", state.onMouseOver);
 
-      startLinting(cm);
+      state.timeout = setTimeout(function(){startLinting(cm);}, state.options.delay || 500);
     }
   });
 
