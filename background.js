@@ -299,7 +299,8 @@ function saveStyle(o, callback) {
 				}).forEach(function(att) {
 					o[att] = null;
 				});
-				t.executeSql('INSERT INTO styles (name, enabled, url, updateUrl, md5Url, originalMd5) VALUES (?, ?, ?, ?, ?, ?);', [o.name, true, o.url, o.updateUrl, o.md5Url, o.originalMd5]);
+				t.executeSql('INSERT INTO styles (name, enabled, url, updateUrl, md5Url, originalMd5) VALUES (?, ?, ?, ?, ?, ?);',
+					[o.name, !("enabled" in o) || o.enabled == "true" || o.enabled == true, o.url, o.updateUrl, o.md5Url, o.originalMd5]);
 			}
 
 			if ("sections" in o) {
