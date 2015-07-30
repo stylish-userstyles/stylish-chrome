@@ -18,13 +18,17 @@ function showStyles(styles) {
 		document.stylishStyles = styles;
 		return;
 	}
-	styles.sort(function(a, b) { return a.name.localeCompare(b.name)});
+	sortStylesArray(styles);
 	styles.map(createStyleElement).forEach(function(e) {
 		installed.appendChild(e);
 	});
 	if (history.state) {
 		window.scrollTo(0, history.state.scrollY);
 	}
+}
+
+function sortStylesArray(styles) { // sorts the array in-place, also returns it
+	return styles.sort(function(a, b) { return a.name.localeCompare(b.name)});
 }
 
 function createStyleElement(style) {
@@ -171,7 +175,7 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 			handleUpdate(request.style);
 			break;
 		case "styleAdded":
-			installed.appendChild(createStyleElement(request.style));
+			highlight(installed.appendChild(createStyleElement(request.style)));
 			break;
 		case "styleDeleted":
 			handleDelete(request.id);
@@ -186,7 +190,13 @@ function handleUpdate(style) {
 		lastUpdatedStyleId = null;
 		element.className = element.className += " update-done";
 		element.querySelector(".update-note").innerHTML = t('updateCompleted');
-	};
+	}
+	highlight(element);
+}
+
+function highlight(element) {
+	element.classList.add("highlight");
+	element.scrollIntoViewIfNeeded();
 }
 
 function handleDelete(id) {
@@ -470,6 +480,214 @@ function initFilter(className, node) {
 	onFilterChange(className, {target: node});
 }
 
+function importStylesJSON(event) {
+	var oldStyles;
+	showCodeMirrorPopup(t("importJsonTitle"), tHTML("<div>\
+		<button role='import' i18n-text='importLabel'></button>\
+		</div>").innerHTML,
+		{}, function(popup) {
+			var btn = popup.querySelector("[role='import']");
+			btn.parentNode.appendChild(btn, null);
+			btn.addEventListener("click", doImport.bind(null, popup));
+			popup.codebox.on("change", function() {
+				clearTimeout(popup.importTimeout);
+				popup.importTimeout = setTimeout(function() {
+					popup.classList.toggle("ready", trimNewLines(popup.codebox.getValue()));
+				}, 100);
+			});
+		}
+	);
+	chrome.extension.sendMessage({method: "getStyles"}, function(styles) {
+		oldStyles = sortStylesArray(styles);
+	});
+	function trimNewLines(s) {
+		return s.replace(/^[\s\n]+/, "").replace(/[\s\n]+$/, "");
+	}
+	function doImport(popup) {
+		if (!oldStyles) {
+			setTimeout(doImport, 100);
+		}
+		var styles = (function() {
+			try { return sortStylesArray(JSON.parse(popup.codebox.getValue())) }
+			catch(e) {
+				var mark = popup.codebox.state.lint.marked[0];
+				if (mark) {
+					popup.codebox.setCursor(mark.__annotation.from);
+				}
+				alert(e);
+				popup.codebox.focus();
+				return;
+			}
+		})();
+		if (!styles) {
+			return;
+		}
+		// validate
+		var appliesTo = {urls: true, urlPrefixes: true, domains: true, regexps: true};
+		var errors = styles.map(function(style, i) {
+			var errIndex = i + 1;
+			delete style.id;
+			if (typeof style.name != "string" || style.name.trim().length == 0) return errIndex;
+			if (!("sections" in style)) return; // style may have no sections property
+			if (!Array.prototype.isPrototypeOf(style.sections)) return errIndex;
+			if (style.sections.some(function(section) {
+				for (var a in appliesTo) {
+					if (!(a in section)) continue;
+					if (!Array.prototype.isPrototypeOf(section[a])) return true;
+					if (!section[a].every(function(e) { return typeof e == "string" })) return true;
+				}
+				if (!("code" in section)) {
+					section.code = "";
+					return;
+				}
+				return typeof section.code != "string";
+			})) return errIndex;
+		}).filter(function(e) { return e }).join(", ");
+
+		if (errors) {
+			return alert(t("importBadSyntax", [errors]));
+		}
+
+		// find identical styles so we can skip them to speedup import
+		var purgeStyles = {}, changedOrNew = [];
+		oldStyles.forEach(function(style) {
+			(purgeStyles[style.name] = purgeStyles[style.name] || []).push(style);
+		});
+		styles.forEach(function(newStyle) {
+			var styleGroup = purgeStyles[newStyle.name];
+			if (!styleGroup) {
+				changedOrNew.push(newStyle);
+				return;
+			}
+			styleGroup.some(function(oldStyle, index) {
+				for (var k in newStyle) {
+					if (!(k in oldStyle)
+					|| (typeof oldStyle[k] != "object" && oldStyle[k] !== newStyle[k])) {
+						return;
+					}
+				}
+				if (newStyle.sections) {
+					if (codeIsEqual(newStyle.sections, oldStyle.sections)) {
+						styleGroup.splice(index, 1);
+						return true;
+					} else {
+						changedOrNew.push(newStyle);
+					}
+				}
+			});
+		});
+		var purgeIDs = [];
+		Object.keys(purgeStyles).forEach(function(name) {
+			purgeStyles[name].forEach(function(style) { purgeIDs.push(style.id) });
+		});
+
+		if (!changedOrNew.length && !purgeIDs.length) {
+			return alert(t("importNotNeeded"));
+		}
+		if (!confirm(t("importConfirm", [changedOrNew.length, purgeIDs.length]))) {
+			return;
+		}
+		popup.querySelector(".close-icon").click();
+		freezeDocument(true);
+		doDelete();
+
+		function doDelete() {
+			var id = purgeIDs.pop();
+			id ? deleteStyle(id, setTimeout.bind(null, doDelete, 0)) : doAdd();
+		}
+		function doAdd() {
+			var style = changedOrNew.shift();
+			if (!style) {
+				return done();
+			}
+			style.method = "saveStyle";
+			style.enabled = style.enabled === "true";
+			chrome.extension.sendMessage(style, doAdd);
+		}
+		function done() {
+			freezeDocument(false);
+			alert(t("importCompleted")); //TODO: autovanishing notification
+		}
+		function freezeDocument(freeze) {
+			document.body.style.pointerEvents = freeze ? "none" : "";
+			document[freeze ? "addEventListener" : "removeEventListener"]("keydown", cancelEvent);
+		}
+		function cancelEvent(e) { e.preventDefault(); }
+	}
+}
+
+function exportStylesJSON(event) {
+	var styles, popup;
+	showCodeMirrorPopup(t("exportPopupTitle"), "", {readOnly: true}, show);
+	chrome.extension.sendMessage({method: "getStyles"}, show);
+	function show(response) {
+		response.codebox ? popup = response : styles = response;
+		if (!styles || !popup) {
+			return;
+		}
+		sortStylesArray(styles);
+		popup.codebox.setValue(styles.length ? JSON.stringify(styles, null, "\t") : "");
+		popup.codebox.execCommand("selectAll");
+		popup.codebox.focus();
+	}
+}
+
+function showPopup(title, text) {
+	var div = document.getElementById("popup");
+	div.querySelector(".contents").innerHTML = text;
+	div.querySelector(".title").innerHTML = title;
+
+	if (getComputedStyle(div).display == "none") {
+		document.addEventListener("keydown", closeHelp);
+		div.querySelector(".close-icon").onclick = closeHelp; // avoid chaining on multiple showHelp() calls
+	}
+
+	div.style.display = "block";
+	return div;
+
+	function closeHelp(e) {
+		if (e.type == "click" || (e.keyCode == 27 && !e.altKey && !e.ctrlKey && !e.shiftKey && !e.metaKey)) {
+			div.style.display = "";
+			div.querySelector(".contents").innerHTML = "";
+			document.removeEventListener("keydown", closeHelp);
+		}
+	}
+}
+
+function showCodeMirrorPopup(title, html, options, callback) {
+	var popup = showPopup(title, html);
+	popup.style.cssText += "width: 100vw; max-width: calc(100vw - 23rem);";
+
+	if (typeof CodeMirror != "undefined") {
+		initCodeMirror();
+	} else {
+		var queue = [].slice.call(document.getElementById("codemirror-scripts").content.children);
+		(function addResource() {
+			var resource = queue.shift();
+			if (resource) {
+				document.head.appendChild(document.importNode(resource)).onload = addResource;
+			} else {
+				initCodeMirror();
+			}
+		})();
+	}
+
+	function initCodeMirror() {
+		popup.codebox = CodeMirror(popup.querySelector(".contents"), shallowMerge(options, {
+			mode: {name: "javascript", json: true},
+			lineNumbers: true,
+			lineWrapping: true,
+			foldGutter: true,
+			matchBrackets: true,
+			styleActiveLine: true,
+			gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter", "CodeMirror-lint-markers"],
+			lint: {getAnnotations: CodeMirror.lint.json, delay: 0}
+		}));
+		popup.codebox.focus();
+		callback(popup);
+	}
+}
+
 document.addEventListener("DOMContentLoaded", function() {
 	installed = document.getElementById("installed");
 	if (document.stylishStyles) {
@@ -479,6 +697,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	document.getElementById("check-all-updates").addEventListener("click", checkUpdateAll);
 	document.getElementById("apply-all-updates").addEventListener("click", applyUpdateAll);
+	document.getElementById("import").addEventListener("click", importStylesJSON);
+	document.getElementById("export").addEventListener("click", exportStylesJSON);
 	document.getElementById("search").addEventListener("input", searchStyles);
 	searchStyles(true); // re-apply filtering on history Back
 

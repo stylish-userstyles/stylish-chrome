@@ -169,6 +169,10 @@
 		"message": "Export",
 		"description": "Label for the button to export a style ('edit' page) or all styles ('manage' page)"
 	},
+	"exportPopupTitle": {
+		"message": "All installed styles in JSON format",
+		"description": "Title of the popup with exported styles that appears after pressing the Export button"
+	},
 	"findStylesForSite": {
 		"message": "Find more styles for this site.",
 		"description": "Text for a link that gets a list of styles for the current site"
@@ -185,10 +189,6 @@
 		"message": "Type a command name",
 		"description": "Placeholder text of inputbox in keymap help popup on the edit style page. Must be very short"
 	},
-	"importLabel": {
-		"message": "Import",
-		"description": "Label for the button to import a style ('edit' page) or all styles ('manage' page)"
-	},
 	"importAppendLabel": {
 		"message": "Append to style",
 		"description": "Label for the button to import a style and append to the existing sections"
@@ -196,6 +196,43 @@
 	"importAppendTooltip": {
 		"message": "Append the imported style to current style",
 		"description": "Tooltip for the button to import a style and append to the existing sections"
+	},
+	"importBadSyntax": {
+		"message": "Cannot start import because some styles ($styles$) contain errors.",
+		"description": "Import error message",
+		"placeholders": {
+			"styles": {
+				"content": "$1"
+			}
+		}
+	},
+	"importCompleted": {
+		"message": "Import completed",
+		"description": "Message displayed after successful completion of import"
+	},
+	"importConfirm": {
+		"message": "THIS CAN'T BE UNDONE!\n\nNew/changed styles to import: $changedcount$.\nStyles to delete: $deletedcount$.\n\nAre you sure?",
+		"description": "Message in the confirm dialog displayed after pressing the Import button",
+		"placeholders": {
+			"changedcount": {
+				"content": "$1"
+			},
+			"deletedcount": {
+				"content": "$2"
+			}
+		}
+	},
+	"importJsonTitle": {
+		"message": "Paste the styles in JSON format",
+		"description": "Message displayed after pressing the Import button"
+	},
+	"importLabel": {
+		"message": "Import",
+		"description": "Label for the button to import a style ('edit' page) or all styles ('manage' page)"
+	},
+	"importNotNeeded": {
+		"message": "Nothing to import.\n\nNo new/changed styles were detected",
+		"description": "Message displayed after pressing the Import button"
 	},
 	"importReplaceLabel": {
 		"message": "Overwrite style",
