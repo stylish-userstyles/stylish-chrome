@@ -171,17 +171,25 @@ function getStyleElement(event) {
 
 chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 	switch (request.method) {
-		case "styleUpdated":
-			handleUpdate(request.style);
-			break;
-		case "styleAdded":
-			highlight(installed.appendChild(createStyleElement(request.style)));
-			break;
-		case "styleDeleted":
-			handleDelete(request.id);
-			break;
+		case "styleAdded":   handleAdd(request.style); break;
+		case "styleUpdated": handleUpdate(request.style); break;
+		case "styleDeleted": handleDelete(request.id); break;
 	}
 });
+
+function handleAdd(style) {
+	var before;
+	if (installed.lastElementChild
+	&& installed.lastElementChild.querySelector(".style-name").textContent.localeCompare(style.name) > 0) {
+		[].slice.call(installed.children).some(function(element) {
+			if (element.querySelector(".style-name").textContent.localeCompare(style.name) > 0) {
+				before = element;
+				return true;
+			}
+		});
+	}
+	highlight(installed.insertBefore(createStyleElement(style), before));
+}
 
 function handleUpdate(style) {
 	var element = createStyleElement(style);
