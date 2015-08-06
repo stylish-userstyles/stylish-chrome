@@ -1,6 +1,6 @@
 var stylishDb = null;
 function getDatabase(ready, error) {
-	if (stylishDb != null && stylishDb.version == "1.5") {
+	if (stylishDb != null && stylishDb.version == "1.6") {
 		ready(stylishDb);
 		return;
 	}
@@ -20,6 +20,8 @@ function getDatabase(ready, error) {
 		dbV14(stylishDb, error, ready);
 	} else if (stylishDb.version == "1.4") {
 		dbV15(stylishDb, error, ready);
+	} else if (stylishDb.version == "1.5") {
+		dbV16(stylishDb, error, ready);
 	} else {
 		ready(stylishDb);
 	}
@@ -69,7 +71,14 @@ function dbV14(d, error, done) {
 function dbV15(d, error, done) {
 	d.changeVersion(d.version, '1.5', function (t) {
 		t.executeSql('ALTER TABLE styles ADD COLUMN originalMd5 TEXT NULL;');
-	}, error, function() { dbV15(d, error, done)});
+	}, error, function() { dbV16(d, error, done)});
+}
+
+function dbV16(d, error, done) {
+	d.changeVersion(d.version, '1.6', function (t) {
+		t.executeSql('ALTER TABLE styles ADD COLUMN excludes INTEGER NULL;');
+		t.executeSql('ALTER TABLE styles ADD COLUMN excludesList TEXT NULL;');
+	}, error, function() { done(d); });
 }
 
 function enableStyle(id, enabled) {

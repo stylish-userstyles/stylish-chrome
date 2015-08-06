@@ -30,12 +30,21 @@ chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
 			break;
 		case "styleUpdated":
 			if (request.style.enabled == "true") {
-				retireStyle(request.style.id);
-				// fallthrough to "styleAdded"
+				var id = request.style.id;
+				chrome.extension.sendMessage({
+					method: "getStyles", matchUrl: location.href, id: id, asHash: true, excluded: true
+				}, function(styleHash) {
+					if (styleHash.excluded) {
+						removeStyle(id, document);
+					} else {
+						retireStyle(id);
+						applyStyles(styleHash);
+					}
+				});
 			} else {
 				removeStyle(request.style.id, document);
-				break;
 			}
+			break;
 		case "styleAdded":
 			if (request.style.enabled == "true") {
 				chrome.extension.sendMessage({method: "getStyles", matchUrl: location.href, enabled: true, id: request.style.id, asHash: true}, applyStyles);

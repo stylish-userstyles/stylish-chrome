@@ -111,6 +111,7 @@ function getStyles(options, callback) {
 	var matchUrl = "matchUrl" in options ? options.matchUrl : null;
 	// Return as a hash from style to applicable sections? Can only be used with matchUrl.
 	var asHash = "asHash" in options ? options.asHash : false;
+	var excluded = options.excluded;
 
 	var callCallback = function() {
 		var styles = asHash ? {disableAll: prefs.getPref("disableAll", false)} : [];
@@ -125,6 +126,17 @@ function getStyles(options, callback) {
 				return;
 			}
 			if (matchUrl != null) {
+				if (fixBoolean(style.exclusions) && style.exclusionsRegExp.length) {
+					for (var exList = style.exclusionsRegExp, ex = exList.length - 1; ex >= 0; ex--) {
+						if (exList[ex].test(matchUrl)) {
+							if (excluded) {
+								(asHash ? styles : style).excluded = true;
+								break;
+							}
+							return;
+						}
+					}
+				}
 				var applicableSections = getApplicableSections(style, matchUrl);
 				if (applicableSections.length > 0) {
 					if (asHash) {
@@ -177,7 +189,19 @@ function getStyles(options, callback) {
 					}
 					var metaValue = values.metaValue;
 					if (currentStyle == null || currentStyle.id != values.id) {
-						currentStyle = {id: values.id, url: values.url, updateUrl: values.updateUrl, md5Url: values.md5Url, name: values.name, enabled: values.enabled, originalMd5: values.originalMd5, sections: []};
+						currentStyle = {
+							id: values.id,
+							url: values.url,
+							updateUrl: values.updateUrl,
+							md5Url: values.md5Url,
+							name: values.name,
+							enabled: values.enabled,
+							originalMd5: values.originalMd5,
+							sections: [],
+							exclusions: values.exclusions,
+							exclusionsList: values.exclusionsList,
+							exclusionsRegExp: parseExclusions(values.exclusionsList)
+						};
 						cachedStyles.push(currentStyle);
 					}
 					if (values.section_id != null) {
@@ -205,6 +229,36 @@ function fixBoolean(b) {
 		return b != "false";
 	}
 	return null;
+}
+
+var domainPattern = /^[^-][\w.-]{0,61}[^-]$/;
+var urlPrefixPattern = /^(https?|file|ftps?|chrome-extension):\/\/.*?\*.*?$/;
+var regexpPattern = /^\/(.+?)\/(i?)$/;
+function parseExclusions(text) {
+	if (!text || !text.trim()) {
+		return [];
+	}
+	var exclusions = [];
+	var lines = text.split("\n");
+	for (var L = lines.length - 1; L >= 0; L--) {
+		var line = lines[L].trim();
+		if (regexpPattern.test(line)) {
+			runTryCatch((function() {
+				var m = regexpPattern.exec(line);
+				exclusions.push(new RegExp(m[1], m[2]));
+			})());
+		} else if (domainPattern.test(line)) {
+			exclusions.push(new RegExp("://([^/]*?\.)?" + stringForRegExp(line.toLowerCase()) + "($|/)"));
+		} else if (urlPrefixPattern.test(line)) {
+			exclusions.push(new RegExp("^" + stringForRegExp(line.slice(0,-1)).replace(/\\\*/g, ".*?")));
+		} else {
+			exclusions.push(new RegExp("^" + stringForRegExp(line) + "$"));
+		}
+	}
+	return exclusions;
+	function stringForRegExp(s, flags) {
+		return s.replace(/[{}()\[\]\/\\.+?^$:=*!|]/g, "\\$&");
+	}
 }
 
 var namespacePattern = /^\s*(@namespace[^;]+;\s*)+$/;
@@ -273,28 +327,16 @@ function saveStyle(o, callback) {
 		db.transaction(function(t) {
 			if (o.id) {
 				// update whatever's been passed
-				if ("name" in o) {
-					t.executeSql('UPDATE styles SET name = ? WHERE id = ?;', [o.name, o.id]);
-				}
-				if ("enabled" in o) {
-					t.executeSql('UPDATE styles SET enabled = ? WHERE id = ?;', [o.enabled, o.id]);
-				}
-				if ("url" in o) {
-					t.executeSql('UPDATE styles SET url = ? WHERE id = ?;', [o.url, o.id]);
-				}
-				if ("updateUrl" in o) {
-					t.executeSql('UPDATE styles SET updateUrl = ? WHERE id = ?;', [o.updateUrl, o.id]);
-				}
-				if ("md5Url" in o) {
-					t.executeSql('UPDATE styles SET md5Url = ? WHERE id = ?;', [o.md5Url, o.id]);
-				}
-				if ("originalMd5" in o) {
-					t.executeSql('UPDATE styles SET originalMd5 = ? WHERE id = ?;', [o.originalMd5, o.id]);
-				}
+				["name", "enabled", "url", "updateUrl", "md5Url", "originalMd5", "exclusions", "exclusionsList"]
+					.forEach(function(prop) {
+						if (prop in o) {
+							t.executeSql('UPDATE styles SET ' + prop + ' = ? WHERE id = ?;', [o[prop], o.id]);
+						}
+					});
 			} else {
 				// create a new record
 				// set optional things to null if they're undefined
-				["updateUrl", "md5Url", "url", "originalMd5"].filter(function(att) {
+				["updateUrl", "md5Url", "url", "originalMd5", "exclusions", "exclusionsList"].filter(function(att) {
 					return !(att in o);
 				}).forEach(function(att) {
 					o[att] = null;

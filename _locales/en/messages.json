@@ -325,6 +325,18 @@
 		"message": "Enabled",
 		"description": "Label for the enabled state of styles"
 	},
+	"styleExclusionsTitle": {
+		"message": "Locally excluded sites",
+		"description": "Title of the excluded sites section on the edit style page, shown when \"[x] Don't apply on specified sites\" is enabled"
+	},
+	"styleExclusionsLabel": {
+		"message": "Don't apply on specified sites",
+		"description": "Label for the checkbox that enables specified sites to be excluded from having the style applied"
+	},
+	"styleExclusionsSyntax": {
+		"message": "Enter one site per line using this syntax for URL, URL prefix, domain, regexp:",
+		"description": "Label for the textbox with sites to be excluded from having the style applied. "
+	},
 	"styleInstall": {
 		"message": "Install '$stylename$' into Stylish?",
 		"description": "Confirmation when installing a style",

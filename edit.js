@@ -104,7 +104,7 @@ function isCleanGlobal() {
 }
 
 function setCleanGlobal() {
-	document.querySelectorAll("#header, #sections > div").forEach(setCleanSection);
+	document.querySelectorAll("#header, #sections, #exclusions-section").forEach(setCleanSection);
 	dirty = {}; // forget the dirty applies-to ids from a deleted section after the style was saved
 }
 
@@ -1037,6 +1037,7 @@ function init() {
 	var params = getParams();
 	if (!params.id) { // match should be 2 - one for the whole thing, one for the parentheses
 		// This is an add
+		initHooks();
 		var section = {code: ""}
 		for (var i in CssToProperty) {
 			if (params[i]) {
@@ -1047,7 +1048,6 @@ function init() {
 		// default to enabled
 		document.getElementById("enabled").checked = true
 		tE("heading", "addStyleTitle");
-		initHooks();
 		return;
 	}
 	// This is an edit
@@ -1067,9 +1067,17 @@ function init() {
 }
 
 function initWithStyle(style) {
+	initHooks();
 	document.getElementById("name").value = style.name;
 	document.getElementById("enabled").checked = style.enabled == "true";
 	document.getElementById("url").href = style.url;
+
+	document.getElementById("exclusions").checked = style.exclusions == "true";
+	document.getElementById("exclusions-section").classList.toggle("hidden", style.exclusions != "true");
+	var exList = document.getElementById("exclusions-list");
+	exList.value = style.exclusionsList || "";
+	exList.rows = style.exclusionsList ? style.exclusionsList.split("\n").length : 5;
+
 	// if this was done in response to an update, we need to clear existing sections
 	getSections().forEach(function(div) { div.remove(); });
 	var queue = style.sections.length ? style.sections : [{code: ""}];
@@ -1084,7 +1092,6 @@ function initWithStyle(style) {
 			setTimeout(processQueue, 0);
 		}
 	})();
-	initHooks();
 
 	function add() {
 		var sectionDiv = addSection(null, queue.shift());
@@ -1094,7 +1101,7 @@ function initWithStyle(style) {
 }
 
 function initHooks() {
-	document.querySelectorAll("#header .style-contributor").forEach(function(node) {
+	document.querySelectorAll(".style-contributor").forEach(function(node) {
 		node.addEventListener("change", onChange);
 		node.addEventListener("input", onChange);
 	});
@@ -1103,12 +1110,22 @@ function initHooks() {
 	document.getElementById("from-mozilla").addEventListener("click", fromMozillaFormat);
 	document.getElementById("beautify").addEventListener("click", beautify);
 	document.getElementById("save-button").addEventListener("click", save, false);
+	document.getElementById("exclusions-help").addEventListener("click", showExclusionsHelp);
 	document.getElementById("sections-help").addEventListener("click", showSectionHelp, false);
 	document.getElementById("keyMap-help").addEventListener("click", showKeyMapHelp, false);
 	document.getElementById("cancel-button").addEventListener("click", goBackToManage);
 	document.getElementById("lint-help").addEventListener("click", showLintHelp);
 	document.getElementById("lint").addEventListener("click", gotoLintIssue);
 	window.addEventListener("resize", resizeLintReport);
+
+	document.getElementById("exclusions").addEventListener("change", function() {
+		document.getElementById("exclusions-section").classList.toggle("hidden", !this.checked);
+	});
+	document.getElementById("exclusions-list").addEventListener("input", function() {
+		this.rows = this.value.trim() ? this.value.split("\n").length : 5;
+	});
+	var exclSyntax = "https://www.google.com/webhp\nhttps://google.com/mail/*\ngoogle.com\n/google\\.\\w{2,3}(.\\w{2,3})?\\/.*\\/inbox.*/";
+	document.getElementById("exclusions-list").placeholder += "\n" + exclSyntax;
 
 	setupGlobalSearch();
 	setCleanGlobal();
@@ -1213,13 +1230,13 @@ function save() {
 		alert(error);
 		return;
 	}
-	var name = document.getElementById("name").value;
-	var enabled = document.getElementById("enabled").checked;
 	var request = {
 		method: "saveStyle",
 		id: styleId,
-		name: name,
-		enabled: enabled,
+		name: document.getElementById("name").value,
+		enabled: document.getElementById("enabled").checked,
+		exclusions: document.getElementById("exclusions").checked,
+		exclusionsList: document.getElementById("exclusions-list").value.trim(),
 		sections: getSectionsHashes()
 	};
 	chrome.extension.sendMessage(request, saveComplete);
@@ -1426,6 +1443,11 @@ function fromMozillaFormat() {
 			: section.code || addendum;
 		return section.code;
 	}
+}
+
+function showExclusionsHelp() {
+	showHelp(t("styleExclusionsTitle"),
+		document.getElementById("exclusions-list").placeholder.replace(/\n/g, "<br>"));
 }
 
 function showSectionHelp() {
