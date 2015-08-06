@@ -336,10 +336,10 @@ function saveStyle(o, callback) {
 			} else {
 				// create a new record
 				// set optional things to null if they're undefined
-				["updateUrl", "md5Url", "url", "originalMd5", "exclusions", "exclusionsList"].filter(function(att) {
-					return !(att in o);
-				}).forEach(function(att) {
-					o[att] = null;
+				["updateUrl", "md5Url", "url", "originalMd5", "exclusions", "exclusionsList"].forEach(function(att) {
+					if (!(att in o)) {
+						o[att] = null;
+					}
 				});
 				t.executeSql('INSERT INTO styles (name, enabled, url, updateUrl, md5Url, originalMd5) VALUES (?, ?, ?, ?, ?, ?);', [o.name, true, o.url, o.updateUrl, o.md5Url, o.originalMd5]);
 			}
@@ -357,26 +357,17 @@ function saveStyle(o, callback) {
 					} else {
 						t.executeSql('INSERT INTO sections (style_id, code) SELECT id, ? FROM styles ORDER BY id DESC LIMIT 1;', [section.code]);
 					}
-					if (section.urls) {
-						section.urls.forEach(function(u) {
-							t.executeSql("INSERT INTO section_meta (section_id, name, value) SELECT id, 'url', ? FROM sections ORDER BY id DESC LIMIT 1;", [u]);
-						});
-					}
-					if (section.urlPrefixes) {
-						section.urlPrefixes.forEach(function(u) {
-							t.executeSql("INSERT INTO section_meta (section_id, name, value) SELECT id, 'url-prefix', ? FROM sections ORDER BY id DESC LIMIT 1;", [u]);
-						});
-					}
-					if (section.domains) {
-						section.domains.forEach(function(u) {
-							t.executeSql("INSERT INTO section_meta (section_id, name, value) SELECT id, 'domain', ? FROM sections ORDER BY id DESC LIMIT 1;", [u]);
-						});
-					}
-					if (section.regexps) {
-						section.regexps.forEach(function(u) {
-							t.executeSql("INSERT INTO section_meta (section_id, name, value) SELECT id, 'regexp', ? FROM sections ORDER BY id DESC LIMIT 1;", [u]);
-						});
-					}
+					var propertyToCss = {urls: "url", urlPrefixes: "url-prefix", domains: "domain", regexps: "regexp"};
+					Object.keys(propertyToCss).forEach(function(prop) {
+						if (prop in section) {
+							section[prop].forEach(function(u) {
+								t.executeSql(
+									"INSERT INTO section_meta (section_id, name, value) SELECT id, '" +
+									propertyToCss[prop] + "', ? FROM sections ORDER BY id DESC LIMIT 1;", [u]
+								);
+							});
+						}
+					});
 				});
 			}
 		}, reportError, function() {saveFromJSONComplete(o.id, callback)});
