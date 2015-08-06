@@ -23,7 +23,7 @@ CodeMirror.registerHelper("lint", "json", function(text) {
                 to: CodeMirror.Pos(loc.last_line - 1, loc.last_column),
                 message: str});
   };
-  try { jsonlint.parse(text); }
+  try { jsonlint.parse(text || "[]"); } // Stylish hack to allow empty input
   catch(e) {}
   return found;
 });
