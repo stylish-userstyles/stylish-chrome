@@ -111,6 +111,7 @@ function getStyles(options, callback) {
 	var matchUrl = "matchUrl" in options ? options.matchUrl : null;
 	// Return as a hash from style to applicable sections? Can only be used with matchUrl.
 	var asHash = "asHash" in options ? options.asHash : false;
+	var excluded = options.excluded;
 
 	var callCallback = function() {
 		var styles = asHash ? {disableAll: prefs.getPref("disableAll", false)} : [];
@@ -125,6 +126,17 @@ function getStyles(options, callback) {
 				return;
 			}
 			if (matchUrl != null) {
+				if (fixBoolean(style.exclusions) && style.exclusionsRegExp.length) {
+					for (var exList = style.exclusionsRegExp, ex = exList.length - 1; ex >= 0; ex--) {
+						if (exList[ex].test(matchUrl)) {
+							if (excluded) {
+								(asHash ? styles : style).excluded = true;
+								break;
+							}
+							return;
+						}
+					}
+				}
 				var applicableSections = getApplicableSections(style, matchUrl);
 				if (applicableSections.length > 0) {
 					if (asHash) {
@@ -177,7 +189,19 @@ function getStyles(options, callback) {
 					}
 					var metaValue = values.metaValue;
 					if (currentStyle == null || currentStyle.id != values.id) {
-						currentStyle = {id: values.id, url: values.url, updateUrl: values.updateUrl, md5Url: values.md5Url, name: values.name, enabled: values.enabled, originalMd5: values.originalMd5, sections: []};
+						currentStyle = {
+							id: values.id,
+							url: values.url,
+							updateUrl: values.updateUrl,
+							md5Url: values.md5Url,
+							name: values.name,
+							enabled: values.enabled,
+							originalMd5: values.originalMd5,
+							sections: [],
+							exclusions: values.exclusions,
+							exclusionsList: values.exclusionsList,
+							exclusionsRegExp: parseExclusions(values.exclusionsList)
+						};
 						cachedStyles.push(currentStyle);
 					}
 					if (values.section_id != null) {
@@ -205,6 +229,36 @@ function fixBoolean(b) {
 		return b != "false";
 	}
 	return null;
+}
+
+var domainPattern = /^[^-][\w.-]{0,61}[^-]$/;
+var urlPrefixPattern = /^(https?|file|ftps?|chrome-extension):\/\/.*?\*.*?$/;
+var regexpPattern = /^\/(.+?)\/(i?)$/;
+function parseExclusions(text) {
+	if (!text || !text.trim()) {
+		return [];
+	}
+	var exclusions = [];
+	var lines = text.split("\n");
+	for (var L = lines.length - 1; L >= 0; L--) {
+		var line = lines[L].trim();
+		if (regexpPattern.test(line)) {
+			runTryCatch((function() {
+				var m = regexpPattern.exec(line);
+				exclusions.push(new RegExp(m[1], m[2]));
+			})());
+		} else if (domainPattern.test(line)) {
+			exclusions.push(new RegExp("://([^/]*?\.)?" + stringForRegExp(line.toLowerCase()) + "($|/)"));
+		} else if (urlPrefixPattern.test(line)) {
+			exclusions.push(new RegExp("^" + stringForRegExp(line.slice(0,-1)).replace(/\\\*/g, ".*?")));
+		} else {
+			exclusions.push(new RegExp("^" + stringForRegExp(line) + "$"));
+		}
+	}
+	return exclusions;
+	function stringForRegExp(s, flags) {
+		return s.replace(/[{}()\[\]\/\\.+?^$:=*!|]/g, "\\$&");
+	}
 }
 
 var namespacePattern = /^\s*(@namespace[^;]+;\s*)+$/;
@@ -273,31 +327,19 @@ function saveStyle(o, callback) {
 		db.transaction(function(t) {
 			if (o.id) {
 				// update whatever's been passed
-				if ("name" in o) {
-					t.executeSql('UPDATE styles SET name = ? WHERE id = ?;', [o.name, o.id]);
-				}
-				if ("enabled" in o) {
-					t.executeSql('UPDATE styles SET enabled = ? WHERE id = ?;', [o.enabled, o.id]);
-				}
-				if ("url" in o) {
-					t.executeSql('UPDATE styles SET url = ? WHERE id = ?;', [o.url, o.id]);
-				}
-				if ("updateUrl" in o) {
-					t.executeSql('UPDATE styles SET updateUrl = ? WHERE id = ?;', [o.updateUrl, o.id]);
-				}
-				if ("md5Url" in o) {
-					t.executeSql('UPDATE styles SET md5Url = ? WHERE id = ?;', [o.md5Url, o.id]);
-				}
-				if ("originalMd5" in o) {
-					t.executeSql('UPDATE styles SET originalMd5 = ? WHERE id = ?;', [o.originalMd5, o.id]);
-				}
+				["name", "enabled", "url", "updateUrl", "md5Url", "originalMd5", "exclusions", "exclusionsList"]
+					.forEach(function(prop) {
+						if (prop in o) {
+							t.executeSql('UPDATE styles SET ' + prop + ' = ? WHERE id = ?;', [o[prop], o.id]);
+						}
+					});
 			} else {
 				// create a new record
 				// set optional things to null if they're undefined
-				["updateUrl", "md5Url", "url", "originalMd5"].filter(function(att) {
-					return !(att in o);
-				}).forEach(function(att) {
-					o[att] = null;
+				["updateUrl", "md5Url", "url", "originalMd5", "exclusions", "exclusionsList"].forEach(function(att) {
+					if (!(att in o)) {
+						o[att] = null;
+					}
 				});
 				t.executeSql('INSERT INTO styles (name, enabled, url, updateUrl, md5Url, originalMd5) VALUES (?, ?, ?, ?, ?, ?);', [o.name, true, o.url, o.updateUrl, o.md5Url, o.originalMd5]);
 			}
@@ -315,26 +357,17 @@ function saveStyle(o, callback) {
 					} else {
 						t.executeSql('INSERT INTO sections (style_id, code) SELECT id, ? FROM styles ORDER BY id DESC LIMIT 1;', [section.code]);
 					}
-					if (section.urls) {
-						section.urls.forEach(function(u) {
-							t.executeSql("INSERT INTO section_meta (section_id, name, value) SELECT id, 'url', ? FROM sections ORDER BY id DESC LIMIT 1;", [u]);
-						});
-					}
-					if (section.urlPrefixes) {
-						section.urlPrefixes.forEach(function(u) {
-							t.executeSql("INSERT INTO section_meta (section_id, name, value) SELECT id, 'url-prefix', ? FROM sections ORDER BY id DESC LIMIT 1;", [u]);
-						});
-					}
-					if (section.domains) {
-						section.domains.forEach(function(u) {
-							t.executeSql("INSERT INTO section_meta (section_id, name, value) SELECT id, 'domain', ? FROM sections ORDER BY id DESC LIMIT 1;", [u]);
-						});
-					}
-					if (section.regexps) {
-						section.regexps.forEach(function(u) {
-							t.executeSql("INSERT INTO section_meta (section_id, name, value) SELECT id, 'regexp', ? FROM sections ORDER BY id DESC LIMIT 1;", [u]);
-						});
-					}
+					var propertyToCss = {urls: "url", urlPrefixes: "url-prefix", domains: "domain", regexps: "regexp"};
+					Object.keys(propertyToCss).forEach(function(prop) {
+						if (prop in section) {
+							section[prop].forEach(function(u) {
+								t.executeSql(
+									"INSERT INTO section_meta (section_id, name, value) SELECT id, '" +
+									propertyToCss[prop] + "', ? FROM sections ORDER BY id DESC LIMIT 1;", [u]
+								);
+							});
+						}
+					});
 				});
 			}
 		}, reportError, function() {saveFromJSONComplete(o.id, callback)});

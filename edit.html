@@ -36,7 +36,9 @@
 		<script src="codemirror/keymap/vim.js"></script>
 
 		<style type="text/css">
-
+			.hidden {
+				display: none;
+			}
 			body {
 				margin: 0;
 				font: 9pt arial,sans-serif;
@@ -54,11 +56,12 @@
 			#header h1 {
 				margin-top: 0;
 			}
-			#sections {
+			body > section {
 				padding-left: 18rem;
 			}
 			#sections h2 {
-				margin-top: 0.5rem;
+				margin-top: 1rem;
+				margin-bottom: 0;
 			}
 			.aligned {
 				display: table-row;
@@ -93,7 +96,7 @@
 			#url:not([href^="http"]) {
 				display: none;
 			}
-			#enabled {
+			#enabled, #exclusions {
 				margin-left: 0;
 				vertical-align: middle;
 			}
@@ -138,6 +141,15 @@
 				counter-increment: codebox;
 				content: counter(codebox);
 				margin-left: 0.25rem;
+			}
+			/* exclusions */
+			#exclusions-section {
+				margin: 0.25rem 0 2rem;
+			}
+			#exclusions-list {
+				width: calc(100% - 0.7rem*2 - 2rem);
+				max-width: calc(100% - 0.7rem*2 - 2rem);
+				margin: 0.5rem 0 0 1.7rem;
 			}
 			/* code */
 			.code {
@@ -539,6 +551,10 @@
 					<input type="checkbox" id="enabled" class="style-contributor">
 					<label for="enabled" id="enabled-label" i18n-text="styleEnabledLabel"></label>
 				</div>
+				<div id="basic-info-exclusions">
+					<input type="checkbox" id="exclusions" class="style-contributor">
+					<label for="exclusions" id="exclusions-label" i18n-text="styleExclusionsLabel"></label>
+				</div>
 			</section>
 			<section id="actions">
 				<div>
@@ -582,6 +598,10 @@
 			</section>
 			<section id="lint"><h2 i18n-text="issues"><img id="lint-help" src="help.png" i18n-alt="helpAlt"></h2><div></div></section>
 		</div>
+		<section id="exclusions-section" class="hidden">
+			<h2 id="exclusions-heading" i18n-text="styleExclusionsTitle"><img id="exclusions-help" src="help.png" i18n-alt="helpAlt"></h2>
+			<textarea id="exclusions-list" class="style-contributor" i18n-placeholder="styleExclusionsSyntax" spellcheck="false"></textarea>
+		</section>
 		<section id="sections">
 			<h2><span id="sections-heading" i18n-text="styleSectionsTitle"></span><img id="sections-help" src="help.png" i18n-alt="helpAlt"></h2>
 		</section>

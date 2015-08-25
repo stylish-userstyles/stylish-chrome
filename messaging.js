@@ -1,8 +1,11 @@
+var frameIdMessageable;
+
 function notifyAllTabs(request) {
+	frameIdMessageable = frameIdMessageable || chrome.extension.getBackgroundPage().frameIdMessageable;
 	chrome.windows.getAll({populate: true}, function(windows) {
 		windows.forEach(function(win) {
 			win.tabs.forEach(function(tab) {
-				chrome.tabs.sendMessage(tab.id, request);
+				chrome.tabs.sendMessage(tab.id, request, frameIdMessageable ? {frameId: 0} : undefined);
 				updateIcon(tab);
 			});
 		});
@@ -53,7 +56,7 @@ function updateIcon(tab, styles) {
 		chrome.browserAction.setIcon({
 			path: {19: "19" + postfix + ".png", 38: "38" + postfix + ".png"},
 			tabId: tab.id
-		});
+		}, function() { var clearError = chrome.runtime.lastError });
 		var t = prefs.getPref("show-badge") && styles.length ? ("" + styles.length) : "";
 		chrome.browserAction.setBadgeText({text: t, tabId: tab.id});
 		chrome.browserAction.setBadgeBackgroundColor({color: disableAll ? "#aaa" : [0, 0, 0, 0]});
