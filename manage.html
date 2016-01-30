@@ -99,6 +99,82 @@
 				display: none;
 			}
 			.hidden {display: none}
+			/* Import/export */
+			#popup {
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				width: 50%;
+				height: 50%;
+				min-width: 10rem;
+				min-height: 10rem;
+				position: fixed;
+				display: none;
+				background-color: white;
+				box-shadow: 3px 3px 30px rgba(0, 0, 0, 0.5);
+				padding: 0.5rem;
+				margin: auto;
+				z-index: 9999;
+			}
+			#popup .title {
+				font-weight: bold;
+				background-color: rgba(0,0,0,0.05);
+				margin: -0.5rem -0.5rem 0.5rem;
+				padding: 0.5rem;
+			}
+			#popup .contents {
+				overflow-y: auto;
+			}
+			#popup .close-icon {
+				cursor: pointer;
+				width: 8px;
+				height: 8px;
+				border: 8px solid transparent;
+				position: absolute;
+				right: 4px;
+				top: 4px;
+				background: linear-gradient(-45deg, transparent 5px, black 5px, black 6px, transparent 6.5px) no-repeat, linear-gradient(45deg, transparent 5px, black 5px, black 6px, transparent 6.5px) no-repeat;
+			}
+			#popup button {
+				line-height: 1.5rem;
+				padding: 0 1rem;
+			}
+			#popup button[role="import"] {
+				line-height: 1.5rem;
+				padding: 0 0.5rem;
+				margin: 0.5rem 0 0 0.5rem;
+				pointer-events: none;
+				opacity: 0.5;
+				float: right;
+			}
+			#popup.ready button[role="import"] {
+				pointer-events: all;
+				opacity: 1.0;
+			}
+			#popup .CodeMirror {
+				border: 1px solid lightgray;
+				height: calc(100% - 4rem - 4px);
+			}
+			#popup .CodeMirror:only-child {
+				height: calc(100% - 2rem);
+			}
+			#popup .CodeMirror-focused {
+				outline: -webkit-focus-ring-color auto 5px;
+				outline-offset: -2px;
+			}
+			/* highlight updated/added styles */
+			.highlight {
+				-webkit-animation: highlight 3s ease-out;
+			}
+			@-webkit-keyframes highlight {
+				from {
+					background-color: #ff9;
+				}
+				to {
+					background-color: none;
+				}
+			}
 
 			@media(max-width:675px) {
 				#header {
@@ -175,6 +251,10 @@
 				<span id="update-all-no-updates" class="hidden" i18n-text="updateAllCheckSucceededNoUpdate"></span>
 			</p>
 			<p><a href="edit.html"><button id="add-style-label" i18n-text="addStyleLabel"></button></a></p>
+			<p>
+				<button id="import" i18n-text="importLabel"></button>
+				<button id="export" i18n-text="exportLabel"></button>
+			</p>
 			<div id="options">
 				<h2 id="options-heading" i18n-text="optionsHeading"></h2>
 				<input id="show-badge" type="checkbox"><label id="show-badge-label" for="show-badge" i18n-text="prefShowBadge"></label>
@@ -182,5 +262,35 @@
 			</div>
 		</div>
 		<div id="installed"></div>
+		<div id="popup">
+			<div class="title"></div><div class="close-icon"></div>
+			<div class="contents"></div>
+		</div>
+		<template id="codemirror-scripts">
+			<script src="codemirror/lib/codemirror.js"></script>
+			<link rel="stylesheet" href="codemirror/lib/codemirror.css">
+			<script src="codemirror/mode/javascript/javascript.js"></script>
+
+			<link rel="stylesheet" href="codemirror/addon/dialog/dialog.css">
+			<link rel="stylesheet" href="codemirror/addon/search/matchesonscrollbar.css">
+			<script src="codemirror/addon/scroll/annotatescrollbar.js"></script>
+			<script src="codemirror/addon/search/matchesonscrollbar.js"></script>
+			<script src="codemirror/addon/dialog/dialog.js"></script>
+			<script src="codemirror/addon/search/searchcursor.js"></script>
+			<script src="codemirror/addon/search/search.js"></script>
+			<script src="codemirror/addon/comment/comment.js"></script>
+			<script src="codemirror/addon/selection/active-line.js"></script>
+
+			<link rel="stylesheet" href="codemirror/addon/fold/foldgutter.css" />
+			<script src="codemirror/addon/fold/foldcode.js"></script>
+			<script src="codemirror/addon/fold/foldgutter.js"></script>
+			<script src="codemirror/addon/fold/brace-fold.js"></script>
+			<script src="codemirror/addon/edit/matchbrackets.js"></script>
+
+			<link rel="stylesheet" href="codemirror/addon/lint/lint.css" />
+			<script src="jsonlint/jsonlint.js"></script>
+			<script src="codemirror/addon/lint/lint.js"></script>
+			<script src="codemirror/addon/lint/json-lint.js"></script>
+		</template>
 	</body>
 </html>

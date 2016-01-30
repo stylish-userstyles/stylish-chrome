@@ -86,7 +86,7 @@ function enableStyle(id, enabled) {
 	});
 }
 
-function deleteStyle(id) {
+function deleteStyle(id, callback) {
 	getDatabase(function(db) {
 		db.transaction(function (t) {
 			t.executeSql('DELETE FROM section_meta WHERE section_id IN (SELECT id FROM sections WHERE style_id = ?);', [id]);
@@ -94,8 +94,10 @@ function deleteStyle(id) {
 			t.executeSql("DELETE FROM styles WHERE id = ?;", [id]);
 		}, reportError, function() {
 			chrome.extension.sendMessage({method: "styleChanged"});
-			handleDelete(id);
 			notifyAllTabs({method: "styleDeleted", id: id});
+			if (callback) {
+				callback();
+			}
 		});
 	});
 }
