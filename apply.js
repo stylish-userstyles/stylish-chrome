@@ -59,7 +59,7 @@ function disableAll(disable) {
 	}
 	g_disableAll = disable;
 	if (g_disableAll) {
-		iframeObserver.disconnect();
+		iframeObserver.stop();
 	}
 
 	disableSheets(g_disableAll, document);
@@ -91,7 +91,7 @@ function removeStyle(id, doc) {
 		e.remove();
 	}
 	if (doc == document && Object.keys(g_styleElements).length == 0) {
-		iframeObserver.disconnect();
+		iframeObserver.stop();
 	}
 	getDynamicIFrames(doc).forEach(function(iframe) {
 		removeStyle(id, iframe.contentDocument);
@@ -273,15 +273,23 @@ function initObserver() {
 		// namely gmail's old chat iframe talkgadget.google.com
 		setTimeout(process.bind(null, mutations), 0);
 	});
+	var observeOptions = {childList: true, subtree: true};
 
 	function process(mutations) {
 		for (var m = 0, ml = mutations.length; m < ml; m++) {
 			var mutation = mutations[m];
-			if (mutation.type === "childList") {
-				for (var n = 0, nodes = mutation.addedNodes, nl = nodes.length; n < nl; n++) {
-					var node = nodes[n];
-					if (node.localName === "iframe" && iframeIsDynamic(node)) {
-						addDocumentStylesToIFrame(node);
+			for (var n = 0, nodes = mutation.addedNodes, nl = nodes.length; n < nl; n++) {
+				var node = nodes[n];
+				if (node.nodeType != 1) { // skip non-ELEMENT_NODE
+					continue;
+				}
+				var iframes = node.localName === "iframe" ? [node] : node.getElementsByTagName("iframe");
+				for (var i = iframes.length - 1; i >= 0; i--) {
+					var iframe = iframes[i];
+					if (iframeIsDynamic(iframe)) {
+						addDocumentStylesToIFrame(iframe);
+						iframe.observer = new MutationObserver(process);
+						iframe.observer.observe(iframe.contentDocument, observeOptions);
 					}
 				}
 			}
@@ -290,6 +298,34 @@ function initObserver() {
 
 	iframeObserver.start = function() {
 		// will be ignored by browser if already observing
-		iframeObserver.observe(document, {childList: true, subtree: true});
+		iframeObserver.observe(document, observeOptions);
+		startInIFrames(document);
+	}
+
+	iframeObserver.stop = function() {
+		iframeObserver.disconnect();
+		stopInIFrames(document);
+	}
+
+	function startInIFrames(doc) {
+		var iframes = doc.getElementsByTagName("iframe");
+		for (var i = iframes.length - 1; i >= 0; i--) {
+			var iframe = iframes[i];
+			if (iframe.observer) {
+				iframe.observer.observe(iframe.contentDocument, observeOptions);
+				startInIFrames(iframe.contentDocument);
+			}
+		}
+	}
+
+	function stopInIFrames(doc) {
+		var iframes = doc.getElementsByTagName("iframe");
+		for (var i = iframes.length - 1; i >= 0; i--) {
+			var iframe = iframes[i];
+			if (iframe.observer) {
+				iframe.observer.disconnect();
+				stopInIFrames(iframe.contentDocument);
+			}
+		}
 	}
 }
