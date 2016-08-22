@@ -4209,6 +4209,7 @@ var Properties = {
     "transition-timing-function"    : 1,
 
     //U
+    "unicode-range"                 : 1,
     "unicode-bidi"                  : "normal | embed | isolate | bidi-override | isolate-override | plaintext | inherit",
     "user-modify"                   : "read-only | read-write | write-only | inherit",
     "user-select"                   : "none | text | toggle | element | elements | all | inherit",
