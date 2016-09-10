@@ -1,6 +1,7 @@
 "use strict";
 
 var styleId = null;
+var savedStyle = null; // assigned in saveComplete to skip re-init from styleUpdated in onMessage
 var dirty = {};       // only the actually dirty items here
 var editors = [];     // array of all CodeMirror instances
 var saveSizeOnClose;
@@ -1290,6 +1291,7 @@ function getMeta(e) {
 }
 
 function saveComplete(style) {
+	savedStyle = style;
 	styleId = style.id;
 	setCleanGlobal();
 
@@ -1622,7 +1624,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	switch (request.method) {
 		case "styleUpdated":
 			if (styleId && styleId == request.style.id) {
-				initWithStyle(request.style);
+				if (!savedStyle || JSON.stringify(savedStyle) != JSON.stringify(request.style)) {
+					initWithStyle(request.style);
+				}
+				savedStyle = null;
 			}
 			break;
 		case "styleDeleted":
