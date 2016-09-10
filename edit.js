@@ -471,7 +471,7 @@ function addAppliesTo(list, name, value) {
 function addSection(event, section) {
 	var div = template.section.cloneNode(true);
 	div.querySelector(".applies-to-help").addEventListener("click", showAppliesToHelp, false);
-	div.querySelector(".remove-section").addEventListener("click", removeSection, false);
+	div.querySelector(".remove-section").addEventListener("click", removeSectionOnClick, false);
 	div.querySelector(".add-section").addEventListener("click", addSection, false);
 	div.querySelector(".beautify-section").addEventListener("click", beautify);
 
@@ -525,8 +525,13 @@ function removeAppliesTo(event) {
 	}
 }
 
-function removeSection(event) {
-	var section = getSectionForChild(event.target);
+function removeSectionOnClick(event) {
+	removeSection(event.target);
+}
+
+function removeSection(element) {
+	// 'element' can be a section div itself or anything deeper
+	var section = getSectionForChild(element);
 	var cm = section.CodeMirror;
 	removeAreaAndSetDirty(section);
 	editors.splice(editors.indexOf(cm), 1);
@@ -1101,7 +1106,7 @@ function initWithStyle(style) {
 	document.getElementById("enabled").checked = style.enabled;
 	document.getElementById("url").href = style.url;
 	// if this was done in response to an update, we need to clear existing sections
-	getSections().forEach(function(div) { div.remove(); });
+	getSections().forEach(removeSection);
 	var queue = style.sections.length ? style.sections : [{code: ""}];
 	var queueStart = new Date().getTime();
 	// after 100ms the sections will be added asynchronously
@@ -1439,12 +1444,12 @@ function fromMozillaFormat() {
 			}
 			if (replaceOldStyle) {
 				editors.slice(0).reverse().forEach(function(cm) {
-					removeSection({target: cm.getSection().firstElementChild});
+					removeSection(cm.getSection());
 				});
 			} else if (!editors.last.getValue()) {
 				// nuke the last blank section
 				if (editors.last.getSection().querySelector(".applies-to-everything")) {
-					removeSection({target: editors.last.getSection()});
+					removeSection(editors.last.getSection());
 				}
 			}
 			return true;
