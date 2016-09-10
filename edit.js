@@ -567,6 +567,11 @@ function makeSectionVisible(cm) {
 }
 
 function setupGlobalSearch() {
+	if (setupGlobalSearch.done) {
+		return;
+	}
+	setupGlobalSearch.done = true;
+
 	var originalCommand = {
 		find: CodeMirror.commands.find,
 		findNext: CodeMirror.commands.findNext,
