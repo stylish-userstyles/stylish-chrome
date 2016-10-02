@@ -116,21 +116,14 @@ function enable(event, enabled) {
 }
 
 function doDelete() {
-	// Opera can't do confirms in popups
-	if (getBrowser() != "Opera") {
-		if (!confirm(t('deleteStyleConfirm'))) {
-			return;
-		}
+	// Opera/Vivaldi can't do confirms in popups
+	// so we assume the dialog wasn't displayed if time span <= 10ms
+	var confirmStart = Date.now();
+	if (!confirm(t('deleteStyleConfirm')) && Date.now() - confirmStart > 10) {
+		return;
 	}
 	var id = getId(event);
 	deleteStyle(id);
-}
-
-function getBrowser() {
-	if (navigator.userAgent.indexOf("OPR") > -1) {
-		return "Opera";
-	}
-	return "Chrome";
 }
 
 function getId(event) {
