@@ -173,6 +173,22 @@
 		"message": "Export",
 		"description": "Label for the button to export a style ('edit' page) or all styles ('manage' page)"
 	},
+	"findStylesForThisSiteTextOff": {
+		"description": "Text for a link that gets a list of styles for another sites when there are no styles available for current site",
+		"message": "There are no styles available for this site. You can be the first to create one!"
+	},
+	"findStylesForThisSiteLinkOff": {
+		"description": "text for link (<a>) after findStylesForThisSiteTextOff",
+		"message": "Find for others."
+	},
+	"findStylesForThisSiteText": {
+		"description": "Text for a link that gets a list of styles for the current site",
+		"message": "There are styles for this site. "
+	},
+	"findStylesForThisSiteLink": {
+		"description": "text for link (<a>) after findStylesForThisSiteText",
+		"message": "Choose them."
+	},
 	"findStylesForSite": {
 		"message": "Find more styles for this site.",
 		"description": "Text for a link that gets a list of styles for the current site"
@@ -209,6 +225,10 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
+    "installButtonLabel": {
+        "message": "Install Style",
+        "description": "Label inside the install button"
+    },
 	"installUpdate": {
 		"message": "Install update",
 		"description": "Label for the button to install an update for a single style"
@@ -234,7 +254,7 @@
 		"description": "Checkbox to show only enabled styles"
 	},
 	"manageOnlyEdited": {
-		"message": "Only edited styles",
+		"message": "Only created locally",
 		"description": "Checkbox to show only locally edited styles"
 	},
 	"manageText": {
@@ -253,9 +273,17 @@
 		"message": "No styles installed for this site.",
 		"description": "Text displayed when no styles are installed for the current site"
 	},
+    "numberOfWeaklyInstalls": {
+      "message": "Number of weekly installs",
+      "description": "Text of popup when hovering over installs icon"
+    },
 	"openManage": {
-		"message": "Manage installed styles.",
+		"message": "Manage styles",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Create New Style",
+		"description": "Link to open the creation page."
 	},
 	"optionsHeading": {
 		"message": "Options",
