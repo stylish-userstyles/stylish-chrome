@@ -42,6 +42,13 @@
 			"js": ["apply.js"]
 		},
 		{
+			"matches": ["http://userstyles.org/styles/*", "https://userstyles.org/styles/*"],
+			"run_at": "document_end",
+			"all_frames": false,
+			"css": ["codemirror/lib/codemirror.css"],
+			"js": ["codemirror/lib/codemirror.js", "codemirror/mode/css/css.js"]
+		},
+		{
 			"matches": ["http://userstyles.org/*", "https://userstyles.org/*"],
 			"run_at": "document_end",
 			"all_frames": false,
