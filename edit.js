@@ -1,6 +1,7 @@
 "use strict";
 
 var styleId = null;
+var savedStyle = null; // assigned in saveComplete to skip re-init from styleUpdated in onMessage
 var dirty = {};       // only the actually dirty items here
 var editors = [];     // array of all CodeMirror instances
 var saveSizeOnClose;
@@ -31,6 +32,11 @@ Array.prototype.rotate = function(amount) { // negative amount == rotate left
 }
 
 Object.defineProperty(Array.prototype, "last", {get: function() { return this[this.length - 1]; }});
+
+// Unregister CSSLint-worker's onmessage listener
+// (reminder: we need 'worker' build because it exposes parserlib)
+// Nothing seems to trigger the listener now but just in case.
+self.onmessage = undefined;
 
 // reroute handling to nearest editor when keypress resolves to one of these commands
 var hotkeyRerouter = {
@@ -465,7 +471,7 @@ function addAppliesTo(list, name, value) {
 function addSection(event, section) {
 	var div = template.section.cloneNode(true);
 	div.querySelector(".applies-to-help").addEventListener("click", showAppliesToHelp, false);
-	div.querySelector(".remove-section").addEventListener("click", removeSection, false);
+	div.querySelector(".remove-section").addEventListener("click", removeSectionOnClick, false);
 	div.querySelector(".add-section").addEventListener("click", addSection, false);
 	div.querySelector(".beautify-section").addEventListener("click", beautify);
 
@@ -519,8 +525,13 @@ function removeAppliesTo(event) {
 	}
 }
 
-function removeSection(event) {
-	var section = getSectionForChild(event.target);
+function removeSectionOnClick(event) {
+	removeSection(event.target);
+}
+
+function removeSection(element) {
+	// 'element' can be a section div itself or anything deeper
+	var section = getSectionForChild(element);
 	var cm = section.CodeMirror;
 	removeAreaAndSetDirty(section);
 	editors.splice(editors.indexOf(cm), 1);
@@ -556,6 +567,11 @@ function makeSectionVisible(cm) {
 }
 
 function setupGlobalSearch() {
+	if (setupGlobalSearch.done) {
+		return;
+	}
+	setupGlobalSearch.done = true;
+
 	var originalCommand = {
 		find: CodeMirror.commands.find,
 		findNext: CodeMirror.commands.findNext,
@@ -1095,7 +1111,7 @@ function initWithStyle(style) {
 	document.getElementById("enabled").checked = style.enabled;
 	document.getElementById("url").href = style.url;
 	// if this was done in response to an update, we need to clear existing sections
-	getSections().forEach(function(div) { div.remove(); });
+	getSections().forEach(removeSection);
 	var queue = style.sections.length ? style.sections : [{code: ""}];
 	var queueStart = new Date().getTime();
 	// after 100ms the sections will be added asynchronously
@@ -1285,6 +1301,7 @@ function getMeta(e) {
 }
 
 function saveComplete(style) {
+	savedStyle = style;
 	styleId = style.id;
 	setCleanGlobal();
 
@@ -1340,7 +1357,7 @@ function fromMozillaFormat() {
 		var replaceOldStyle = this.name == "import-replace";
 		popup.querySelector(".close-icon").click();
 		var mozStyle = trimNewLines(popup.codebox.getValue());
-		var parser = new exports.css.Parser(), lines = mozStyle.split("\n");
+		var parser = new parserlib.css.Parser(), lines = mozStyle.split("\n");
 		var sectionStack = [{code: "", start: {line: 1, col: 1}}];
 		var errors = "", oldSectionCount = editors.length;
 		var firstAddedCM;
@@ -1348,7 +1365,7 @@ function fromMozillaFormat() {
 		parser.addListener("startdocument", function(e) {
 			var outerText = getRange(sectionStack.last.start, (--e.col, e));
 			var gapComment = outerText.match(/(\/\*[\s\S]*?\*\/)[\s\n]*$/);
-			var section = {code: "", start: backtrackTo(this, exports.css.Tokens.LBRACE, "end")};
+			var section = {code: "", start: backtrackTo(this, parserlib.css.Tokens.LBRACE, "end")};
 			// move last comment before @-moz-document inside the section
 			if (gapComment && !gapComment[1].match(/\/\*\s*AGENT_SHEET\s*\*\//)) {
 				section.code = gapComment[1] + "\n";
@@ -1369,7 +1386,7 @@ function fromMozillaFormat() {
 		});
 
 		parser.addListener("enddocument", function(e) {
-			var end = backtrackTo(this, exports.css.Tokens.RBRACE, "start");
+			var end = backtrackTo(this, parserlib.css.Tokens.RBRACE, "start");
 			var section = sectionStack.pop();
 			section.code += getRange(section.start, end);
 			sectionStack.last.start = (++end.col, end);
@@ -1432,12 +1449,12 @@ function fromMozillaFormat() {
 			}
 			if (replaceOldStyle) {
 				editors.slice(0).reverse().forEach(function(cm) {
-					removeSection({target: cm.getSection().firstElementChild});
+					removeSection(cm.getSection());
 				});
 			} else if (!editors.last.getValue()) {
 				// nuke the last blank section
 				if (editors.last.getSection().querySelector(".applies-to-everything")) {
-					removeSection({target: editors.last.getSection()});
+					removeSection(editors.last.getSection());
 				}
 			}
 			return true;
@@ -1617,7 +1634,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	switch (request.method) {
 		case "styleUpdated":
 			if (styleId && styleId == request.style.id) {
-				initWithStyle(request.style);
+				if (!savedStyle || JSON.stringify(savedStyle) != JSON.stringify(request.style)) {
+					initWithStyle(request.style);
+				}
+				savedStyle = null;
 			}
 			break;
 		case "styleDeleted":
