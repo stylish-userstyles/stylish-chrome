@@ -223,10 +223,6 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "List styles before commands in the toolbar button menu",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
-	},
 	"sectionHelp": {
 		"message": "Osiot antavat sinun tarkentaa koodin eri osia niin että ne koskevat eri URL osoitteita samassa tyylissä. Esimerkiksi, yksi tyyli voi muokata kotisivua yhdellä tavalla kun se muokkaa koko muuta sivustoa toisella tavalla.",
 		"description": "Help text for sections"

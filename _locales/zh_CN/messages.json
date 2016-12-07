@@ -223,10 +223,6 @@
 		"message": "放弃当前样式的内容，使用已导入样式覆盖它",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "在工具栏按钮中的命令前列出样式",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
-	},
 	"sectionHelp": {
 		"message": "各部分可让您定义不同的代码段，以通过同一样式应用到不同的网址组。例如，某个单一样式能以一种方式更改网站首页，同时以另一种方式更改网站的其余部分。",
 		"description": "Help text for sections"
@@ -417,7 +413,7 @@
 		"description": "Placeholder text of inputbox in keymap help popup on the edit style page. Must be very short"
 	},
 	"description": {
-		"message": "Stylish 是一个调整网页外观的用户样式管理器。它可让您轻松地为许多热门网站网站安装主题和皮肤。",
+		"message": "採用用戶風格管理器Stylish改變網站風格。Stylish可讓您為多個常用網站輕鬆安裝主題和皮膚，創建您自己的風格。",
 		"description": "Extension description"
 	}
 }

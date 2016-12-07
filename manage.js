@@ -477,9 +477,18 @@ document.addEventListener("DOMContentLoaded", function() {
 		"manage.onlyEnabled",
 		"manage.onlyEdited",
 		"show-badge",
-		"popup.stylesFirst",
 		"analyticsEnabled"
 	]);
 	initFilter("enabled-only", document.getElementById("manage.onlyEnabled"));
 	initFilter("edited-only", document.getElementById("manage.onlyEdited"));
+	document.querySelector("#analyticsEnabled").addEventListener("change", function(){
+		if (!this.checked && this.getAttribute("data-warned") != "1"){
+			this.setAttribute("data-warned", "1");
+			alert(chrome.i18n.getMessage("statsDisabled"));
+			prefs.get('popup.checkNewStyles').popupCheckDisable();
+		}else if (this.checked){
+			this.removeAttribute("data-warned");
+			prefs.get('popup.checkNewStyles').popupCheckEnable();
+		}
+	});
 });

@@ -223,10 +223,6 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "List styles before commands in the toolbar button menu",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
-	},
 	"sectionHelp": {
 		"message": "样式节允许你定义多个样式段落并将它们应用于不同的站点匹配规则上。例如，一个样式可以更改使用一个方式来更改主页，而此时其它的样式段可以更改站点的其它部分。",
 		"description": "Help text for sections"

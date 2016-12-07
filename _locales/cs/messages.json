@@ -223,10 +223,6 @@
 		"message": "Zahodit obsah současného stylu a přepsat ho importovaným stylem",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "Vypsat styly před příkazy v menu pod tlačítkem na panelu nástrojů",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
-	},
 	"sectionHelp": {
 		"message": "Pomocí sekcí můžete v jednom stylu nadefinovat více částí kódu pro různé skupiny URL adres. Jeden styl pak může např. změnit hlavní stránku webu jinak, než jeho zbytek.",
 		"description": "Help text for sections"

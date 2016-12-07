@@ -10,7 +10,7 @@ var webSqlStorage = {
 				var tx = db.transaction(["styles"], "readwrite");
 				var os = tx.objectStore("styles");
 				styles.forEach(function(s) {
-					webSqlStorage.cleanStyle(s)
+					webSqlStorage.cleanStyle(s);
 					os.add(s);
 				});
 				// While this was running, the styles were loaded from the (empty) indexed db
@@ -166,4 +166,4 @@ var webSqlStorage = {
 			t.executeSql('ALTER TABLE styles ADD COLUMN originalMd5 TEXT NULL;');
 		}, error, function() { done(d); });
 	}
-}
+};

@@ -1,87 +1,223 @@
+var IMAGE_URL_NOT_AVAILABLE = "n/a",
+    IMAGE_URL_DEFAULT = "image_na.png";
+
 var writeStyleTemplate = document.createElement("a");
 writeStyleTemplate.className = "write-style-link";
 
 var installed = document.getElementById("installed");
 
-if (!prefs.get("popup.stylesFirst")) {
-	document.body.insertBefore(document.querySelector("body > .actions"), installed);
+var STYLE_URL_ID_REGEX = /(styles\/)(\d+)/;
+
+getActiveTab(updatePopUp);
+
+function getInstalledStyles(){
+	return new Promise(function(resolve, reject){
+		chrome.runtime.sendMessage({method: "getStyles"}, resolve);
+	});
 }
 
-getActiveTabRealURL(updatePopUp);
+function parseStyleId(style){
+    var matches = STYLE_URL_ID_REGEX.exec(style.url);
+    if (matches && matches.length == 3){
+        return parseInt(matches[2]);
+    } else {
+        throw new Error("Can't retrieve style id. Url corrupted " + style.url);
+    }
+}
 
-function updatePopUp(url) {
-	var urlWillWork = /^(file|http|https|ftps?|chrome\-extension):/.exec(url);
+function getOrParseStyleId(style){
+    if (style.styleid) {
+        return style.styleid;
+    }
+
+    var parsed;
+	try{
+		parsed = parseStyleId(style);
+		return parsed;
+	} catch(e){
+		console.error(e);
+		return Math.floor(-10000 * Math.random());
+	}
+}
+
+function styleIsInInstalled(style, installedStyles){
+    for(var i = 0; i < installedStyles.length; i++){
+        var current = installedStyles[i],
+            currentStyleId = getOrParseStyleId(current);
+        if (style.styleid === currentStyleId){
+            return true;
+        }
+    }
+    return false;
+}
+
+function parseUrl(url){
+	var a = document.createElement('a');
+	a.href = url;
+	return a;
+}
+
+function updatePopUp(tab) {
+	updateSiteName(getSiteName(tab.url));
+	updateCreateStyleLink(parseUrl(tab.url).hostname);
+
+	var urlWillWork = /^(file|http|https|ftps?|chrome\-extension):/.exec(tab.url);
 	if (!urlWillWork) {
 		document.body.classList.add("blocked");
 		document.getElementById("unavailable").style.display = "block";
 		return;
 	}
 
-	chrome.runtime.sendMessage({method: "getStyles", matchUrl: url}, showStyles);
-	document.querySelector("#find-styles a").href = "https://userstyles.org/styles/browse/all/" + encodeURIComponent("file" === urlWillWork[1] ? "file:" : url);
+	var hasStyles = chrome.extension.getBackgroundPage()
+        .prefs.get("checkNewStyles").haveNewStyles(tab.id);
 
-	// Write new style links
-	var writeStyleLinks = [],
-	    container = document.createElement('span');
-	container.id = "match";
+	var userAllowedServerConnection = prefs.get('popup.checkNewStyles').popupCheckEnabled();
 
-	// For this URL
-	var urlLink = writeStyleTemplate.cloneNode(true);
-	urlLink.href = "edit.html?url-prefix=" + encodeURIComponent(url);
-	urlLink.appendChild(document.createTextNode( // switchable; default="this&nbsp;URL"
-		!prefs.get("popup.breadcrumbs.usePath")
-		? t("writeStyleForURL").replace(/ /g, "\u00a0")
-		: /\/\/[^/]+\/(.*)/.exec(url)[1]
-	));
-	urlLink.title = "url-prefix(\"$\")".replace("$", url);
-	writeStyleLinks.push(urlLink);
-	document.querySelector("#write-style").appendChild(urlLink)
-	if (prefs.get("popup.breadcrumbs")) { // switchable; default=enabled
-		urlLink.addEventListener("mouseenter", function(event) { this.parentNode.classList.add("url()") }, false);
-		urlLink.addEventListener("focus", function(event) { this.parentNode.classList.add("url()") }, false);
-		urlLink.addEventListener("mouseleave", function(event) { this.parentNode.classList.remove("url()") }, false);
-		urlLink.addEventListener("blur", function(event) { this.parentNode.classList.remove("url()") }, false);
-	}
+    if (hasStyles && userAllowedServerConnection){
+        var styles = chrome.extension.getBackgroundPage()
+            .prefs.get("checkNewStyles").getStyles(tab.id);
 
-	// For domain
-	var domains = getDomains(url)
-	domains.forEach(function(domain) {
-		// Don't include TLD
-		if (domains.length > 1 && domain.indexOf(".") == -1) {
-			return;
+        preProcessStyles(styles).then(function(styles){
+            showStyles(styles);
+        });
+    } else {
+        document.getElementById("nostyles").classList.remove("hide");
+		document.getElementById("find-styles").style.display = "none";
+		proceedToOptMessage();
+    }
+
+	document.querySelectorAll('#find-styles a').forEach(function (el) {
+		el.href = "https://userstyles.org/styles/browse/all/" +
+			encodeURIComponent("file" === urlWillWork[1] ? "file:" : tab.url);
+	});
+}
+
+function proceedToOptMessage(){
+	getSync().get(function(set){
+		if (!set.settings.analyticsEnabled){
+			displayOptMessage();
 		}
-		var domainLink = writeStyleTemplate.cloneNode(true);
-		domainLink.href = "edit.html?domain=" + encodeURIComponent(domain);
-		domainLink.appendChild(document.createTextNode(domain));
-		domainLink.title = "domain(\"$\")".replace("$", domain);
-		domainLink.setAttribute("subdomain", domain.substring(0, domain.indexOf(".")));
-		writeStyleLinks.push(domainLink);
 	});
+}
 
-	var writeStyle = document.querySelector("#write-style");
-	writeStyleLinks.forEach(function(link, index) {
-		link.addEventListener("click", openLinkInTabOrWindow, false);
-		container.appendChild(link);
+function displayOptMessage(){
+	var noConnection = document.getElementById("noServerConnection");
+    noConnection.classList.remove("hide");
+	document.getElementById("nostyles").classList.add("hide");
+
+    var localSiteName = chrome.i18n.getMessage("noServerConnectionParam1"),
+        localSettingsName = chrome.i18n.getMessage("noServerConnectionParam2");
+
+    var message = noConnection.querySelector('div');
+    message.innerHTML = message.innerHTML
+        .replace("%noServerConnectionParam1%", createLink("https://userstyles.org", localSiteName).outerHTML)
+        .replace("%noServerConnectionParam2%", createLink("/manage.html", localSettingsName).outerHTML);
+}
+
+function createLink(href, name){
+    var a = document.createElement('a');
+    a.href = href;
+    a.innerText = name;
+    a.target = "_blank";
+    return a;
+}
+
+function updateCreateStyleLink(tabDomain){
+	var createNewStyleLink = document.getElementById('write-new-style-link');
+	createNewStyleLink.href += "?domain="+tabDomain;
+}
+
+function updateSiteName(siteName){
+	document.getElementById('sitename').innerHTML = siteName;
+}
+
+function getSiteName(tabUrl){
+	var a = document.createElement('a');
+	a.href = tabUrl;
+	return a.hostname;
+}
+
+function preProcessStyles(styles){
+	return new Promise(function(resolve, reject){
+		var allStyles = styles.stylesCache.styles.popularstyles;
+		allStyles.forEach(preProcessStyle);
+        getInstalledStyles().then(function(installedStyles){
+            var filter = preProcessFilterInstalledGenerator(installedStyles);
+            allStyles = allStyles.filter(filter);
+            allStyles = limitTo(allStyles, styles.stylesCache.popularstylestoshow);
+            allStyles.forEach(preProcessImage);
+            resolve(allStyles);
+        });
 	});
-	if (prefs.get("popup.breadcrumbs")) {
-		container.classList.add("breadcrumbs");
-		container.appendChild(container.removeChild(container.firstChild));
-	}
-	writeStyle.appendChild(container);
+}
+
+function limitTo(styles, limit){
+    return styles.filter(function(){
+        return limit-- > 0;
+    });
+}
+
+function preProcessStyle(style){
+    style.installsStr = preProcessInstalls(style.installs);
+    style.installsTooltip = chrome.i18n.getMessage("numberOfWeeklyInstalls");
+    style.installButtonLabel = chrome.i18n.getMessage("installButtonLabel");
+    return style;
+}
+
+function preProcessFilterInstalledGenerator(installedStyles){
+	return function preProcessFilterInstalled(style){
+	    return !styleIsInInstalled(style, installedStyles);
+	};
+}
+
+function preProcessInstalls(installsSrc){
+    var installs, devider = 1;
+    if (installsSrc >= 1000000){
+        devider = 1000000;
+    } else if (installsSrc >= 1000){
+        devider = 1000;
+    }
+
+    if (devider > 1){
+        installs = installsSrc / devider;
+        installs = installs.toFixed(1);
+        installs = installs.replace(".0", ""); // remove the decimal part if it is 0
+        switch (devider){
+            case 1000:
+                installs += "k";
+                break;
+            case 1000000:
+                installs += "m";
+                break;
+        }
+    } else {
+        installs = installsSrc;
+    }
+
+    return installs;
+}
+
+function preProcessImage(style){
+    if (!style.thumbnail ||
+        style.thumbnail.toLowerCase() == IMAGE_URL_NOT_AVAILABLE){
+        style.thumbnail = IMAGE_URL_DEFAULT;
+    }
+    return style;
 }
 
 function showStyles(styles) {
-	var enabledFirst = prefs.get("popup.enabledFirst");
-	styles.sort(function(a, b) {
-		if (enabledFirst && a.enabled !== b.enabled) return !(a.enabled < b.enabled) ? -1 : 1;
-		return a.name.localeCompare(b.name);
+	var allStyles = styles;
+	allStyles.forEach(function(el){
+        addStyleToInstalled(el);
 	});
-	if (styles.length == 0) {
-		installed.innerHTML = "<div class='entry' id='no-styles'>" + t('noStylesForSite') + "</div>";
-	}
-	styles.map(createStyleElement).forEach(function(e) {
-		installed.appendChild(e);
-	});
+}
+
+function addStyleToInstalled(style){
+    installed.appendChild(styleToElement(style));
+}
+
+function styleToElement(style){
+    return MustacheTemplate.render("style-item", style);
 }
 
 function createStyleElement(style) {
@@ -199,11 +335,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}
 });
 
-["find-styles-link", "open-manage-link"].forEach(function(id) {
-	document.getElementById(id).addEventListener("click", openLink, false);
+document.querySelectorAll("#find-styles-link , #open-manage-link").forEach(function(el) {
+	el.addEventListener("click", openLink, false);
 });
-
-document.getElementById("disableAll").addEventListener("change", function(event) {
-	installed.classList.toggle("disabled", prefs.get("disableAll"));
-});
-setupLivePrefs(["disableAll"]);

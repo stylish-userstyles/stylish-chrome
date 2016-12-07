@@ -123,7 +123,7 @@ function getResource(url, callback) {
 		    callback(xhr.responseText);
 			}
 		}
-	}
+	};
 	if (url.length > 2000) {
 		var parts = url.split("?");
 		xhr.open("POST", parts[0], true);

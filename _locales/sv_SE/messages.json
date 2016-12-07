@@ -223,10 +223,6 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "Lista stilar före kommandon i verktygsfältets knappmeny",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
-	},
 	"sectionHelp": {
 		"message": "Sektioner låter dig definiera olika sorters kod som påverkar olika URL:er i samma stil. Till exempel, en stil kan ändra en viss hemsida på ett sätt, samtidigt som den ändrar andra delar på en helt annan sida.",
 		"description": "Help text for sections"

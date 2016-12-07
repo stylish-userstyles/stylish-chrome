@@ -223,10 +223,6 @@
 		"message": "Удалить содержимое редактируемого стиля и заменить его на импортируемый стиль",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "Показывать список стилей перед командами в интерфейсе тулбара",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
-	},
 	"sectionHelp": {
 		"message": "Разделы позволяют задавать разный код для различных наборов URL в пределах одного стиля. Например, стиль может применяться к главной странице не так, как к остальным частям сайта.",
 		"description": "Help text for sections"

@@ -223,10 +223,6 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "List styles before commands in the toolbar button menu",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
-	},
 	"sectionHelp": {
 		"message": "تتيح لك الأقسام تحديد أجزاء مختلفة من الرمز لتطبيقها على مجموعات مختلفة من عناوين URL بالنمط نفسه. فعلى سبيل المثال، يمكن لنمط مفرد تغيير الصفحة الرئيسية لموقع ويب بطريقة، مع تغيير بقية أجزاء موقع الويب بطريقة أخرى.",
 		"description": "Help text for sections"

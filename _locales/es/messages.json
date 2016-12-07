@@ -223,10 +223,6 @@
 		"message": "Descartar contenido del tema actual y sobreescribirlo con el estilo importado",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "Listar temas antes de comandos en el botón de menú en la barra de herramientas",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
-	},
 	"sectionHelp": {
 		"message": "Las secciones te permiten definir diferentes fragmentos de código para aplicarlos a distintos conjuntos de URL en el mismo estilo. Por ejemplo, un único estilo puede cambiar la página de inicio de un sitio de una forma y modificar el resto del sitio de otra.",
 		"description": "Help text for sections"

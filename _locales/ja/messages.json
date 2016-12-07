@@ -223,10 +223,6 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "List styles before commands in the toolbar button menu",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
-	},
 	"sectionHelp": {
 		"message": "セクションを利用すると、1 つのスタイルの中で複数のコードを定義し、それぞれ異なる URL に適用することができます。たとえば、単一のスタイルで、サイトのトップページの表示方法と他のページの表示方法を変えることができます。",
 		"description": "Help text for sections"
@@ -417,7 +413,7 @@
 		"description": "Placeholder text of inputbox in keymap help popup on the edit style page. Must be very short"
 	},
 	"description": {
-		"message": "Stylish はユーザー スタイルを管理するツールで、ウェブのスタイルを変更することができます。Stylish を利用すると、Google、Facebook、YouTube、orkut など、さまざまなサイトに対応したテーマやスキンを簡単にインストールできます。",
+		"message": "ユーザースタイルマネージャーのStylishでウェブサイトのデザインを変更。Stylishを使ってテーマやスキンを様々な人気サイトにインストールすれば、自分のスタイルを作り上げられます。",
 		"description": "Extension description"
 	}
 }

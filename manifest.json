@@ -1,30 +1,24 @@
 {
 	"name": "Stylish",
-	"version": "1.5.2",
+	"version": "1.6.0",
 	"description": "__MSG_description__",
 	"homepage_url": "https://userstyles.org",
 	"manifest_version": 2,
-	"applications": {
-		"gecko": {
-			"id": "{46551EC9-40F0-4e47-8E18-8E5CF550CFB8}"
-		}
-	},
 	"icons": {
-		"16": "16.png",
-		"48": "48.png",
 		"128": "128.png"
 	},
 	"permissions": [
 		"tabs",
 		"webNavigation",
+		"webRequest",
+		"webRequestBlocking",
 		"contextMenus",
 		"storage",
-		"http://userstyles.org/",
-		"https://userstyles.org/"
+		"*://*/*"
 	],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 	"background": {
-		"scripts": ["messaging.js", "storage-websql.js", "storage.js", "background.js", "analytics.js"]
+		"scripts": ["refilter.js", "messaging.js", "storage-websql.js", "storage.js", "background.js", "analytics.js"]
 	},
 	"commands": {
 	  "openManage": {
@@ -51,10 +45,7 @@
 	"options_page": "manage.html",
 	"browser_action": {
 		"default_icon": {
-			"16": "16w.png",
-			"32": "32w.png",
-			"19": "19w.png",
-			"38": "38w.png"
+			"128": "128w.png"
 		},
 		"default_title": "Stylish",
 		"default_popup": "popup.html"

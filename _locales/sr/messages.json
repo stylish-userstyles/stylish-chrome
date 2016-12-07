@@ -223,10 +223,6 @@
 		"message": "Одбаци садржај тренутног стила и упиши преко њега увезени стил",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "Излистај стилове пре команди у менију дугмета на алатној траци",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
-	},
 	"sectionHelp": {
 		"message": "Одељци вам омогућавају да дефинишете различите делове кода који се примењују на раличите скупове УРЛ-ова у истом стилу. На пример, један исти стил може променити почетну страницу једног сајта на један начин а остатак сајта на други начин.",
 		"description": "Help text for sections"
