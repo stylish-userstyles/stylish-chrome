@@ -133,7 +133,7 @@
 		"description": "Confirmation before deleting a style"
 	},
 	"description": {
-		"message": "Restyle the web with Stylish, a user styles manager. Stylish lets you to easily install themes and skins for many popular sites and create your own styles.",
+		"message": "Restyle the web with Stylish, a user styles manager. With Stylish you can install themes & skins for many sites and create your own.",
 		"description": "Extension description"
 	},
 	"disableAllStyles": {
