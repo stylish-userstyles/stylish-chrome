@@ -4,9 +4,21 @@ var IMAGE_URL_NOT_AVAILABLE = "n/a",
 var writeStyleTemplate = document.createElement("a");
 writeStyleTemplate.className = "write-style-link";
 
-var installed = document.getElementById("installed");
+var installed = document.getElementById("recommended");
 
 var STYLE_URL_ID_REGEX = /(styles\/)(\d+)/;
+
+!function initUITabs(){
+    Tabs.bindHeaderToBody('#tab-header-recommended', '#tab-item-recommended');
+    Tabs.bindHeaderToBody('#tab-header-installed', '#tab-item-installed');
+	var storedTabId = parseInt(localStorage.getItem("lastTabId"));
+	if (!!storedTabId){
+		Tabs.setActiveTab(storedTabId);
+	}
+	Tabs.onTabChanged(function(e){
+		localStorage.setItem("lastTabId", e.newTabId);
+	})
+}();
 
 getActiveTab(updatePopUp);
 
@@ -64,7 +76,8 @@ function updatePopUp(tab) {
 	var urlWillWork = /^(file|http|https|ftps?|chrome\-extension):/.exec(tab.url);
 	if (!urlWillWork) {
 		document.body.classList.add("blocked");
-		document.getElementById("unavailable").style.display = "block";
+		document.getElementById("unavailable").classList.remove("hide");
+		document.getElementById("recommended").classList.add("hide");
 		return;
 	}
 
@@ -82,6 +95,7 @@ function updatePopUp(tab) {
         });
     } else {
         document.getElementById("nostyles").classList.remove("hide");
+		document.getElementById("recommended").classList.add("hide");
 		document.getElementById("find-styles").style.display = "none";
 		proceedToOptMessage();
     }
@@ -208,11 +222,11 @@ function preProcessImage(style){
 function showStyles(styles) {
 	var allStyles = styles;
 	allStyles.forEach(function(el){
-        addStyleToInstalled(el);
+        addStyleToRecommended(el);
 	});
 }
 
-function addStyleToInstalled(style){
+function addStyleToRecommended(style){
     installed.appendChild(styleToElement(style));
 }
 

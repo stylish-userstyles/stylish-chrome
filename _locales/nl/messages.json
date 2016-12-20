@@ -24,7 +24,7 @@
 		"description": "Label for the text box controlling tab size option for the style editor."
 	},
 	"enableStyleLabel": {
-		"message": "Inschakelen",
+		"message": "Enable",
 		"description": "Label for the button to enable a style"
 	},
 	"styleMissingName": {
@@ -64,11 +64,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "Meer stijlen zoeken voor deze website.",
+		"message": "Find more styles for this site",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "Geïnstalleerde stijlen",
+		"message": "Installed Styles",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -125,7 +125,7 @@
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "Uitschakelen",
+		"message": "Disable",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,13 +223,21 @@
 		"message": "Verwerp de inhoud van de huidige stijl en overschrijf het met de geïmporteerde stijl",
 		"description": "Label for the button to import and overwrite current style"
 	},
+	"installButtonLabel": {
+		"message": "Install Style",
+		"description": "Label inside the install button"
+	},
 	"sectionHelp": {
 		"message": "Secties stellen u in staat om andere stukken code toe te passen op andere URL's in dezelfde stijl. Bijv.: een enkele stijl kan de homepage van een site aanpassen op een bepaalde manier, terwijl de rest van de site op een andere manier wordt aangepast.",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "Geen geïnstalleerde stijlen voor deze website.",
+		"message": "You don't have any styles installed for this web page",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "Number of weekly installs",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "en meer",
@@ -260,8 +268,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "Geïnstalleerde stijlen beheren.",
+		"message": "Manage Styles",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Create New Style",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "Update mislukt - server gaf code $code$ als antwoord.",
@@ -321,7 +333,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "Stijl bewerken",
+		"message": "Edit Style",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -389,7 +401,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "Verwijderen",
+		"message": "Delete",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -415,5 +427,21 @@
 	"description": {
 		"message": "Voorzie het web van een ander uiterlijk met Stylish, een gebruikersstijlbeheerder. Stylish stelt u in staat om eenvoudig thema's en stijlen te installeren voor vele populaire websites.",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "You chose to opt-out from seeing available styles for this site directly on Stylish. Visit %noServerConnectionParam1% to see available styles, or update your %noServerConnectionParam2% to see them here.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "settings",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Opting out means you won't be able to see available styles directly on the Stylish add on. Visit Userstyles.org to reach them, or opt back in at any time.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
 	}
 }

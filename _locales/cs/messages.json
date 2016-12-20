@@ -24,7 +24,7 @@
 		"description": "Label for the text box controlling tab size option for the style editor."
 	},
 	"enableStyleLabel": {
-		"message": "Povolit",
+		"message": "Enable",
 		"description": "Label for the button to enable a style"
 	},
 	"styleMissingName": {
@@ -64,11 +64,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "Najít styly pro tento web.",
+		"message": "Find more styles for this site",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "Nainstalované Styly",
+		"message": "Installed Styles",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -125,7 +125,7 @@
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "Zakázat",
+		"message": "Disable",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,13 +223,21 @@
 		"message": "Zahodit obsah současného stylu a přepsat ho importovaným stylem",
 		"description": "Label for the button to import and overwrite current style"
 	},
+	"installButtonLabel": {
+		"message": "Install Style",
+		"description": "Label inside the install button"
+	},
 	"sectionHelp": {
 		"message": "Pomocí sekcí můžete v jednom stylu nadefinovat více částí kódu pro různé skupiny URL adres. Jeden styl pak může např. změnit hlavní stránku webu jinak, než jeho zbytek.",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "Pro tento web není nainstalován žádný styl.",
+		"message": "You don't have any styles installed for this web page",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "Number of weekly installs",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "a další",
@@ -260,8 +268,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "Spravovat nainstalovné styly.",
+		"message": "Manage Styles",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Create New Style",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "Aktualizace selhala - server opověděl kódem $code$.",
@@ -321,7 +333,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "Upravit Styl",
+		"message": "Edit Style",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -389,7 +401,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "Smazat",
+		"message": "Delete",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -415,5 +427,21 @@
 	"description": {
 		"message": "Přestylujte web pomocí Stylish, manažeru uživatelských stylů. Stylish vám umožní nainstalovat témata a skiny pro mnoho populárních webů.",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "You chose to opt-out from seeing available styles for this site directly on Stylish. Visit %noServerConnectionParam1% to see available styles, or update your %noServerConnectionParam2% to see them here.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "settings",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Opting out means you won't be able to see available styles directly on the Stylish add on. Visit Userstyles.org to reach them, or opt back in at any time.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
 	}
 }

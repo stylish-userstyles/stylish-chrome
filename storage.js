@@ -42,6 +42,12 @@ function getStyles(options, callback) {
   }, null);
 }
 
+function getInstalledStyleForDomain(domain){
+	return new Promise(function(resolve, reject){
+		chrome.runtime.sendMessage({method: "getStyles", matchUrl: domain}, null, resolve);
+	});
+}
+
 function invalidateCache(andNotify) {
 	cachedStyles = null;
 	if (andNotify) {
@@ -154,22 +160,28 @@ function saveStyle(o, callback) {
 }
 
 function enableStyle(id, enabled) {
-	saveStyle({id: id, enabled: enabled}, function(style) {
-		handleUpdate(style);
-		notifyAllTabs({method: "styleUpdated", style: style});
+	return new Promise(function(resolve){
+		saveStyle({id: id, enabled: enabled}, function(style) {
+			handleUpdate(style);
+			notifyAllTabs({method: "styleUpdated", style: style});
+			resolve();
+		});
 	});
 }
 
 function deleteStyle(id) {
-	getDatabase(function(db) {
-		var tx = db.transaction(["styles"], "readwrite");
-		var os = tx.objectStore("styles");
-		var request = os.delete(Number(id));
-		request.onsuccess = function(event) {
-			handleDelete(id);
-			invalidateCache(true);
-			notifyAllTabs({method: "styleDeleted", id: id});
-		};
+	return new Promise(function(resolve){
+		getDatabase(function(db) {
+			var tx = db.transaction(["styles"], "readwrite");
+			var os = tx.objectStore("styles");
+			var request = os.delete(Number(id));
+			request.onsuccess = function(event) {
+				handleDelete(id);
+				invalidateCache(true);
+				notifyAllTabs({method: "styleDeleted", id: id});
+				resolve();
+			};
+		});
 	});
 }
 

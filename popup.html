@@ -29,6 +29,40 @@
 			</div>
 		</div>
     </script>
+    <script id="template-style-installed-item" type="x-tmpl-mustache">
+		<div id="installed-style-{{id}}" class="installed entry {{additionalClass}}" >
+			<div class="main-controls">
+				<div class="thumbnail-holder">
+					<img class="thumbnail" src="{{screenshot}}"/>
+					<div class="activation_info">
+					    <span class="activation_status active">{{active_str}}</span>
+					    <span class="activation_status inactive">{{inactive_str}}</span>
+                    </div>
+					<div class="thumbnail-mask">
+					    <a class="thumbnail_edit" href="{{style_edit_url}}" target="_blank">{{editButtonLabel}}</a>
+						<a class="thumbnail_activate" href="{{style_url}}" target="_blank">{{activateButtonLabel}}</a>
+						<a class="thumbnail_deactivate" href="{{style_url}}" target="_blank">{{deactivateButtonLabel}}</a>
+						<a class="thumbnail_delete" href="{{style_url}}" target="_blank">{{deleteButtonLabel}}</a>
+					</div>
+				</div>
+				<label class="style-name">{{name}}</label>
+				<label class="style-author">by {{author}}</label>
+				<div class="info">
+					<div class="num_installs">
+						<span class="installs">{{installsStr}}</span>
+						<div class="installs_tooltip">{{installsTooltip}}</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="actions">
+					<a href="#" class="enable">Enable</a>
+					<a href="#" class="disable">Disable</a>
+					<a class="style-edit-link" href="edit.html?id=">Edit</a>
+					<a href="#" class="delete">Delete</a>
+				</div>
+			</div>
+		</div>
+    </script>
 
 	<link rel="stylesheet" href="styles.css"/>
 
@@ -40,36 +74,78 @@
 	<script src="apply.js"></script>
     <script src="mustache.min.js"></script>
     <script src="mustache.wrap.js"></script>
+    <script src="Tabs.js"></script>
 </head>
 <body id="stylish-popup">
 <div id="sitename">dribbble.com</div>
-
-<div id="unavailable"><div class="left-gutter"></div><div class="main-controls">
-    <span id="unavailable-message" i18n-text="stylishUnavailableForURL"></span>
-</div></div>
-<div id="nostyles" class="hide"
-     i18n-text="findStylesForThisSiteTextOff">
-</div>
 <div id="noServerConnection" class="hide">
 	<div i18n-text="noServerConnection"></div>
 </div>
-<div id="installed">
+<div class="tabs-container">
+    <header>
+        <div class="tab-header active">
+            <label for="tab-header-recommended">Styles Library</label>
+            <input id="tab-header-recommended" type="radio" name="style-type" checked>
+        </div>
+        <div class="tab-header">
+            <label for="tab-header-installed">Installed Styles</label>
+            <input id="tab-header-installed" type="radio" name="style-type">
+        </div>
+    </header>
+    <section id="tab-item-recommended" class="tab-item tab-recommended active">
+        <div id="unavailable" class="hide"><div class="left-gutter"></div><div class="main-controls">
+            <span id="unavailable-message" i18n-text="stylishUnavailableForURL"></span>
+        </div></div>
+        <div id="nostyles" class="hide"
+             i18n-text="findStylesForThisSiteTextOff">
+        </div>
+        <div id="recommended"></div>
+        <div id="find-styles">
+            <a id="find-styles-link"
+               tabindex="-1"
+               href="https://userstyles.org/styles/browse/all/https%3A%2F%2Fwww.google.hu%2F%3Fgfe_rd%3Dcr%26ei%3D2u0aWK6BMrPs8wfdtrzgCA%26gws_rd%3Dssl"
+               i18n-text="findStylesForSite">
+            </a>
+        </div>
+    </section>
+    <section id="tab-item-installed" class="tab-item tab-installed">
+        <div id="disable-all-container">
+            <div id="disable-all-block">
+                <span class="disable-all-lable">All styles</span>
+                <div class="swipe-button">
+                    <label class="swipe-button-label">
+                        <input type="checkbox" id="disable-all-checkbox"/>
+                        <div class="swipe-wrap">
+                            <span class="on">on</span>
+                            <span class="swiper"></span>
+                            <span class="off">off</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div id="zerostyles" class=""><div class="message">You don’t have any styles installed for this site.</div>
+            <div id="chose_style">
+                Choose a style from the Styles Library
+            </div>
+            <div id="create_style">
+                Create your own style
+            </div>
+        </div>
+        <div id="installed" class="hide"></div>
+    </section>
+</div>
 
-</div>
-</div>
-
-<div id="find-styles">
-    <a id="find-styles-link"
-       href="https://userstyles.org/styles/browse/all/https%3A%2F%2Fwww.google.hu%2F%3Fgfe_rd%3Dcr%26ei%3D2u0aWK6BMrPs8wfdtrzgCA%26gws_rd%3Dssl"
-       i18n-text="findStylesForSite">
-    </a>
-</div>
 <div class="bottom_controls">
+    <a id="write-new-style-link" class="add_style" href="/edit.html" target="_blank" tabindex="-1" i18n-text="openCreate"></a>
 	<a class="manage_styles" href="/manage.html" target="_blank" tabindex="-1" i18n-text="openManage"></a>
-	<a id="write-new-style-link" class="add_style" href="/edit.html" target="_blank" tabindex="-1" i18n-text="openCreate"></a>
 </div>
+<script src="object.assign.polyfill.js"></script>
+<script src="Requester.js"></script>
+<script src="MemCachedRequester.js"></script>
+<script src="SessionCachedRequester.js"></script>
+<script src="StyleInfoFetcher.js"></script>
 <script src="popup.js"></script>
-
-
+<script src="popup-installed.js"></script>
 
 </body></html>

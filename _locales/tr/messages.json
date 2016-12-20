@@ -24,7 +24,7 @@
 		"description": "Label for the text box controlling tab size option for the style editor."
 	},
 	"enableStyleLabel": {
-		"message": "Etkinleştir",
+		"message": "Enable",
 		"description": "Label for the button to enable a style"
 	},
 	"styleMissingName": {
@@ -64,11 +64,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "Bu site için başka stiller bul.",
+		"message": "Find more styles for this site",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "Yüklü Stiller",
+		"message": "Installed Styles",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -125,7 +125,7 @@
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "Devre dışı bırak",
+		"message": "Disable",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,13 +223,21 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
+	"installButtonLabel": {
+		"message": "Install Style",
+		"description": "Label inside the install button"
+	},
 	"sectionHelp": {
 		"message": "Bölümler, aynı stil içindeki farklı URL kümelerine uygulanacak farklı kod parçaları tanımlamanıza olanak sağlar. Örneğin, tek bir stil bir sitenin ana sayfasını belirli bir şekilde değiştirirken, sayfanın kalan kısmını farklı bir şekilde değiştirebilir.",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "Bu site için hiçbir stil yüklenmedi.",
+		"message": "You don't have any styles installed for this web page",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "Number of weekly installs",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "ve diğerleri",
@@ -260,8 +268,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "Yüklü stilleri yönet.",
+		"message": "Manage Styles",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Create New Style",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "Güncellenemedi - sunucu yanıt olarak $code$ kodunu gönderdi.",
@@ -321,7 +333,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "Stili Düzenle",
+		"message": "Edit Style",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -389,7 +401,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "Sil",
+		"message": "Delete",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -415,5 +427,21 @@
 	"description": {
 		"message": "Kullanıcı stil yöneticisi Stylish ile Web'in stilini yenileyin. Stylish Google, Facebook, YouTube, Orkut ve diğer pek çok site için temalar ve görünüm yüklemenize imkân tanır.",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "You chose to opt-out from seeing available styles for this site directly on Stylish. Visit %noServerConnectionParam1% to see available styles, or update your %noServerConnectionParam2% to see them here.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "settings",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Opting out means you won't be able to see available styles directly on the Stylish add on. Visit Userstyles.org to reach them, or opt back in at any time.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
 	}
 }

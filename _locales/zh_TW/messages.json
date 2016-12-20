@@ -24,7 +24,7 @@
 		"description": "Label for the text box controlling tab size option for the style editor."
 	},
 	"enableStyleLabel": {
-		"message": "啟用",
+		"message": "Enable",
 		"description": "Label for the button to enable a style"
 	},
 	"styleMissingName": {
@@ -64,11 +64,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "查找更多適合此網站的樣式。",
+		"message": "Find more styles for this site",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "已安裝的樣式",
+		"message": "Installed Styles",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -125,7 +125,7 @@
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "禁用",
+		"message": "Disable",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,13 +223,21 @@
 		"message": "棄用當前樣式內容并用導入樣式覆蓋",
 		"description": "Label for the button to import and overwrite current style"
 	},
+	"installButtonLabel": {
+		"message": "Install Style",
+		"description": "Label inside the install button"
+	},
 	"sectionHelp": {
 		"message": "樣式段讓你能在同一個樣式中定義適用於不同網段的不同代碼段。例如，僅僅一個樣式就能以一種樣式改變一個網站的主頁，同時以另一種樣式改變這個網站的其他頁面。",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "當前網站沒有安裝任何樣式。",
+		"message": "You don't have any styles installed for this web page",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "Number of weekly installs",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "以及更多",
@@ -260,8 +268,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "管理已安裝樣式",
+		"message": "Manage Styles",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Create New Style",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "更新失敗 – 伺服器傳回代碼 $code$ 。",
@@ -321,7 +333,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "編輯樣式",
+		"message": "Edit Style",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -389,7 +401,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "删除",
+		"message": "Delete",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -415,5 +427,21 @@
 	"description": {
 		"message": "用Stylish（一個用戶樣式管理器）重塑網頁。 Stylish 讓你能為诸多主流網站輕鬆的安裝主題和皮膚。",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "You chose to opt-out from seeing available styles for this site directly on Stylish. Visit %noServerConnectionParam1% to see available styles, or update your %noServerConnectionParam2% to see them here.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "settings",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Opting out means you won't be able to see available styles directly on the Stylish add on. Visit Userstyles.org to reach them, or opt back in at any time.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
 	}
 }

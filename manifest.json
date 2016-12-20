@@ -1,6 +1,6 @@
 {
 	"name": "Stylish",
-	"version": "1.6.0",
+	"version": "1.6.3",
 	"description": "__MSG_description__",
 	"homepage_url": "https://userstyles.org",
 	"manifest_version": 2,
@@ -18,7 +18,7 @@
 	],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 	"background": {
-		"scripts": ["refilter.js", "messaging.js", "storage-websql.js", "storage.js", "background.js", "analytics.js"]
+		"scripts": ["refilter.js", "messaging.js", "storage-websql.js", "storage.js", "analytics.js", "background.js"]
 	},
 	"commands": {
 	  "openManage": {

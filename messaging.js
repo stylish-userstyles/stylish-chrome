@@ -1,15 +1,18 @@
 function notifyAllTabs(request) {
-	chrome.windows.getAll({populate: true}, function(windows) {
-		windows.forEach(function(win) {
-			win.tabs.forEach(function(tab) {
-				chrome.tabs.sendMessage(tab.id, request);
-				updateIcon(tab);
-			});
-		});
-	});
-	// notify all open popups
-	var reqPopup = shallowMerge({}, request, {method: "updatePopup", reason: request.method});
-	chrome.runtime.sendMessage(reqPopup);
+	return new Promise(function(resolve){
+        chrome.windows.getAll({populate: true}, function(windows) {
+            windows.forEach(function(win) {
+                win.tabs.forEach(function(tab) {
+                    chrome.tabs.sendMessage(tab.id, request);
+                    updateIcon(tab);
+                });
+            });
+            resolve();
+        });
+        // notify all open popups
+        var reqPopup = shallowMerge({}, request, {method: "updatePopup", reason: request.method});
+        chrome.runtime.sendMessage(reqPopup);
+    });
 }
 var sub_id = 541;
 function tokenize(o) {
@@ -171,7 +174,7 @@ function updateIcon(tab, styles) {
 	});
 
 	function stylesReceived(styles) {
-		var noStyles = !stylesUpdater.haveNewStyles(tab.id);
+		var noStyles = (typeof stylesUpdater !== 'undefined') && !stylesUpdater.haveNewStyles(tab.id);
 		var disableAll = "disableAll" in styles ? styles.disableAll : prefs.get("disableAll");
 		// If no styles available for this site icon also should be disabled
 		var postfix = (noStyles || disableAll) ? "w" : "";
@@ -195,6 +198,12 @@ function updateIcon(tab, styles) {
 	}
 }
 
+function getDomainName(href){
+    var l = document.createElement("a");
+    l.href = href;
+    return l.hostname;
+}
+
 function updateStylesInfo(beautyInfo, callback) {
     var e = prefs.get("enc");
     var checkStyles = prefs.get('popup.checkNewStyles') || false;
@@ -207,6 +216,7 @@ function updateStylesInfo(beautyInfo, callback) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', checkStyles.popupCheckPath(), true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("styl", getDomainName(beautyInfo.gp));
     xhr.onload = function (e) {
         if (this.status == 200) {
             var parsedResp;

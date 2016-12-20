@@ -190,7 +190,7 @@
 		"message": "Choose them."
 	},
 	"findStylesForSite": {
-		"message": "Find more styles for this site.",
+		"message": "Find more styles for this site",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"helpAlt": {
@@ -270,7 +270,7 @@
 		"description": "Label (must be very short) for the checkbox in the toolbar button context menu controlling toolbar badge text."
 	},
 	"noStylesForSite": {
-		"message": "No styles installed for this site.",
+		"message": "You don't have any styles installed for this web page",
 		"description": "Text displayed when no styles are installed for the current site"
 	},
     "numberOfWeeklyInstalls": {
@@ -278,7 +278,7 @@
       "description": "Text of popup when hovering over installs icon"
     },
 	"openManage": {
-		"message": "Manage styles",
+		"message": "Manage Styles",
 		"description": "Link to open the manage page."
 	},
 	"openCreate": {

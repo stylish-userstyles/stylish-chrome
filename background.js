@@ -36,6 +36,15 @@ if ("onHistoryStateUpdated" in chrome.webNavigation) {
 	chrome.webNavigation.onHistoryStateUpdated.addListener(webNavigationListener.bind(this, "styleReplaceAll"));
 }
 
+chrome.runtime.onInstalled.addListener(function(details){
+    if(details.reason == "install"){
+	_gaq.push(['_trackEvent', 'extension', 'installed']);
+    }else if(details.reason == "update"){
+        var thisVersion = chrome.runtime.getManifest().version;
+	var mess = "Updated from " + details.previousVersion + " to " + thisVersion;
+	_gaq.push(['_trackEvent', 'extension', mess]);
+    }
+});
 
 var stylesUpdater = initStylesUpdater();
 chrome.webNavigation.onBeforeNavigate.addListener(webNavigationListener.bind(this, null));
