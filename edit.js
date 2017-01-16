@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 "use strict";
 
 var styleId = null;
@@ -28,7 +29,7 @@ Array.prototype.rotate = function(amount) { // negative amount == rotate left
 	var r = this.slice(-amount, this.length);
 	Array.prototype.push.apply(r, this.slice(0, this.length - r.length));
 	return r;
-}
+};
 
 Object.defineProperty(Array.prototype, "last", {get: function() { return this[this.length - 1]; }});
 
@@ -98,9 +99,9 @@ function setCleanItem(node, isClean) {
 }
 
 function isCleanGlobal() {
-	var clean = Object.keys(dirty).length == 0;
+	var clean = Object.keys(dirty).length === 0;
 	setDirtyClass(document.body, !clean);
-    var saveBtn = document.getElementById("save-button")
+    var saveBtn = document.getElementById("save-button");
     if (clean){
         //saveBtn.removeAttribute('disabled');
     }else{
@@ -115,7 +116,7 @@ function setCleanGlobal() {
 }
 
 function setCleanSection(section) {
-	section.querySelectorAll(".style-contributor").forEach(function(node) { setCleanItem(node, true) });
+	section.querySelectorAll(".style-contributor").forEach(function(node) { setCleanItem(node, true); });
 
 	// #header section has no codemirror
 	var cm = section.CodeMirror;
@@ -150,8 +151,8 @@ function initCodeMirror() {
 
 	// additional commands
 	CM.commands.jumpToLine = jumpToLine;
-	CM.commands.nextEditor = function(cm) { nextPrevEditor(cm, 1) };
-	CM.commands.prevEditor = function(cm) { nextPrevEditor(cm, -1) };
+	CM.commands.nextEditor = function(cm) { nextPrevEditor(cm, 1); };
+	CM.commands.prevEditor = function(cm) { nextPrevEditor(cm, -1); };
 	CM.commands.save = save;
 	CM.commands.blockComment = function(cm) {
 		cm.blockComment(cm.getCursor("from"), cm.getCursor("to"), {fullLines: false});
@@ -182,7 +183,7 @@ function initCodeMirror() {
 	if (isWindowsOS) {
 		// "pcDefault" keymap on Windows should have F3/Shift-F3
 		if (!extraKeysCommands.findNext) {
-			CM.keyMap.pcDefault["F3"] = "findNext";
+			CM.keyMap.pcDefault.F3 = "findNext";
 		}
 		if (!extraKeysCommands.findPrev) {
 			CM.keyMap.pcDefault["Shift-F3"] = "findPrev";
@@ -253,7 +254,7 @@ function initCodeMirror() {
 		document.getElementById("options").addEventListener("change", acmeEventListener, false);
 		setupLivePrefs(
 			document.querySelectorAll("#options *[data-option][id^='editor.']")
-				.map(function(option) { return option.id })
+				.map(function(option) { return option.id; })
 		);
 	});
 
@@ -342,13 +343,13 @@ function setupCodeMirror(textarea, index) {
 		});
 	});
 	// resizeGrip has enough space when scrollbars.horiz is visible
-	if (cm.display.scrollbars.horiz.style.display != "") {
+	if (cm.display.scrollbars.horiz.style.display !== "") {
 		cm.display.scrollbars.vert.style.marginBottom = "0";
 	}
 	// resizeGrip space adjustment in case a long line was entered/deleted by a user
 	new MutationObserver(function(mutations) {
 		var hScrollbar = mutations[0].target;
-		var hScrollbarVisible = hScrollbar.style.display != "";
+		var hScrollbarVisible = hScrollbar.style.display !== "";
 		var vScrollbar = hScrollbar.parentNode.CodeMirror.display.scrollbars.vert;
 		vScrollbar.style.marginBottom = hScrollbarVisible ? "0" : "";
 	}).observe(cm.display.scrollbars.horiz, {
@@ -443,7 +444,7 @@ window.onbeforeunload = function() {
 };
 
 function addAppliesTo(list, name, value) {
-	var showingEverything = list.querySelector(".applies-to-everything") != null;
+	var showingEverything = list.querySelector(".applies-to-everything") !== null;
 	// blow away "Everything" if it's there
 	if (showingEverything) {
 		list.removeChild(list.firstChild);
@@ -463,7 +464,7 @@ function addAppliesTo(list, name, value) {
 	} else {
 		e = template.appliesToEverything.cloneNode(true);
 	}
-	e.querySelector(".add-applies-to").addEventListener("click", function() {addAppliesTo(this.parentNode.parentNode)}, false);
+	e.querySelector(".add-applies-to").addEventListener("click", function() {addAppliesTo(this.parentNode.parentNode);}, false);
 	list.appendChild(e);
 }
 
@@ -496,18 +497,19 @@ function addSection(event, section) {
 	appliesTo.addEventListener("change", onChange);
 	appliesTo.addEventListener("input", onChange);
 
-	var sections = document.getElementById("sections");
+	var sections = document.getElementById("sections"),
+        cm;
 	if (event) {
 		var clickedSection = getSectionForChild(event.target);
 		sections.insertBefore(div, clickedSection.nextElementSibling);
 		var newIndex = getSections().indexOf(clickedSection) + 1;
-		var cm = setupCodeMirror(codeElement, newIndex);
+		cm = setupCodeMirror(codeElement, newIndex);
 		makeSectionVisible(cm);
-		cm.focus()
+		cm.focus();
 		renderLintReport();
 	} else {
 		sections.appendChild(div);
-		var cm = setupCodeMirror(codeElement);
+		cm = setupCodeMirror(codeElement);
 	}
 
 	div.CodeMirror = cm;
@@ -594,7 +596,7 @@ function setupGlobalSearch() {
 			query: newState.query,
 			overlay: newState.overlay,
 			annotate: cm.showMatchesOnScrollbar(newState.query, shouldIgnoreCase(newState.query))
-		}
+		};
 		cm.addOverlay(newState.overlay);
 		return cm.state.search;
 	}
@@ -633,7 +635,7 @@ function setupGlobalSearch() {
 					updateState(cm, curState);
 				}
 			});
-			if (CodeMirror.cmpPos(curState.posFrom, curState.posTo) == 0) {
+			if (CodeMirror.cmpPos(curState.posFrom, curState.posTo) === 0) {
 				findNext(activeCM);
 			}
 		});
@@ -767,7 +769,7 @@ function setupGlobalSearch() {
 						wrapAround |= cmp <= 0;
 
 						var dlg = cm.getWrapperElement().querySelector(".CodeMirror-dialog");
-						if (!dlg || cmp == 0 || wrapAround && CodeMirror.cmpPos(cm.getCursor(), origPos) >= 0) {
+						if (!dlg || cmp === 0 || wrapAround && CodeMirror.cmpPos(cm.getCursor(), origPos) >= 0) {
 							if (dlg) {
 								dlg.remove();
 							}

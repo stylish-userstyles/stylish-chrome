@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-8246384-4']);
 _gaq.push(['_trackPageview']);

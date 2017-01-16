@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 function MemСachedRequester(){
     this.memcache = {};
 }
@@ -9,7 +10,7 @@ MemСachedRequester.prototype.setCache  = function(url){
     return function(data){
         self.memcache[url] = data;
         return data;
-    }
+    };
 };
 MemСachedRequester.prototype.getCache  = function(url){
     return this.memcache[url];

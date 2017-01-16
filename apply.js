@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 var g_disableAll = false;
 var g_styleElements = {};
 var iframeObserver;
@@ -12,7 +13,7 @@ function requestStyles() {
 	// unless Chrome still starts up and the background page isn't fully loaded.
 	// (Note: in this case the function may be invoked again from applyStyles.)
 	var request = {method: "getStyles", matchUrl: location.href, enabled: true, asHash: true};
-	if (location.href.indexOf(chrome.extension.getURL("")) == 0) {
+	if (location.href.indexOf(chrome.extension.getURL("")) === 0) {
 		var bg = chrome.extension.getBackgroundPage();
 		if (bg && bg.getStyles) {
 			// apply styles immediately, then proceed with a normal request that will update the icon
@@ -24,6 +25,12 @@ function requestStyles() {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	// Also handle special request just for the pop-up
+    function handleStyleAdded() {
+        if (request.style.enabled) {
+            chrome.runtime.sendMessage({method: "getStyles", matchUrl: location.href, enabled: true, id: request.style.id, asHash: true}, applyStyles);
+        }
+    }
+    
 	switch (request.method == "updatePopup" ? request.reason : request.method) {
 		case "styleDeleted":
 			removeStyle(request.id, document);
@@ -31,15 +38,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		case "styleUpdated":
 			if (request.style.enabled) {
 				retireStyle(request.style.id);
-				// fallthrough to "styleAdded"
+				handleStyleAdded();
 			} else {
 				removeStyle(request.style.id, document);
-				break;
 			}
+            break;
 		case "styleAdded":
-			if (request.style.enabled) {
-				chrome.runtime.sendMessage({method: "getStyles", matchUrl: location.href, enabled: true, id: request.style.id, asHash: true}, applyStyles);
-			}
+			handleStyleAdded();
 			break;
 		case "styleApply":
 			applyStyles(request.styles);
@@ -90,7 +95,7 @@ function removeStyle(id, doc) {
 	if (e) {
 		e.remove();
 	}
-	if (doc == document && Object.keys(g_styleElements).length == 0) {
+	if (doc == document && Object.keys(g_styleElements).length === 0) {
 		iframeObserver.disconnect();
 	}
 	getDynamicIFrames(doc).forEach(function(iframe) {
@@ -224,7 +229,7 @@ function iframeIsDynamic(f) {
 		// Cross-origin, so it's not a dynamic iframe
 		return false;
 	}
-	return href == document.location.href || href.indexOf("about:") == 0;
+	return href == document.location.href || href.indexOf("about:") === 0;
 }
 
 function iframeIsLoadingSrcDoc(f) {
@@ -291,5 +296,5 @@ function initObserver() {
 	iframeObserver.start = function() {
 		// will be ignored by browser if already observing
 		iframeObserver.observe(document, {childList: true, subtree: true});
-	}
+	};
 }

@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 var MustacheTemplate = new (function MustacheTemplate(){
     var TEMPLATE_PREFIX = "template-";
 

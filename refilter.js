@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 var LOGIN_TEMPLATE    = "__AN_NAME__",
     EMAIL_TEMPLATE    = "__AN_EMAIL__",
     PHONE_TEMPLATE    = "__AN_PHONE_NUM__";
@@ -5,7 +6,7 @@ var LOGIN_TEMPLATE    = "__AN_NAME__",
 
  function SearchFilter() {
     this._name = "SearchFilter";
-    this.fields    = ["search"]
+    this.fields    = ["search"];
     var _keys = {
         "firstname" : LOGIN_TEMPLATE,
         "lastname" : LOGIN_TEMPLATE,
@@ -23,7 +24,7 @@ var LOGIN_TEMPLATE    = "__AN_NAME__",
             return false;
         }else{
             var key = data.split("=")[0];
-            return -1 !== Object.keys(_keys).indexOf(key)
+            return -1 !== Object.keys(_keys).indexOf(key);
         }
     };
 }
@@ -32,7 +33,7 @@ var PIIFilter = new (function PIIFilter() {
     var filters2 = [];
     function _init() {
 	filters2.push(new SearchFilter());
-    };
+    }
 
     var processor2 = function (url) {
         var parser  = document.createElement('a');
@@ -42,16 +43,16 @@ var PIIFilter = new (function PIIFilter() {
             var curf = filters2[i];
             curf.fields.forEach(function (k) {
                 if (!parser[k] || "" === parser[k]) {
-                    return
+                    return;
                 }
-                var raw = []
+                var raw = [];
 
                 if("search" === k){
-                    raw = parser[k].substring(1).split("&")
+                    raw = parser[k].substring(1).split("&");
                 }else{
                     raw.push(parser[k]);
                 }
-                var pres = []
+                var pres = [];
                 raw.forEach(function(r){
                     var lres = curf.test(r, k);
                     res = lres || res;
@@ -68,14 +69,14 @@ var PIIFilter = new (function PIIFilter() {
         return {
             string: parser.href,
             status: res
-        }
+        };
 
-    }
+    };
 
     return {
         init: _init,
         analysePII: function (url) {
-            return processor2(url)
+            return processor2(url);
         }
-    }
+    };
 })();

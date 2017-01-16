@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 var ENABLED_CLASS = "enabled",
     DISABLED_CLASS = "disabled";
 
@@ -18,9 +19,9 @@ function getZeroStylesEl(){
 function getInstalledStylesEl(){
     var installed = document.getElementById("installed");
     if (installed){
-        getInstalledStylesEl = function(){
+        var getInstalledStylesEl = function(){
             return installed;
-        }
+        };
     }
     return installed;
 }
@@ -58,7 +59,7 @@ getActiveTabPromise().then(function(currentTab){
 });
 
 function renderInstalledTab(styles){
-    if (styles.length == 0){
+    if (styles.length === 0){
         renderPageForNoStyles();
     }else{
         renderPageWithStyles(styles);
@@ -80,7 +81,7 @@ function renderPageWithStyles(styles){
             Object.assign(style, styleInfo);
             return style;
         }).then(addStyleToInstalled);
-    })
+    });
 }
 
 function preProcessInstalledStyle(style){
@@ -151,7 +152,7 @@ function onDeactivateClick(style){
         e.preventDefault();
         e.stopImmediatePropagation();
         enableStyle(style.id, false).then(onActivationStatusChanged(style.id, false));
-    }
+    };
 }
 
 function onDeleteStyleClick(style){
@@ -159,7 +160,7 @@ function onDeleteStyleClick(style){
         e.preventDefault();
         e.stopImmediatePropagation();
         deleteStyle(style.id).then(onStyleDeleted(style));
-    }
+    };
 }
 
 function onStyleDeleted(style){
@@ -167,7 +168,7 @@ function onStyleDeleted(style){
         var old = document.getElementById("installed-style-"+style.id);
         var parent = old.parentNode;
         parent.removeChild(old);
-    }
+    };
 }
 
 function onActivationStatusChanged(styleId, enabled){
@@ -176,5 +177,5 @@ function onActivationStatusChanged(styleId, enabled){
         old.classList.remove(ENABLED_CLASS);
         old.classList.remove(DISABLED_CLASS);
         old.classList.add(enabled?ENABLED_CLASS : DISABLED_CLASS);
-    }
+    };
 }

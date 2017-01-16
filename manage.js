@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 var lastUpdatedStyleId = null;
 var installed;
 
@@ -18,7 +19,7 @@ function showStyles(styles) {
 		document.stylishStyles = styles;
 		return;
 	}
-	styles.sort(function(a, b) { return a.name.localeCompare(b.name)});
+	styles.sort(function(a, b) { return a.name.localeCompare(b.name);});
 	styles.map(createStyleElement).forEach(function(e) {
 		installed.appendChild(e);
 	});
@@ -44,7 +45,7 @@ function createStyleElement(style) {
 	var styleName = e.querySelector(".style-name");
 	styleName.appendChild(document.createTextNode(style.name));
 	if (style.url) {
-		var homepage = template.styleHomepage.cloneNode(true)
+		var homepage = template.styleHomepage.cloneNode(true);
 		homepage.setAttribute("href", style.url);
 		styleName.appendChild(document.createTextNode(" " ));
 		styleName.appendChild(homepage);
@@ -60,7 +61,7 @@ function createStyleElement(style) {
 					return array.indexOf(value) == -1;
 				}).forEach(function(value) {
 					array.push(value);
-				});;
+				});
 			}
 		});
 	}
@@ -79,7 +80,7 @@ function createStyleElement(style) {
 		appliesToToShow = appliesToToShow.concat(regexps.map(function(u) { return "/" + u + "/"; }));
 	var appliesToString = "";
 	var showAppliesToExtra = false;
-	if (appliesToToShow.length == "")
+	if (appliesToToShow.length === "")
 		appliesToString = t('appliesToEverything');
 	else if (appliesToToShow.length <= 10)
 		appliesToString = appliesToToShow.join(", ");
@@ -95,7 +96,7 @@ function createStyleElement(style) {
 	editLink.setAttribute("href", editLink.getAttribute("href") + style.id);
 	editLink.addEventListener("click", function(event) {
 		if (!event.altKey) {
-			var left = event.button == 0, middle = event.button == 1,
+			var left = event.button === 0, middle = event.button == 1,
 				shift = event.shiftKey, ctrl = event.ctrlKey;
 			var openWindow = left && shift && !ctrl;
 			var openBackgroundTab = (middle && !shift) || (left && ctrl && !shift);
@@ -181,7 +182,7 @@ function handleUpdate(style) {
 		lastUpdatedStyleId = null;
 		element.className = element.className += " update-done";
 		element.querySelector(".update-note").innerHTML = t('updateCompleted');
-	};
+	}
 }
 
 function handleDelete(id) {
@@ -225,7 +226,7 @@ function checkUpdateAll() {
 			if (success) {
 				++updatableCount;
 			}
-			if (--toCheckCount == 0) {
+			if (--toCheckCount === 0) {
 				btnCheck.disabled = false;
 				if (updatableCount) {
 					btnApply.classList.remove("hidden");
@@ -265,7 +266,7 @@ function checkUpdate(element, callback) {
 	}
 
 	function handleFailure(status) {
-		if (status == 0) {
+		if (status === 0) {
 			handleNeedsUpdate(t('updateCheckFailServerUnreachable'), id, null);
 		} else {
 			handleNeedsUpdate(t('updateCheckFailBadResponseCode', [status]), id, null);
@@ -276,7 +277,7 @@ function checkUpdate(element, callback) {
 	}
 
 	if (!md5Url || !originalMd5) {
-		checkUpdateFullCode(url, false, handleSuccess, handleFailure)
+		checkUpdateFullCode(url, false, handleSuccess, handleFailure);
 	} else {
 		checkUpdateMd5(originalMd5, md5Url, function(needsUpdate) {
 			if (needsUpdate) {
@@ -313,12 +314,12 @@ function download(url, successCallback, failureCallback) {
 	xhr.onreadystatechange = function (aEvt) {
 		if (xhr.readyState == 4) {
 			if (xhr.status == 200) {
-				successCallback(xhr.responseText)
+				successCallback(xhr.responseText);
 			} else {
 				failureCallback(xhr.status);
 			}
 		}
-	}
+	};
 	if (url.length > 2000) {
 		var parts = url.split("?");
 		xhr.open("POST", parts[0], true);
@@ -391,7 +392,7 @@ function jsonEquals(a, b, property) {
 	var bProp = b[property], typeB = getType(bProp);
 	if (typeA != typeB) {
 		// consider empty arrays equivalent to lack of property
-		if ((typeA == "undefined" || (typeA == "array" && aProp.length == 0)) && (typeB == "undefined" || (typeB == "array" && bProp.length == 0))) {
+		if ((typeA == "undefined" || (typeA == "array" && aProp.length === 0)) && (typeB == "undefined" || (typeB == "array" && bProp.length === 0))) {
 			return true;
 		}
 		return false;

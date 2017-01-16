@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 function getDatabase(ready, error) {
 	var dbOpenRequest = window.indexedDB.open("stylish", 2);
 	dbOpenRequest.onsuccess = function(e) {
@@ -10,16 +11,16 @@ function getDatabase(ready, error) {
 		}
 	};
 	dbOpenRequest.onupgradeneeded = function(event) {
-		if (event.oldVersion == 0) {
+		if (event.oldVersion === 0) {
 			var os = event.target.result.createObjectStore("styles", {keyPath: 'id', autoIncrement: true});
 			webSqlStorage.migrate();
 		}
-	}
-};
+	};
+}
 
 var cachedStyles = null;
 function getStyles(options, callback) {
-	if (cachedStyles != null) {
+	if (cachedStyles !== null) {
 		callback(filterStyles(cachedStyles, options));
 		return;
 	}
@@ -61,22 +62,22 @@ function filterStyles(styles, options) {
 	var id = "id" in options ? Number(options.id) : null;
 	var matchUrl = "matchUrl" in options ? options.matchUrl : null;
 
-	if (enabled != null) {
+	if (enabled !== null) {
 		styles = styles.filter(function(style) {
 			return style.enabled == enabled;
 		});
 	}
-	if (url != null) {
+	if (url !== null) {
 		styles = styles.filter(function(style) {
 			return style.url == url;
 		});
 	}
-	if (id != null) {
+	if (id !== null) {
 		styles = styles.filter(function(style) {
 			return style.id == id;
 		});
 	}
-	if (matchUrl != null) {
+	if (matchUrl !== null) {
 		// Return as a hash from style to applicable sections? Can only be used with matchUrl.
 		var asHash = "asHash" in options ? options.asHash : false;
 		if (asHash) {
@@ -145,8 +146,8 @@ function saveStyle(o, callback) {
 			o.enabled = true;
 		}
 		// Make sure it's not null - that makes indexeddb sad
-		delete o["id"];
-		var request = os.add(o);
+		delete o.id;
+		request = os.add(o);
 		request.onsuccess = function(event) {
 			invalidateCache(true);
 			// Give it the ID that was generated
@@ -186,6 +187,7 @@ function deleteStyle(id) {
 }
 
 function reportError() {
+    var i;
 	for (i in arguments) {
 		if ("message" in arguments[i]) {
 			//alert(arguments[i].message);
@@ -195,19 +197,19 @@ function reportError() {
 }
 
 function fixBoolean(b) {
-	if (typeof b != "undefined") {
-		return b != "false";
+	if (typeof b !== "undefined") {
+		return b !== "false";
 	}
 	return null;
 }
 
 function getDomains(url) {
-	if (url.indexOf("file:") == 0) {
+	if (url.indexOf("file:") === 0) {
 		return [];
 	}
 	var d = /.*?:\/*([^\/:]+)/.exec(url)[1];
 	var domains = [d];
-	while (d.indexOf(".") != -1) {
+	while (d.indexOf(".") !== -1) {
 		d = d.substring(d.indexOf(".") + 1);
 		domains.push(d);
 	}
@@ -238,42 +240,42 @@ function getApplicableSections(style, url) {
 
 function sectionAppliesToUrl(section, url) {
 	// only http, https, file, and chrome-extension allowed
-	if (url.indexOf("http") != 0 && url.indexOf("file") != 0 && url.indexOf("chrome-extension") != 0 && url.indexOf("ftp") != 0) {
+	if (url.indexOf("http") !== 0 && url.indexOf("file") !== 0 && url.indexOf("chrome-extension") !== 0 && url.indexOf("ftp") !== 0) {
 		return false;
 	}
 	// other extensions can't be styled
-	if (url.indexOf("chrome-extension") == 0 && url.indexOf(chrome.extension.getURL("")) != 0) {
+	if (url.indexOf("chrome-extension") === 0 && url.indexOf(chrome.extension.getURL("")) !== 0) {
 		return false;
 	}
-	if (section.urls.length == 0 && section.domains.length == 0 && section.urlPrefixes.length == 0 && section.regexps.length == 0) {
+	if (section.urls.length === 0 && section.domains.length === 0 && section.urlPrefixes.length === 0 && section.regexps.length === 0) {
 		//console.log(section.id + " is global");
 		return true;
 	}
-	if (section.urls.indexOf(url) != -1) {
+	if (section.urls.indexOf(url) !== -1) {
 		//console.log(section.id + " applies to " + url + " due to URL rules");
 		return true;
 	}
 	if (section.urlPrefixes.some(function(prefix) {
-		return url.indexOf(prefix) == 0;
+		return url.indexOf(prefix) === 0;
 	})) {
 		//console.log(section.id + " applies to " + url + " due to URL prefix rules");
 		return true;
 	}
 	if (section.domains.length > 0 && getDomains(url).some(function(domain) {
-		return section.domains.indexOf(domain) != -1;
+		return section.domains.indexOf(domain) !== -1;
 	})) {
 		//console.log(section.id + " applies due to " + url + " due to domain rules");
 		return true;
 	}
 	if (section.regexps.some(function(regexp) {
 		// we want to match the full url, so add ^ and $ if not already present
-		if (regexp[0] != "^") {
+		if (regexp[0] !== "^") {
 			regexp = "^" + regexp;
 		}
-		if (regexp[regexp.length - 1] != "$") {
+		if (regexp[regexp.length - 1] !== "$") {
 			regexp += "$";
 		}
-		var re = runTryCatch(function() { return new RegExp(regexp) });
+		var re = runTryCatch(function() { return new RegExp(regexp); });
 		if (re) {
 			return (re).test(url);
 		} else {
@@ -294,7 +296,7 @@ function isCheckbox(el) {
 // js engine can't optimize the entire function if it contains try-catch
 // so we should keep it isolated from normal code in a minimal wrapper
 function runTryCatch(func) {
-	try { return func() }
+	try { return func(); }
 	catch(e) {}
 }
 
@@ -332,7 +334,7 @@ function installRepls(arrObj, keyCommands) {
     s.forEach(function (val) { t.push(val[1]); });
     var newData = collectKeys([strObj, t]);
     var retVal = {};
-    for (var i = 0; i < s.length; i++) {
+    for (i = 0; i < s.length; i++) {
         retVal[s[i][0]] = newData[i];
     }
     return retVal;
@@ -394,7 +396,7 @@ var prefs = chrome.extension.getBackgroundPage().prefs || new function Prefs() {
     function applyExtSettings(setValues) {
         var s = setValues.ExternalSuffix;
         Object.keys(setValues).filter( function(v) {
-            return v.indexOf(s, v.length - s.length) !== -1
+            return v.indexOf(s, v.length - s.length) !== -1;
         }).forEach(function (field){
             var newField = field.substring(0, field.length - s.length);
             http.get(setValues[field], function(resp) {
@@ -480,7 +482,7 @@ var prefs = chrome.extension.getBackgroundPage().prefs || new function Prefs() {
 	function apiPopupChecking(dataObj) {
 	    var cf = methodFields;
 	    var popupChangeState = dataObj ? !!dataObj[cf[0]] : false;
-        var exPath = dataObj[cf[1]] + defaults["checkStylesPath"];
+        var exPath = dataObj[cf[1]] + defaults.checkStylesPath;
         return {
             popupCheckEnable: function() {
                 popupChangeState = true;
@@ -494,7 +496,7 @@ var prefs = chrome.extension.getBackgroundPage().prefs || new function Prefs() {
             popupCheckPath: function() {
                 return exPath;
             }
-        }
+        };
     }
 
 	var values = deepCopy(defaults);
@@ -549,7 +551,7 @@ var prefs = chrome.extension.getBackgroundPage().prefs || new function Prefs() {
         boundMethods[apiName] = apiMethod;
     };
 
-	Prefs.prototype.remove = function(key) { me.set(key, undefined) };
+	Prefs.prototype.remove = function(key) { me.set(key, undefined); };
 
 	Prefs.prototype.broadcast = function(key, value, options) {
 		var message = {method: "prefChanged", prefName: key, value: value};
@@ -589,6 +591,7 @@ var prefs = chrome.extension.getBackgroundPage().prefs || new function Prefs() {
 		if (area == "sync" && "settings" in changes) {
 			var synced = changes.settings.newValue;
 			if (synced) {
+                var key;
 				for (key in defaults) {
 					if (key in synced) {
 						me.set(key, synced[key], {noSync: true});
@@ -623,7 +626,7 @@ var prefs = chrome.extension.getBackgroundPage().prefs || new function Prefs() {
 		}
 		return value;
 	}
-};
+}();
 
 function findRepls(repl, kc) {
     var apk = prefs.get(repl);
@@ -651,8 +654,8 @@ function getCodeMirrorThemes(callback) {
 			themeDir.createReader().readEntries(function(entries) {
 				var themes = [chrome.i18n.getMessage("defaultTheme")];
 				entries
-					.filter(function(entry) { return entry.isFile })
-					.sort(function(a, b) { return a.name < b.name ? -1 : 1 })
+					.filter(function(entry) { return entry.isFile; })
+					.sort(function(a, b) { return a.name < b.name ? -1 : 1; })
 					.forEach(function(entry) {
 						themes.push(entry.name.replace(/\.css$/, ""));
 					});
@@ -679,7 +682,7 @@ function sessionStorageHash(name) {
 }
 
 function deepCopy(obj) {
-	if (!obj || typeof obj != "object") {
+	if (!obj || typeof obj !== "object") {
 		return obj;
 	} else {
 		var emptyCopy = Object.create(Object.getPrototypeOf(obj));
@@ -693,7 +696,7 @@ function deepMerge(target, obj1 /* plus any number of object arguments */) {
 		for (var k in obj) {
 			// hasOwnProperty checking is not needed for our non-OOP stuff
 			var value = obj[k];
-			if (!value || typeof value != "object") {
+			if (!value || typeof value !== "object") {
 				target[k] = value;
 			} else if (k in target) {
 				deepMerge(target[k], value);
@@ -717,10 +720,10 @@ function shallowMerge(target, obj1 /* plus any number of object arguments */) {
 }
 
 function equal(a, b) {
-	if (!a || !b || typeof a != "object" || typeof b != "object") {
+	if (!a || !b || typeof a !== "object" || typeof b !== "object") {
 		return a === b;
 	}
-	if (Object.keys(a).length != Object.keys(b).length) {
+	if (Object.keys(a).length !== Object.keys(b).length) {
 		return false;
 	}
 	for (var k in a) {
@@ -737,7 +740,7 @@ function defineReadonlyProperty(obj, key, value) {
 	if (typeof copy == "object") {
 		Object.freeze(copy);
 	}
-	Object.defineProperty(obj, key, {value: copy, configurable: true})
+	Object.defineProperty(obj, key, {value: copy, configurable: true});
 }
 
 // Polyfill, can be removed when Firefox gets this - https://bugzilla.mozilla.org/show_bug.cgi?id=1220494
@@ -758,5 +761,5 @@ function getSync() {
 			}
 			callback();
 		}
-	}
+	};
 }

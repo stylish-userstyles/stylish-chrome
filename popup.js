@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 var IMAGE_URL_NOT_AVAILABLE = "n/a",
     IMAGE_URL_DEFAULT = "image_na.png";
 
@@ -17,7 +18,7 @@ var STYLE_URL_ID_REGEX = /(styles\/)(\d+)/;
 	}
 	Tabs.onTabChanged(function(e){
 		localStorage.setItem("lastTabId", e.newTabId);
-	})
+	});
 }();
 
 getActiveTab(updatePopUp);
@@ -297,7 +298,7 @@ function getId(event) {
 function openLinkInTabOrWindow(event) {
 	event.preventDefault();
 	if (prefs.get("openEditInWindow", false)) {
-		var options = {url: event.target.href}
+		var options = {url: event.target.href};
 		var wp = prefs.get("windowPosition", {});
 		for (var k in wp) options[k] = wp[k];
 		chrome.windows.create(options);
