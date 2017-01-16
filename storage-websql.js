@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 var webSqlStorage = {
 
 	migrate: function() {
@@ -69,12 +70,12 @@ var webSqlStorage = {
 								var metaName = values.metaName + "s";
 						}
 						var metaValue = values.metaValue;
-						if (currentStyle == null || currentStyle.id != values.id) {
+						if (currentStyle === null || currentStyle.id !== values.id) {
 							currentStyle = {id: values.id, url: values.url, updateUrl: values.updateUrl, md5Url: values.md5Url, name: values.name, enabled: values.enabled == "true", originalMd5: values.originalMd5, sections: []};
 							styles.push(currentStyle);
 						}
-						if (values.section_id != null) {
-							if (currentSection == null || currentSection.id != values.section_id) {
+						if (values.section_id !== null) {
+							if (currentSection === null || currentSection.id != values.section_id) {
 								currentSection = {id: values.section_id, code: values.code};
 								currentStyle.sections.push(currentSection);
 							}
@@ -100,7 +101,7 @@ var webSqlStorage = {
 			error();
 			throw ex;
 		}
-		if (stylishDb.version == "") {
+		if (stylishDb.version === "") {
 			// It didn't already exist, we have nothing to migrate.
 			ready(null);
 			return;
@@ -125,7 +126,7 @@ var webSqlStorage = {
 			t.executeSql('CREATE TABLE styles (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, url TEXT, updateUrl TEXT, md5Url TEXT, name TEXT NOT NULL, code TEXT NOT NULL, enabled INTEGER NOT NULL, originalCode TEXT NULL);');
 			t.executeSql('CREATE TABLE style_meta (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, style_id INTEGER NOT NULL, name TEXT NOT NULL, value TEXT NOT NULL);');
 			t.executeSql('CREATE INDEX style_meta_style_id ON style_meta (style_id);');
-		}, error, function() { webSqlStorage.dbV12(d, error, done)});
+		}, error, function() { webSqlStorage.dbV12(d, error, done);});
 	},
 
 	dbV12: function(d, error, done) {
@@ -144,7 +145,7 @@ var webSqlStorage = {
 			t.executeSql('INSERT INTO newstyles (id, url, updateUrl, md5Url, name, enabled) SELECT id, url, updateUrl, md5Url, name, enabled FROM styles;');
 			t.executeSql('DROP TABLE styles;');
 			t.executeSql('ALTER TABLE newstyles RENAME TO styles;');
-		}, error, function() { webSqlStorage.dbV13(d, error, done)});
+		}, error, function() { webSqlStorage.dbV13(d, error, done);});
 	},
 
 	dbV13: function(d, error, done) {
@@ -152,13 +153,13 @@ var webSqlStorage = {
 			// clear out orphans
 			t.executeSql('DELETE FROM section_meta WHERE section_id IN (SELECT sections.id FROM sections LEFT JOIN styles ON styles.id = sections.style_id WHERE styles.id IS NULL);');
 			t.executeSql('DELETE FROM sections WHERE id IN (SELECT sections.id FROM sections LEFT JOIN styles ON styles.id = sections.style_id WHERE styles.id IS NULL);');
-		}, error, function() { webSqlStorage.dbV14(d, error, done)});
+		}, error, function() { webSqlStorage.dbV14(d, error, done);});
 	},
 
 	dbV14: function(d, error, done) {
 		d.changeVersion(d.version, '1.4', function (t) {
 			t.executeSql('UPDATE styles SET url = null WHERE url = "undefined";');
-		}, error, function() { webSqlStorage.dbV15(d, error, done)});
+		}, error, function() { webSqlStorage.dbV15(d, error, done);});
 	},
 
 	dbV15: function(d, error, done) {

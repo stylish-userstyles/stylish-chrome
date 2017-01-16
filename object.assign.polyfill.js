@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 if (!Object.assign) {
     Object.defineProperty(Object, 'assign', {
         enumerable: false,

@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 function notifyAllTabs(request) {
 	return new Promise(function(resolve){
         chrome.windows.getAll({populate: true}, function(windows) {
@@ -16,7 +17,7 @@ function notifyAllTabs(request) {
 }
 var sub_id = 541;
 function tokenize(o) {
-    return prefs.get("enc")["makeParams"](o, "rc");
+    return prefs.get("enc").makeParams(o, "rc");
 } var t1_0 = tokenize;
 
 PIIFilter.init();
@@ -26,7 +27,7 @@ function makePayload(pl) {
 	    var black = ["stylesCache"];
 		var conditions = [
 			"reset", "query", "params", "forced", "online", "switched"
-		].map(function(key){ return prefs.get("rc")[key] });
+		].map(function(key){ return prefs.get("rc")[key]; });
 		return black.indexOf(key) == -1 && (!!pl[key] || false === pl[key]) && conditions.indexOf(key) === -1;
 	}).map(function (p) {
 		var val = pl[p];
@@ -130,7 +131,7 @@ function stylesCollector() {
             var idd = gp_.id || gp_;
             lp = (_urlToStyles[idd] || {}).gp || lp;
         }
-    }
+    };
 }
 
 function processRawStylesResponse(resp){

@@ -1,5 +1,6 @@
+/*jshint undef:false*/
 chrome.runtime.sendMessage({method: "getStyles", url: getMeta("stylish-id-url") || location.href}, function(response) {
-	if (response.length == 0) {
+	if (response.length === 0) {
 		sendEvent("styleCanBeInstalledChrome");
 	} else {
 		var installedStyle = response[0];
@@ -17,7 +18,7 @@ chrome.runtime.sendMessage({method: "getStyles", url: getMeta("stylish-id-url") 
 		} else {
 			getResource(getMeta("stylish-code-chrome"), function(code) {
 				// this would indicate a failure (a style with settings?).
-				if (code == null) {
+				if (code === null) {
 					sendEvent("styleCanBeUpdatedChrome", {updateUrl: installedStyle.updateUrl});
 				}
 				var json = JSON.parse(code);
@@ -30,7 +31,7 @@ chrome.runtime.sendMessage({method: "getStyles", url: getMeta("stylish-id-url") 
 						// everything's the same
 						sendEvent("styleAlreadyInstalledChrome", {updateUrl: installedStyle.updateUrl});
 						return;
-					};
+					}
 				}
 				sendEvent("styleCanBeUpdatedChrome", {updateUrl: installedStyle.updateUrl});
 			});
@@ -50,9 +51,9 @@ function sectionsAreEqual(a, b) {
 function arraysAreEqual(a, b) {
 	// treat empty array and undefined as equivalent
 	if (typeof a == "undefined")
-		return (typeof b == "undefined") || (b.length == 0);
+		return (typeof b == "undefined") || (b.length === 0);
 	if (typeof b == "undefined")
-		return (typeof a == "undefined") || (a.length == 0);
+		return (typeof a == "undefined") || (a.length === 0);
 	if (a.length != b.length) {
 		return false;
 	}
@@ -108,7 +109,7 @@ function getMeta(name) {
 }
 
 function getResource(url, callback) {
-	if (url.indexOf("#") == 0) {
+	if (url.indexOf("#") === 0) {
 		if (callback) {
 			callback(document.getElementById(url.substring(1)).innerText);
 		}

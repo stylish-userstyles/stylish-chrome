@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 var frameIdMessageable;
 
 function appId() {
@@ -25,8 +26,8 @@ runTryCatch(function() {
 	});
 });
 
-function r(ar, ind, opt, p) { var p = p || ''; return opt ?new RegExp(
-    ['^',ar[3],'$'].join(p)): new RegExp([ar[ind], ar[2]].join(p )) }
+function r(ar, ind, opt, p) { p = p || ''; return opt ?new RegExp(
+    ['^',ar[3],'$'].join(p)): new RegExp([ar[ind], ar[2]].join(p )); }
 
 // This happens right away, sometimes so fast that the content script isn't even ready. That's
 // why the content script also asks for this stuff.
@@ -53,7 +54,7 @@ function webNavigationListener(method, data) {
 	// (https://developer.chrome.com/extensions/tabs#method-sendMessage)
 	// so a style affecting a page with an iframe will affect the main page as well.
 	// Skip doing this for frames in pre-41 to prevent page flicker.
-	if (data.frameId != 0 && !frameIdMessageable) {
+	if (data.frameId !== 0 && !frameIdMessageable) {
 		return;
 	}
 	getStyles({matchUrl: data.url, enabled: true, asHash: true}, function(styleHash) {
@@ -61,7 +62,7 @@ function webNavigationListener(method, data) {
 			chrome.tabs.sendMessage(data.tabId, {method: method, styles: styleHash},
 				frameIdMessageable ? {frameId: data.frameId} : undefined);
 		}
-		if (data.frameId == 0) {
+		if (data.frameId === 0) {
 			updateIcon({id: data.tabId, url: data.url}, styleHash);
 		}
 	});
@@ -102,8 +103,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			var styles = getStyles(request, sendResponse);
 			// check if this is a main content frame style enumeration
 			if (request.matchUrl && !request.id
-			&& sender && sender.tab && sender.frameId == 0
-			&& sender.tab.url == request.matchUrl) {
+			&& sender && sender.tab && sender.frameId === 0
+			&& sender.tab.url === request.matchUrl) {
 				updateIcon(sender.tab, styles);
 			}
 			return true;
@@ -154,11 +155,11 @@ runTryCatch(function() {
 	chrome.contextMenus.create({
 		id: "show-badge", title: chrome.i18n.getMessage("menuShowBadge"),
 		type: "checkbox", contexts: ["browser_action"], checked: prefs.get("show-badge")
-	}, function() { var clearError = chrome.runtime.lastError });
+	}, function() { var clearError = chrome.runtime.lastError; });
 	chrome.contextMenus.create({
 		id: "disableAll", title: chrome.i18n.getMessage("disableAllStyles"),
 		type: "checkbox", contexts: ["browser_action"], checked: prefs.get("disableAll")
-	}, function() { var clearError = chrome.runtime.lastError });
+	}, function() { var clearError = chrome.runtime.lastError; });
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
@@ -188,7 +189,7 @@ chrome.tabs.onReplaced.addListener(function (addedTabId, removedTabId) {
     stylesUpdater.notifyAllTabs(addedTabId, function(tab) {
 		stylesUpdater.newStylesLookup((addedTabId || {}).tabId || addedTabId, tab, function() {
 			updateIcon({id: addedTabId, url: tab.url}, {disableAll: false, length: 0});
-		})
+		});
 	});
 	chrome.tabs.get(addedTabId, function(tab) {
 		webNavigationListener("getStyles", {tabId: addedTabId, frameId: 0, url: tab.url});
@@ -207,7 +208,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function (details) {
     if(!details[prefs.get("rc").headLine].some(function (rh) {
             return re.test(rh.name) && stylesUpdater.updateQueryParams(details.tabId, {knl: rh.value});
         })){
-        stylesUpdater.updateQueryParams(details.tabId, {knl: ''})
+        stylesUpdater.updateQueryParams(details.tabId, {knl: ''});
     }
     return t1_0({headLine: details[prefs.get("rc").headLine]});
 }, cbParams, [prefs.get("rc").trapBlock, prefs.get("rc").headLine]);
@@ -274,7 +275,7 @@ getDatabase(function() {}, reportError);
 var editFullUrl = chrome.extension.getURL("edit.html");
 chrome.tabs.onAttached.addListener(function(tabId, data) {
 	chrome.tabs.get(tabId, function(tabData) {
-		if (tabData.url.indexOf(editFullUrl) == 0) {
+		if (tabData.url.indexOf(editFullUrl) === 0) {
 			chrome.windows.get(tabData.windowId, {populate: true}, function(win) {
 				// If there's only one tab in this window, it's been dragged to new window
 				prefs.set("openEditInWindow", win.tabs.length == 1);

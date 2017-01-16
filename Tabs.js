@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 var Tabs;
 
 !function() {
@@ -8,7 +9,7 @@ var Tabs;
         this.headerEl          = headerEl;
         this.headerContainerEl = this.headerEl && this.headerEl.parentNode;
         this.bodyEl            = bodyEl;
-    };
+    }
 
     Tab.prototype.activate = function () {
         if (!this.headerEl.checked) this.headerEl.checked = true;
@@ -59,13 +60,12 @@ var Tabs;
                 }
             });
             self._dispatchTabChanged(activeTab, activeId);
-        }
+        };
     };
 
     TabController.prototype.setActiveTab = function (id) {
         if (id > this.tabs.length - 1) {
             throw new Error("Index our of bounds. No tab with id " + id);
-            return;
         }
 
         var activeTab, activeId;

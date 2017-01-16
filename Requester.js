@@ -1,3 +1,4 @@
+/*jshint undef:false*/
 function Requester(){}
 
 Requester.prototype.get = function(url){
@@ -16,6 +17,6 @@ Requester.prototype.get = function(url){
             } else {
                 resolve(xhr.responseText);
             }
-        }
+        };
     });
 };
