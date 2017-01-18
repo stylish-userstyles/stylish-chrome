@@ -1,4 +1,7 @@
 {
+    "extName": {
+        "message": "Stylish - temas a medida para cada sitio web."
+    },
 	"appliesToEverything": {
 		"message": "Todos los sitios",
 		"description": "Text displayed for styles that apply to all sites"
@@ -24,7 +27,7 @@
 		"description": "Label for the text box controlling tab size option for the style editor."
 	},
 	"enableStyleLabel": {
-		"message": "Habilitar",
+		"message": "Activar",
 		"description": "Label for the button to enable a style"
 	},
 	"styleMissingName": {
@@ -64,7 +67,7 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "Buscar más estilos para este sitio",
+		"message": "Encuentra más estilos para este sitio",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
@@ -116,16 +119,24 @@
 			}
 		}
 	},
-	"manageText": {
-		"message": "<a href='https://userstyles.org'>Get styles on userstyles.org</a> | <a href='https://userstyles.org/help/stylish_chrome'>Get help</a> | <a href='https://userstyles.org/login/policy'>Read the privacy policy</a>",
-		"description": "Help text on the manage page"
+	"manageTextGetStyles": {
+		"message": "Get styles on userstyles.org",
+		"description": "Help text on the manage page: get more styles"
+	},
+	"manageTextGetHelp": {
+		"message": "Get help",
+		"description": "Help text on the manage page: get help"
+	},
+	"manageTextReadPP": {
+		"message": "Read the privacy policy",
+		"description": "Help text on the manage page: read privacy policy"
 	},
 	"searchStyles": {
 		"message": "Buscar contenido",
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "Inhabilitar",
+		"message": "Desactivar",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,17 +234,21 @@
 		"message": "Descartar contenido del tema actual y sobreescribirlo con el estilo importado",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "Listar temas antes de comandos en el botón de menú en la barra de herramientas",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
+	"installButtonLabel": {
+		"message": "Instala un estilo",
+		"description": "Label inside the install button"
 	},
 	"sectionHelp": {
 		"message": "Las secciones te permiten definir diferentes fragmentos de código para aplicarlos a distintos conjuntos de URL en el mismo estilo. Por ejemplo, un único estilo puede cambiar la página de inicio de un sitio de una forma y modificar el resto del sitio de otra.",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "No hay estilos instalados para este sitio.",
+		"message": "No hay estilos instalados para este sitio",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "Nº instalaciones x semana",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "y otros muchos sitios",
@@ -264,8 +279,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "Gestionar estilos instalados",
+		"message": "Gestionar estilos",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Crear un estilo",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "Error de actualización: el servidor ha respondido con el código $code$.",
@@ -325,7 +344,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "Editar estilo",
+		"message": "Editar",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -357,7 +376,7 @@
 		"description": "Label before the replace input field in the editor shown on 'replaceAll' hotkey"
 	},
 	"analyticsEnabled": {
-		"message": "Send anonymous data to Stylish developers for determining user counts",
+		"message": "Enviar datos anónimos a los desarrolladores de Stylish ",
 		"description": "Label for the enable analytics setting"
 	},
 	"editGotoLine": {
@@ -393,7 +412,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "Eliminar",
+		"message": "Borrar",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -417,7 +436,53 @@
 		"description": "Placeholder text of inputbox in keymap help popup on the edit style page. Must be very short"
 	},
 	"description": {
-		"message": "Cambia el estilo de la Web con Stylish, un gestor de estilos de usuario. Stylish te permite instalar fácilmente temas y estilos para Google, Facebook, YouTube, orkut y muchos otros sitios.",
+		"message": "Cambia el estilo del sitio con Stylish, el gestor de estilos para usuarios que te permite instalar temas y skins y crear los tuyos.",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "Has elegido deshabilitar la posibilidad de ver estilos disponibles para este sitio directamente en Stylish.  Visita Userstyles.org para ver estilos disponibles, o actualiza tu configuración para verlos aquí.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "Config.",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Si te das de baja no verás estilos disponibles directamente en el add-on de Stylish. Visita Userstyles.org para verlos o vuelve a darte de alta cuando desees.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
+	},
+	"chooseStyleFromLib": {
+		"message": "Elige un estilo de la biblioteca"
+	},
+	"createOwnStyle": {
+		"message": "Crea tu propio estilo"
+	},
+	"ON": {
+		"message": "ON"
+	},
+	"OFF": {
+		"message": "OFF"
+	},
+	"styleActiveLabel": {
+		"message": "ACTIVO"
+	},
+	"styleInactiveLabel": {
+		"message": "INACTIVO"
+	},
+	"sendFeedbackLabel": {
+		"message": "Da tu opinión"
+	},
+	"bckpInstStyles": {
+		"message": "Respaldar los estilos instalados"
+	},
+	"retrieveBckp": {
+		"message": "Recuperar respaldo"
+	},
+	"stylesLibLabel": {
+		"message": "Aplicar  Estilos"
 	}
 }

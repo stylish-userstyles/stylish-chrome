@@ -512,7 +512,7 @@
 				<br>
 				<div class="applies-to">
 					<label i18n-text="appliesLabel">
-						<img class="applies-to-help" src="help.png" i18n-alt="helpAlt">
+						<img class="applies-to-help" src="images/help.png" i18n-alt="helpAlt">
 					</label>
 					<ul class="applies-to-list"></ul>
 				</div>
@@ -551,11 +551,13 @@
 			<span i18n-text="editGotoLine">: <input class="CodeMirror-jump-field" type="text"></span>
 		</template>
 
-		<script src="storage.js"></script>
-		<script src="messaging.js"></script>
-		<script src="localization.js"></script>
-		<script src="apply.js"></script>
-		<script src="edit.js"></script>
+		<script src="src/storage.js"></script>
+		<script src="src/refilter.js"></script>
+		<script src="src/messaging.js"></script>
+		<script src="src/localization.js"></script>
+		<script src="src/inject/apply.js"></script>
+		<script src="src/analytics.js"></script>
+		<script src="src/edit.js"></script>
 	</head>
 	<body id="stylish-edit">
 		<div id="header">
@@ -563,7 +565,7 @@
 			<section id="basic-info">
 				<div id="basic-info-name">
 					<input id="name" class="style-contributor" i18n-placeholder="styleMissingName">
-					<a id="url" target="_blank"><img src="world_go.png"></a>
+					<a id="url" target="_blank"><img src="images/world_go.png"></a>
 				</div>
 				<div id="basic-info-enabled">
 					<input type="checkbox" id="enabled" class="style-contributor">
@@ -577,7 +579,7 @@
 					<a href="manage.html"><button id="cancel-button" i18n-text="styleCancelEditLabel"></button></a>
 				</div>
 				<div>
-					<h2 id="mozilla-format-heading" i18n-text="styleMozillaFormatHeading"><img id="to-mozilla-help" src="help.png"></h2>
+					<h2 id="mozilla-format-heading" i18n-text="styleMozillaFormatHeading"><img id="to-mozilla-help" src="images/help.png"></h2>
 					<button id="from-mozilla" i18n-text="importLabel"></button>
 					<button id="to-mozilla" i18n-text="exportLabel"></button>
 				</div>
@@ -603,17 +605,17 @@
 				<div class="option aligned">
 					<label id="keyMap-label" for="editor.keyMap" i18n-text="cm_keyMap"></label>
 					<select data-option="keyMap" id="editor.keyMap"></select>
-					<img id="keyMap-help" src="help.png" i18n-alt="helpAlt">
+					<img id="keyMap-help" src="images/help.png" i18n-alt="helpAlt">
 				</div>
 				<div class="option aligned">
 					<label id="theme-label" for="editor.theme" i18n-text="cm_theme"></label>
 					<select data-option="theme" id="editor.theme"></select>
 				</div>
 			</section>
-			<section id="lint"><h2 i18n-text="issues">: <span id="issue-count"></span><img id="lint-help" src="help.png" i18n-alt="helpAlt"></h2><div></div></section>
+			<section id="lint"><h2 i18n-text="issues">: <span id="issue-count"></span><img id="lint-help" src="images/help.png" i18n-alt="helpAlt"></h2><div></div></section>
 		</div>
 		<section id="sections">
-			<h2><span id="sections-heading" i18n-text="styleSectionsTitle"></span><img id="sections-help" src="help.png" i18n-alt="helpAlt"></h2>
+			<h2><span id="sections-heading" i18n-text="styleSectionsTitle"></span><img id="sections-help" src="images/help.png" i18n-alt="helpAlt"></h2>
 		</section>
 		<div id="help-popup">
 			<div class="title"></div><div class="close-icon"></div>

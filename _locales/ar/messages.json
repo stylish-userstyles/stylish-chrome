@@ -1,4 +1,7 @@
 {
+	"extName": {
+		"message": "Stylish - Custom themes for any website"
+	},
 	"appliesToEverything": {
 		"message": "كل شيء",
 		"description": "Text displayed for styles that apply to all sites"
@@ -64,11 +67,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "البحث عن المزيد من الأنماط لموقع الويب هذا.",
+		"message": "Find more styles for this site",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "الأنماط المثبتة",
+		"message": "Installed Styles",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -116,16 +119,25 @@
 			}
 		}
 	},
-	"manageText": {
-		"message": "<a href='https://userstyles.org'>Get styles on userstyles.org</a> | <a href='https://userstyles.org/help/stylish_chrome'>Get help</a> | <a href='https://userstyles.org/login/policy'>Read the privacy policy</a>",
-		"description": "Help text on the manage page"
+	"manageTextGetStyles": {
+		"message": "Get styles on userstyles.org",
+		"description": "Help text on the manage page: get more styles"
 	},
+	"manageTextGetHelp": {
+		"message": "Get help",
+		"description": "Help text on the manage page: get help"
+	},
+	"manageTextReadPP": {
+		"message": "Read the privacy policy",
+		"description": "Help text on the manage page: read privacy policy"
+	},
+	
 	"searchStyles": {
 		"message": "Search contents",
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "تعطيل",
+		"message": "Disable",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,17 +235,21 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "List styles before commands in the toolbar button menu",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
+	"installButtonLabel": {
+		"message": "Install Style",
+		"description": "Label inside the install button"
 	},
 	"sectionHelp": {
 		"message": "تتيح لك الأقسام تحديد أجزاء مختلفة من الرمز لتطبيقها على مجموعات مختلفة من عناوين URL بالنمط نفسه. فعلى سبيل المثال، يمكن لنمط مفرد تغيير الصفحة الرئيسية لموقع ويب بطريقة، مع تغيير بقية أجزاء موقع الويب بطريقة أخرى.",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "لم يتم تثبيت أي أنماط لموقع الويب هذا.",
+		"message": "You don't have any styles installed for this web page",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "Number of weekly installs",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "والمزيد",
@@ -264,8 +280,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "إدارة الأنماط المثبتة.",
+		"message": "Manage Styles",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Create New Style",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "أخفق التحديث - استجاب الخادم بالرمز $code$.",
@@ -325,7 +345,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "تعديل النمط",
+		"message": "Edit Style",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -357,7 +377,7 @@
 		"description": "Label before the replace input field in the editor shown on 'replaceAll' hotkey"
 	},
 	"analyticsEnabled": {
-		"message": "Send anonymous data to Stylish developers for determining user counts",
+		"message": "Send anonymous data to Stylish developers",
 		"description": "Label for the enable analytics setting"
 	},
 	"editGotoLine": {
@@ -393,7 +413,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "حذف",
+		"message": "Delete",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -419,5 +439,51 @@
 	"description": {
 		"message": "يمكنك تغيير نمط الويب باستخدام Stylish، وهي أداة لإدارة أنماط المستخدم. وتتيح Stylish لك بسهولة تثبيت المظاهر والأشكال الخارجية لكل من Google، وFacebook وYouTube وOrkut فضلاً عن الكثير جدًا من مواقع الويب الأخرى.",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "You chose to opt-out from seeing available styles for this site directly on Stylish. Visit %noServerConnectionParam1% to see available styles, or update your %noServerConnectionParam2% to see them here.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "settings",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Opting out means you won't be able to see available styles directly on the Stylish add on. Visit Userstyles.org to reach them, or opt back in at any time.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
+	},
+	"chooseStyleFromLib": {
+		"message": "Choose a style from the Styles Library"
+	},
+	"createOwnStyle": {
+		"message": "Create your own style"
+	},
+	"ON": {
+		"message": "ON"
+	},
+	"OFF": {
+		"message": "OFF"
+	},
+	"styleActiveLabel": {
+		"message": "ACTIVE"
+	},
+	"styleInactiveLabel": {
+		"message": "INACTIVE"
+	},
+	"sendFeedbackLabel": {
+		"message": "Send Feedback"
+	},
+	"bckpInstStyles": {
+		"message": "Backup all installed styles"
+	},
+	"retrieveBckp": {
+		"message": "Retrieve Backup"
+	},
+	"stylesLibLabel": {
+		"message": "Styles Library"
 	}
 }

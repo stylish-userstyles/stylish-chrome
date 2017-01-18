@@ -1,4 +1,7 @@
 {
+    "extName": {
+        "message": "Stylish - Muk. teemat kaikille verkkosivuille"
+    },
 	"appliesToEverything": {
 		"message": "Kaikki",
 		"description": "Text displayed for styles that apply to all sites"
@@ -24,7 +27,7 @@
 		"description": "Label for the text box controlling tab size option for the style editor."
 	},
 	"enableStyleLabel": {
-		"message": "Aktivoi",
+		"message": "Ota k.",
 		"description": "Label for the button to enable a style"
 	},
 	"styleMissingName": {
@@ -64,11 +67,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "Hae lisää tyylejä tälle sivustolle.",
+		"message": "Löydä lisää tyylejä tälle sivustolle",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "Asennetut Tyylit",
+		"message": "Asennetut tyylit",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -116,16 +119,24 @@
 			}
 		}
 	},
-	"manageText": {
-		"message": "<a href='https://userstyles.org'>Get styles on userstyles.org</a> | <a href='https://userstyles.org/help/stylish_chrome'>Get help</a> | <a href='https://userstyles.org/login/policy'>Read the privacy policy</a>",
-		"description": "Help text on the manage page"
+	"manageTextGetStyles": {
+		"message": "Get styles on userstyles.org",
+		"description": "Help text on the manage page: get more styles"
+	},
+	"manageTextGetHelp": {
+		"message": "Get help",
+		"description": "Help text on the manage page: get help"
+	},
+	"manageTextReadPP": {
+		"message": "Read the privacy policy",
+		"description": "Help text on the manage page: read privacy policy"
 	},
 	"searchStyles": {
 		"message": "Search contents",
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "Poista Käytöstä",
+		"message": "Pois k.",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,17 +234,21 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "List styles before commands in the toolbar button menu",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
+	"installButtonLabel": {
+		"message": "As. tyyli",
+		"description": "Label inside the install button"
 	},
 	"sectionHelp": {
 		"message": "Osiot antavat sinun tarkentaa koodin eri osia niin että ne koskevat eri URL osoitteita samassa tyylissä. Esimerkiksi, yksi tyyli voi muokata kotisivua yhdellä tavalla kun se muokkaa koko muuta sivustoa toisella tavalla.",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "Ei asennettuja tyylejä tällä sivustolla.",
+		"message": "Sinulla ei ole asennettuja tyylejä sivustolle",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "Viikot. asennusten määrä",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "ja lisää",
@@ -264,8 +279,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "Hallitse asennettuja tyylejä.",
+		"message": "Hal. tyylejä",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Luo uusi tyyli",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "Päivitys epäonnistui - palvelin vastasi koodilla $code$.",
@@ -325,7 +344,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "Muokkaa Tyyliä",
+		"message": "Muok. tyyl",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -357,7 +376,7 @@
 		"description": "Label before the replace input field in the editor shown on 'replaceAll' hotkey"
 	},
 	"analyticsEnabled": {
-		"message": "Send anonymous data to Stylish developers for determining user counts",
+		"message": "Lähetä anonyymejä tietoja Stylish-kehittäjille ",
 		"description": "Label for the enable analytics setting"
 	},
 	"editGotoLine": {
@@ -417,7 +436,53 @@
 		"description": "Placeholder text of inputbox in keymap help popup on the edit style page. Must be very short"
 	},
 	"description": {
-		"message": "Uudelleen stailaa netti Stylishillä, käyttäjän tyyli hallintapaneelilla. Stylish antaa sinun helposti asentaa teemoja ja skinejä palvelluille kuten Google, Facebook, YouTube, Orkut, ja monelle, monelle muulle sivustolle.",
+		"message": "Muuta tyyliä Stylish -käyttäjätyylihallinnalla. Stylish asentaa teemoja ja ulkoasuja useita sivustoja varten ja voit luoda omasi.",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "Jätit valitsematta saatavien tyylien näkymän tälle sivustolle suoraan Stylish puitteissa. Käy sivustolla Userstyles.org nähdäksesi saatavilla olevat tyylit, tai päivittääksesi asetuksesi, ks. tässä.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "Asetukset",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Valitsematta jättö tarkoittaa ettet voi nähdä saatavilla olevia tyylejä suoraan Stylish:ssa. Käy os. Userstyles.org löytääksesi ne tai palauta milloin vain.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
+	},
+	"chooseStyleFromLib": {
+		"message": "Valitse tyyli Tyylikirjastosta"
+	},
+	"createOwnStyle": {
+		"message": "Luo oma tyylisi"
+	},
+	"ON": {
+		"message": "ON"
+	},
+	"OFF": {
+		"message": "OFF"
+	},
+	"styleActiveLabel": {
+		"message": "KÄY"
+	},
+	"styleInactiveLabel": {
+		"message": "EI KÄY"
+	},
+	"sendFeedbackLabel": {
+		"message": "Läh. palautetta"
+	},
+	"bckpInstStyles": {
+		"message": "Varmuusk. kaikki asennetut tyylit"
+	},
+	"retrieveBckp": {
+		"message": "Palauta varmuuskopio"
+	},
+	"stylesLibLabel": {
+		"message": "Tyyli Kirjasto"
 	}
 }

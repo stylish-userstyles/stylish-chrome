@@ -1,4 +1,7 @@
 {
+    "extName": {
+        "message": "Stylish - Custom themes for any website"
+    },
 	"addStyleLabel": {
 		"message": "Write new style",
 		"description": "Label for the button to go to the add style page"
@@ -8,7 +11,7 @@
 		"description": "Title of the page for adding styles"
 	},
 	"analyticsEnabled": {
-		"message": "Send anonymous data to Stylish developers for determining user counts",
+		"message": "Send anonymous data to Stylish developers",
 		"description": "Label for the enable analytics setting"
 	},
 	"appliesAdd": {
@@ -133,7 +136,7 @@
 		"description": "Confirmation before deleting a style"
 	},
 	"description": {
-		"message": "Restyle the web with Stylish, a user styles manager. Stylish lets you easily install themes and skins for many popular sites.",
+		"message": "Restyle the web with Stylish, a user styles manager. With Stylish you can install themes & skins for many sites and create your own.",
 		"description": "Extension description"
 	},
 	"disableAllStyles": {
@@ -141,7 +144,7 @@
 		"description": "Label for the checkbox that turns all enabled styles off."
 	},
 	"disableStyleLabel": {
-		"message": "Disable",
+		"message": "Deactivate",
 		"description": "Label for the button to disable a style"
 	},
 	"editGotoLine": {
@@ -149,7 +152,7 @@
 		"description": "Go to line or line:column on Ctrl-G in style code editor"
 	},
 	"editStyleHeading": {
-		"message": "Edit Style",
+		"message": "Edit",
 		"description": "Title of the page for editing styles"
 	},
 	"editStyleLabel": {
@@ -166,15 +169,31 @@
 		}
 	},
 	"enableStyleLabel": {
-		"message": "Enable",
+		"message": "Activate",
 		"description": "Label for the button to enable a style"
 	},
 	"exportLabel": {
 		"message": "Export",
 		"description": "Label for the button to export a style ('edit' page) or all styles ('manage' page)"
 	},
+	"findStylesForThisSiteTextOff": {
+		"description": "Text for a link that gets a list of styles for another sites when there are no styles available for current site",
+		"message": "There are no styles available for this site. You can be the first to create one!"
+	},
+	"findStylesForThisSiteLinkOff": {
+		"description": "text for link (<a>) after findStylesForThisSiteTextOff",
+		"message": "Find for others."
+	},
+	"findStylesForThisSiteText": {
+		"description": "Text for a link that gets a list of styles for the current site",
+		"message": "There are styles for this site. "
+	},
+	"findStylesForThisSiteLink": {
+		"description": "text for link (<a>) after findStylesForThisSiteText",
+		"message": "Choose them."
+	},
 	"findStylesForSite": {
-		"message": "Find more styles for this site.",
+		"message": "Find more styles for this site",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"helpAlt": {
@@ -209,6 +228,10 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
+    "installButtonLabel": {
+        "message": "Install Style",
+        "description": "Label inside the install button"
+    },
 	"installUpdate": {
 		"message": "Install update",
 		"description": "Label for the button to install an update for a single style"
@@ -234,12 +257,20 @@
 		"description": "Checkbox to show only enabled styles"
 	},
 	"manageOnlyEdited": {
-		"message": "Only edited styles",
+		"message": "Only created locally",
 		"description": "Checkbox to show only locally edited styles"
 	},
-	"manageText": {
-		"message": "<a href='https:\/\/userstyles.org'>Get styles on userstyles.org<\/a> | <a href='https:\/\/userstyles.org\/help\/stylish_chrome'>Get help<\/a> | <a href='https:\/\/userstyles.org\/login\/policy'>Read the privacy policy</a>",
-		"description": "Help text on the manage page"
+	"manageTextGetStyles": {
+		"message": "Get styles on userstyles.org",
+		"description": "Help text on the manage page: get more styles"
+	},
+	"manageTextGetHelp": {
+		"message": "Get help",
+		"description": "Help text on the manage page: get help"
+	},
+	"manageTextReadPP": {
+		"message": "Read the privacy policy",
+		"description": "Help text on the manage page: read privacy policy"
 	},
 	"manageTitle": {
 		"message": "Stylish",
@@ -250,20 +281,24 @@
 		"description": "Label (must be very short) for the checkbox in the toolbar button context menu controlling toolbar badge text."
 	},
 	"noStylesForSite": {
-		"message": "No styles installed for this site.",
+		"message": "You don't have any styles installed for this web page",
 		"description": "Text displayed when no styles are installed for the current site"
 	},
+    "numberOfWeeklyInstalls": {
+      "message": "Number of weekly installs",
+      "description": "Text of popup when hovering over installs icon"
+    },
 	"openManage": {
-		"message": "Manage installed styles.",
+		"message": "Manage Styles",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Create New Style",
+		"description": "Link to open the creation page."
 	},
 	"optionsHeading": {
 		"message": "Options",
 		"description": "Heading for options section on manage page."
-	},
-	"popupStylesFirst": {
-		"message": "List styles before commands in the toolbar button menu",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
 	},
 	"prefShowBadge": {
 		"message": "Show number of styles active for the current site on the toolbar button",
@@ -419,5 +454,51 @@
 	"writeStyleForURL": {
 		"message": "this URL",
 		"description": "Text for link in toolbar pop-up to write a new style for the current URL"
-	}
+	},
+	"noServerConnection": {
+		"message": "You chose to opt-out from seeing available styles for this site directly on Stylish. Visit %noServerConnectionParam1% to see available styles, or update your %noServerConnectionParam2% to see them here.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "Settings",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Opting out means you won't be able to see available styles directly on the Stylish add on. Visit Userstyles.org to reach them, or opt back in at any time.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
+	},
+	"chooseStyleFromLib": {
+		"message": "Choose a style from the Styles Library"
+	},
+    "createOwnStyle": {
+        "message": "Create your own style"
+    },
+    "ON": {
+        "message": "ON"
+    },
+    "OFF": {
+        "message": "OFF"
+    },
+    "styleActiveLabel": {
+        "message": "ACTIVE"
+    },
+    "styleInactiveLabel": {
+        "message": "INACTIVE"
+    },
+    "sendFeedbackLabel": {
+        "message": "Send Feedback"
+    },
+    "bckpInstStyles": {
+        "message": "Backup all installed styles"
+    },
+    "retrieveBckp": {
+        "message": "Retrieve Backup"
+    },
+    "stylesLibLabel": {
+        "message": "Styles Library"
+    }
 }

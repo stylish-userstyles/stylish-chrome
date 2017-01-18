@@ -1,4 +1,7 @@
 {
+	"extName": {
+		"message": "Stylish - Custom themes for any website"
+	},
 	"appliesToEverything": {
 		"message": "Све",
 		"description": "Text displayed for styles that apply to all sites"
@@ -24,7 +27,7 @@
 		"description": "Label for the text box controlling tab size option for the style editor."
 	},
 	"enableStyleLabel": {
-		"message": "Омогући",
+		"message": "Enable",
 		"description": "Label for the button to enable a style"
 	},
 	"styleMissingName": {
@@ -64,11 +67,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "Пронађи још стилова за овај сајт.",
+		"message": "Find more styles for this site",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "Инсталирани стилови",
+		"message": "Installed Styles",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -116,16 +119,24 @@
 			}
 		}
 	},
-	"manageText": {
-		"message": "<a href='https://userstyles.org'>Преузмите стилове са userstyles.org</a> | <a href='https://userstyles.org/help/stylish_chrome'>Помоћ</a> | <a href='https://userstyles.org/login/policy'>Прочитајте правила о приватности</a>",
-		"description": "Help text on the manage page"
+	"manageTextGetStyles": {
+		"message": "Преузмите стилове са userstyles.org",
+		"description": "Help text on the manage page: get more styles"
+	},
+	"manageTextGetHelp": {
+		"message": "Помоћ",
+		"description": "Help text on the manage page: get help"
+	},
+	"manageTextReadPP": {
+		"message": "Прочитајте правила о приватности",
+		"description": "Help text on the manage page: read privacy policy"
 	},
 	"searchStyles": {
 		"message": "Претражи садржај",
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "Онемогући",
+		"message": "Disable",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,17 +234,21 @@
 		"message": "Одбаци садржај тренутног стила и упиши преко њега увезени стил",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "Излистај стилове пре команди у менију дугмета на алатној траци",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
+	"installButtonLabel": {
+		"message": "Install Style",
+		"description": "Label inside the install button"
 	},
 	"sectionHelp": {
 		"message": "Одељци вам омогућавају да дефинишете различите делове кода који се примењују на раличите скупове УРЛ-ова у истом стилу. На пример, један исти стил може променити почетну страницу једног сајта на један начин а остатак сајта на други начин.",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "Нема инсталираних стилова за овај сајт.",
+		"message": "You don't have any styles installed for this web page",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "Number of weekly installs",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "и још",
@@ -264,8 +279,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "Управљај инсталираним стиловима.",
+		"message": "Manage Styles",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Create New Style",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "Ажурирање није успело - сервер је одговорио кодом $code$.",
@@ -325,7 +344,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "Уреди стил",
+		"message": "Edit Style",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -393,7 +412,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "Избриши",
+		"message": "Delete",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -419,5 +438,51 @@
 	"description": {
 		"message": "Измените стил интернет мреже управљачем корисничких стилова. Stylish вам омогућава да лако инсталирате теме и скинове за многе популарне сајтове.",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "You chose to opt-out from seeing available styles for this site directly on Stylish. Visit %noServerConnectionParam1% to see available styles, or update your %noServerConnectionParam2% to see them here.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "settings",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Opting out means you won't be able to see available styles directly on the Stylish add on. Visit Userstyles.org to reach them, or opt back in at any time.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
+	},
+	"chooseStyleFromLib": {
+		"message": "Choose a style from the Styles Library"
+	},
+	"createOwnStyle": {
+		"message": "Create your own style"
+	},
+	"ON": {
+		"message": "ON"
+	},
+	"OFF": {
+		"message": "OFF"
+	},
+	"styleActiveLabel": {
+		"message": "ACTIVE"
+	},
+	"styleInactiveLabel": {
+		"message": "INACTIVE"
+	},
+	"sendFeedbackLabel": {
+		"message": "Send Feedback"
+	},
+	"bckpInstStyles": {
+		"message": "Backup all installed styles"
+	},
+	"retrieveBckp": {
+		"message": "Retrieve Backup"
+	},
+	"stylesLibLabel": {
+		"message": "Styles Library"
 	}
 }

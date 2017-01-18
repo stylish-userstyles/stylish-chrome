@@ -1,4 +1,7 @@
 {
+	"extName": {
+		"message": "Stylish - 為任何網站量身打造專屬佈景主題"
+	},
 	"appliesToEverything": {
 		"message": "全部",
 		"description": "Text displayed for styles that apply to all sites"
@@ -64,7 +67,7 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "查找更多適合此網站的樣式。",
+		"message": "為此網站尋找更多樣式",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
@@ -116,9 +119,17 @@
 			}
 		}
 	},
-	"manageText": {
-		"message": "<a href='https://userstyles.org'>Get styles on userstyles.org</a> | <a href='https://userstyles.org/help/stylish_chrome'>Get help</a> | <a href='https://userstyles.org/login/policy'>Read the privacy policy</a>",
-		"description": "Help text on the manage page"
+	"manageTextGetStyles": {
+		"message": "Get styles on userstyles.org",
+		"description": "Help text on the manage page: get more styles"
+	},
+	"manageTextGetHelp": {
+		"message": "Get help",
+		"description": "Help text on the manage page: get help"
+	},
+	"manageTextReadPP": {
+		"message": "Read the privacy policy",
+		"description": "Help text on the manage page: read privacy policy"
 	},
 	"searchStyles": {
 		"message": "搜索內容",
@@ -223,17 +234,21 @@
 		"message": "棄用當前樣式內容并用導入樣式覆蓋",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "在工具欄按鈕命令行前列出樣式",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
+	"installButtonLabel": {
+		"message": "安裝樣式",
+		"description": "Label inside the install button"
 	},
 	"sectionHelp": {
 		"message": "樣式段讓你能在同一個樣式中定義適用於不同網段的不同代碼段。例如，僅僅一個樣式就能以一種樣式改變一個網站的主頁，同時以另一種樣式改變這個網站的其他頁面。",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "當前網站沒有安裝任何樣式。",
+		"message": "您沒有為此網頁安裝任何樣式",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "每週安裝數",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "以及更多",
@@ -264,8 +279,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "管理已安裝樣式",
+		"message": "管理樣式",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "建立新樣式",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "更新失敗 – 伺服器傳回代碼 $code$ 。",
@@ -357,7 +376,7 @@
 		"description": "Label before the replace input field in the editor shown on 'replaceAll' hotkey"
 	},
 	"analyticsEnabled": {
-		"message": "Send anonymous data to Stylish developers for determining user counts",
+		"message": "傳送匿名資料給 Stylish 開發人員 ",
 		"description": "Label for the enable analytics setting"
 	},
 	"editGotoLine": {
@@ -393,7 +412,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "删除",
+		"message": "刪除",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -417,7 +436,53 @@
 		"description": "Placeholder text of inputbox in keymap help popup on the edit style page. Must be very short"
 	},
 	"description": {
-		"message": "用Stylish（一個用戶樣式管理器）重塑網頁。 Stylish 讓你能為诸多主流網站輕鬆的安裝主題和皮膚。",
+		"message": "利用 Stylish 使用者樣式管理程式，將整個網站改頭換面。有了 Stylish，您可以為許多網站安裝佈景主題和面板，還可以自創樣式。",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "您已選擇不同意，將不會直接在 Stylish 看到此網站可用的樣式。請前往 Userstyles.org 查看可用的樣式，或是更新您的設定以便在此查看樣式。",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "設定",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "選擇不同意表示您無法直接在 Stylish 附加元件看到可用的樣式。請前往 Userstyles.org 取得樣式，您隨時可以選擇同意。",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
+	},
+	"chooseStyleFromLib": {
+		"message": "從樣式庫選擇樣式"
+	},
+	"createOwnStyle": {
+		"message": "建立您自己的樣式"
+	},
+	"ON": {
+		"message": "開啟"
+	},
+	"OFF": {
+		"message": "關閉"
+	},
+	"styleActiveLabel": {
+		"message": "使用中"
+	},
+	"styleInactiveLabel": {
+		"message": "非使用中"
+	},
+	"sendFeedbackLabel": {
+		"message": "傳送意見回饋"
+	},
+	"bckpInstStyles": {
+		"message": "備份所有已安裝的樣式"
+	},
+	"retrieveBckp": {
+		"message": "擷取備份"
+	},
+	"stylesLibLabel": {
+		"message": "樣式列表"
 	}
 }

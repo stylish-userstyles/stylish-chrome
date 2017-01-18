@@ -1,4 +1,7 @@
 {
+    "extName": {
+        "message": "Stylish - Personalizza i temi per siti web"
+    },
 	"appliesToEverything": {
 		"message": "Tutto",
 		"description": "Text displayed for styles that apply to all sites"
@@ -64,11 +67,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "Trova più stili per questo sito.",
+		"message": "Trova altri stili per questo sito",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "Stili installati",
+		"message": "Stili Installati",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -116,9 +119,17 @@
 			}
 		}
 	},
-	"manageText": {
-		"message": "<a href='https://userstyles.org'>Get styles on userstyles.org</a> | <a href='https://userstyles.org/help/stylish_chrome'>Get help</a> | <a href='https://userstyles.org/login/policy'>Read the privacy policy</a>",
-		"description": "Help text on the manage page"
+	"manageTextGetStyles": {
+		"message": "Get styles on userstyles.org",
+		"description": "Help text on the manage page: get more styles"
+	},
+	"manageTextGetHelp": {
+		"message": "Get help",
+		"description": "Help text on the manage page: get help"
+	},
+	"manageTextReadPP": {
+		"message": "Read the privacy policy",
+		"description": "Help text on the manage page: read privacy policy"
 	},
 	"searchStyles": {
 		"message": "Search contents",
@@ -223,17 +234,21 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "List styles before commands in the toolbar button menu",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
+	"installButtonLabel": {
+		"message": "Installa Stile",
+		"description": "Label inside the install button"
 	},
 	"sectionHelp": {
 		"message": "Le sezioni consentono di definire diverse parti di codice da applicare a diversi insiemi di URL dello stesso stile. Ad esempio, un unico stile potrebbe modificare la home page di un sito diversamente da come modificherebbe il resto del sito.",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "Nessuno stile installato per questo sito.",
+		"message": "Nessuno stile installato per questa pagina web",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "N. install. settimanali",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "e altro ancora",
@@ -264,8 +279,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "Gestisci gli stili installati.",
+		"message": "Gestisci Stili",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Crea Stile",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "Aggiornamento non riuscito - il server ha risposto con il codice $code$.",
@@ -325,7 +344,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "Modifica di stili",
+		"message": "Modifica",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -357,7 +376,7 @@
 		"description": "Label before the replace input field in the editor shown on 'replaceAll' hotkey"
 	},
 	"analyticsEnabled": {
-		"message": "Send anonymous data to Stylish developers for determining user counts",
+		"message": "Invia dati anonimi a sviluppatori di Stylish",
 		"description": "Label for the enable analytics setting"
 	},
 	"editGotoLine": {
@@ -393,7 +412,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "Elimina",
+		"message": "Canc.",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -417,7 +436,53 @@
 		"description": "Placeholder text of inputbox in keymap help popup on the edit style page. Must be very short"
 	},
 	"description": {
-		"message": "Modifica lo stile del Web con Stylish, un gestore di stili utente. Stylish consente di installare facilmente temi e skin per Google, Facebook, YouTube, Orkut e moltissimi altri siti.",
+		"message": "Ridisegna il web con Stylish, un gestore di stili utente. Con Stylish puoi installare temi e interfacce per i siti e creare il tuo.",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "Hai scelto di rinunciare a vedere stili disponibili per questo sito direttamente su Stylish. Visita Userstyles.org per vedere stili disponibili, o aggiorna le tue impostazioni per vederli qui.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "Impostaz.",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Rinunciare significa che non potrai vedere stili disponibili sull'add-on di Stylish.Visita Userstyles.org per vederli,o scegli di visualizzarli in ogni momento.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
+	},
+	"chooseStyleFromLib": {
+		"message": "Scegli stile dalla Libr. degli Stili"
+	},
+	"createOwnStyle": {
+		"message": "Crea il tuo stile"
+	},
+	"ON": {
+		"message": "ON"
+	},
+	"OFF": {
+		"message": "OFF"
+	},
+	"styleActiveLabel": {
+		"message": "ATTIVO"
+	},
+	"styleInactiveLabel": {
+		"message": "INATTIVO"
+	},
+	"sendFeedbackLabel": {
+		"message": "Invia feedback"
+	},
+	"bckpInstStyles": {
+		"message": "Backup di tutti gli stili install."
+	},
+	"retrieveBckp": {
+		"message": "Recupera Backup"
+	},
+	"stylesLibLabel": {
+		"message": "Stili Disponibili"
 	}
 }

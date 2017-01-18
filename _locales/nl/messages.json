@@ -1,4 +1,7 @@
 {
+    "extName": {
+        "message": "Stylish: Aangepaste thema's voor elke website"
+    },
 	"appliesToEverything": {
 		"message": "Alles",
 		"description": "Text displayed for styles that apply to all sites"
@@ -24,7 +27,7 @@
 		"description": "Label for the text box controlling tab size option for the style editor."
 	},
 	"enableStyleLabel": {
-		"message": "Inschakelen",
+		"message": "Insch.",
 		"description": "Label for the button to enable a style"
 	},
 	"styleMissingName": {
@@ -64,11 +67,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "Meer stijlen zoeken voor deze website.",
+		"message": "Zoek meer stijlen voor deze site",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "Geïnstalleerde stijlen",
+		"message": "Geïnst. stijlen",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -116,16 +119,24 @@
 			}
 		}
 	},
-	"manageText": {
-		"message": "<a href='https://userstyles.org'>Verkrijg stijlen op userstyles.org</a> | <a href='https://userstyles.org/help/stylish_chrome'>Verkrijg hulp</a> | <a href='https://userstyles.org/login/policy'>Lees de privacy-overeenkomst</a>",
-		"description": "Help text on the manage page"
+	"manageTextGetStyles": {
+		"message": "Verkrijg stijlen op userstyles.org",
+		"description": "Help text on the manage page: get more styles"
+	},
+	"manageTextGetHelp": {
+		"message": "Verkrijg hulp",
+		"description": "Help text on the manage page: get help"
+	},
+	"manageTextReadPP": {
+		"message": "Lees de privacy-overeenkomst",
+		"description": "Help text on the manage page: read privacy policy"
 	},
 	"searchStyles": {
 		"message": "Inhoud doorzoeken",
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "Uitschakelen",
+		"message": "Uitsch.",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,17 +234,21 @@
 		"message": "Verwerp de inhoud van de huidige stijl en overschrijf het met de geïmporteerde stijl",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "Stijlen vóór commando's opsomming in het werkbalkknopmenu",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
+	"installButtonLabel": {
+		"message": "Stijl inst.",
+		"description": "Label inside the install button"
 	},
 	"sectionHelp": {
 		"message": "Secties stellen u in staat om andere stukken code toe te passen op andere URL's in dezelfde stijl. Bijv.: een enkele stijl kan de homepage van een site aanpassen op een bepaalde manier, terwijl de rest van de site op een andere manier wordt aangepast.",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "Geen geïnstalleerde stijlen voor deze website.",
+		"message": "Er zijn geen stijlen voor deze webpagina geïnstalleerd ",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "Aantal install. per week",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "en meer",
@@ -264,8 +279,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "Geïnstalleerde stijlen beheren.",
+		"message": "Stijlen beh.",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Maak Stijl",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "Update mislukt - server gaf code $code$ als antwoord.",
@@ -325,7 +344,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "Stijl bewerken",
+		"message": "Bewerken",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -357,7 +376,7 @@
 		"description": "Label before the replace input field in the editor shown on 'replaceAll' hotkey"
 	},
 	"analyticsEnabled": {
-		"message": "Verstuur anonieme gegevens naar de Stylish-ontwikkelaars voor het bepalen van het aantal gebruikers",
+		"message": "Stuur anonieme gegevens naar Stylish ontwikkelaars",
 		"description": "Label for the enable analytics setting"
 	},
 	"editGotoLine": {
@@ -393,7 +412,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "Verwijderen",
+		"message": "Verw.",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -417,7 +436,53 @@
 		"description": "Placeholder text of inputbox in keymap help popup on the edit style page. Must be very short"
 	},
 	"description": {
-		"message": "Voorzie het web van een ander uiterlijk met Stylish, een gebruikersstijlbeheerder. Stylish stelt u in staat om eenvoudig thema's en stijlen te installeren voor vele populaire websites.",
+		"message": "Pas het uiterlijk van het web aan met Stylish, de gebruikers stijl manager. Installeer en maak zelf met Stylish thema's en weergaven",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "U koos voor opt-out voor het bekijken van voor deze website beschikbare stijlen direct op Stylish. Bezoek Userstyles.org om de beschikbare stijlen te zien, of werk uw instellingen bij om ze hier te zien.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "Instell.",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Opt-out betekent dat u de beschikbare stijlen niet direct op de Stylish add-on kunt zien. Bezoek Userstyles.org om ze te bereiken, of kies op enig moment opt-back.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
+	},
+	"chooseStyleFromLib": {
+		"message": "Kies een stijl in de Styles bibliotheek"
+	},
+	"createOwnStyle": {
+		"message": "Creëer uw eigen stijl"
+	},
+	"ON": {
+		"message": "AAN"
+	},
+	"OFF": {
+		"message": "UIT"
+	},
+	"styleActiveLabel": {
+		"message": "ACTIEF"
+	},
+	"styleInactiveLabel": {
+		"message": "INACTIEF"
+	},
+	"sendFeedbackLabel": {
+		"message": "Stuur feedback"
+	},
+	"bckpInstStyles": {
+		"message": "Backup alle geïnstalleerde stijlen"
+	},
+	"retrieveBckp": {
+		"message": "Ophalen Backup"
+	},
+	"stylesLibLabel": {
+		"message": "Collectie De Stijl"
 	}
 }

@@ -1,4 +1,7 @@
 {
+    "extName": {
+        "message": "Stylish - ウェブサイト用カスタムテーマ"
+    },
 	"appliesToEverything": {
 		"message": "すべて",
 		"description": "Text displayed for styles that apply to all sites"
@@ -24,7 +27,7 @@
 		"description": "Label for the text box controlling tab size option for the style editor."
 	},
 	"enableStyleLabel": {
-		"message": "有効化",
+		"message": "有効にする",
 		"description": "Label for the button to enable a style"
 	},
 	"styleMissingName": {
@@ -64,11 +67,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "このサイト用の他のスタイルを検索",
+		"message": "このサイト用のスタイルをもっと探す",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "インストール済みのスタイル",
+		"message": "インストールされたスタイル",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -116,16 +119,24 @@
 			}
 		}
 	},
-	"manageText": {
-		"message": "<a href='https://userstyles.org'>Get styles on userstyles.org</a> | <a href='https://userstyles.org/help/stylish_chrome'>Get help</a> | <a href='https://userstyles.org/login/policy'>Read the privacy policy</a>",
-		"description": "Help text on the manage page"
+	"manageTextGetStyles": {
+		"message": "Get styles on userstyles.org",
+		"description": "Help text on the manage page: get more styles"
+	},
+	"manageTextGetHelp": {
+		"message": "Get help",
+		"description": "Help text on the manage page: get help"
+	},
+	"manageTextReadPP": {
+		"message": "Read the privacy policy",
+		"description": "Help text on the manage page: read privacy policy"
 	},
 	"searchStyles": {
 		"message": "Search contents",
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "無効化",
+		"message": "無効にする",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,17 +234,21 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "List styles before commands in the toolbar button menu",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
+	"installButtonLabel": {
+		"message": "スタイルをインストールする",
+		"description": "Label inside the install button"
 	},
 	"sectionHelp": {
 		"message": "セクションを利用すると、1 つのスタイルの中で複数のコードを定義し、それぞれ異なる URL に適用することができます。たとえば、単一のスタイルで、サイトのトップページの表示方法と他のページの表示方法を変えることができます。",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "このサイト用のスタイルはインストールされていません。",
+		"message": "このウェブページ用にインストールされたスタイルがありません",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "週間インストール数",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "サイトを追加",
@@ -264,8 +279,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "インストール済みのスタイルを管理",
+		"message": "スタイルを管理する",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "新しいスタイルを作る",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "更新に失敗しました - サーバーが応答コード「$code$」を返しています。",
@@ -325,7 +344,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "スタイルを編集",
+		"message": "スタイルを編集する",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -357,7 +376,7 @@
 		"description": "Label before the replace input field in the editor shown on 'replaceAll' hotkey"
 	},
 	"analyticsEnabled": {
-		"message": "Send anonymous data to Stylish developers for determining user counts",
+		"message": "Stylish開発者に匿名データを送る",
 		"description": "Label for the enable analytics setting"
 	},
 	"editGotoLine": {
@@ -393,7 +412,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "削除",
+		"message": "削除する",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -417,7 +436,53 @@
 		"description": "Placeholder text of inputbox in keymap help popup on the edit style page. Must be very short"
 	},
 	"description": {
-		"message": "Stylish はユーザー スタイルを管理するツールで、ウェブのスタイルを変更することができます。Stylish を利用すると、Google、Facebook、YouTube、orkut など、さまざまなサイトに対応したテーマやスキンを簡単にインストールできます。",
+		"message": "ユーザスタイルマネージャーのStylishで、ウェブをリスタイルしましょう。 Stylishでは複数サイトにテーマとスキンをインストールして、独自のものを作り出せます。",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "Stylish上で直接見ることのできる、このサイト用のスタイルをオプトアウトしました。 利用可能なスタイルを見るには、Userstyles.orgにアクセスするか、ここで見られるように設定を更新してください。",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"設定noServerConnectionParam2": {
+		"message": "設定",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "オプトアウトとは、使用可能なスタイルをStylishアドオンで直接見られないことを意味します。 Userstyles.orgにアクセスするか、いつでもオプトインしてください。",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
+	},
+	"chooseStyleFromLib": {
+		"message": "スタイルライブラリからスタイルを選択する"
+	},
+	"createOwnStyle": {
+		"message": "独自のスタイルを作成する"
+	},
+	"ON": {
+		"message": "オン"
+	},
+	"OFF": {
+		"message": "オフ"
+	},
+	"styleActiveLabel": {
+		"message": "アクティブ"
+	},
+	"styleInactiveLabel": {
+		"message": "非アクティブ"
+	},
+	"sendFeedbackLabel": {
+		"message": "フィードバックを送る"
+	},
+	"bckpInstStyles": {
+		"message": "インストールされた全スタイルをバックアップする"
+	},
+	"retrieveBckp": {
+		"message": "バックアップの回収"
+	},
+	"stylesLibLabel": {
+		"message": "使用可能なスタイル"
 	}
 }

@@ -100,7 +100,12 @@ function setCleanItem(node, isClean) {
 function isCleanGlobal() {
 	var clean = Object.keys(dirty).length == 0;
 	setDirtyClass(document.body, !clean);
-	document.getElementById("save-button").disabled = clean;
+    var saveBtn = document.getElementById("save-button")
+    if (clean){
+        //saveBtn.removeAttribute('disabled');
+    }else{
+        //saveBtn.setAttribute('disabled', true);
+    }
 	return clean;
 }
 
@@ -211,17 +216,17 @@ function initCodeMirror() {
 	// user option values
 	CM.getOption = function (o) {
 		return CodeMirror.defaults[o];
-	}
+	};
 	CM.setOption = function (o, v) {
 		CodeMirror.defaults[o] = v;
 		editors.forEach(function(editor) {
 			editor.setOption(o, v);
 		});
-	}
+	};
 
 	CM.prototype.getSection = function() {
 		return this.display.wrapper.parentNode;
-	}
+	};
 
 	// preload the theme so that CodeMirror can calculate its metrics in DOMContentLoaded->setupLivePrefs()
 	var theme = prefs.get("editor.theme");
@@ -250,6 +255,7 @@ function initCodeMirror() {
 			document.querySelectorAll("#options *[data-option][id^='editor.']")
 				.map(function(option) { return option.id })
 		);
+		analyticsEventReport("Add_style", "shown");
 	});
 
 	hotkeyRerouter.setState(true);
@@ -413,6 +419,7 @@ getActiveTab(function(tab) {
 });
 
 function goBackToManage(event) {
+	analyticsEventReport("Add_style", "sm_back_to_manage");
 	if (useHistoryBack) {
 		event.stopPropagation();
 		event.preventDefault();
@@ -435,7 +442,7 @@ window.onbeforeunload = function() {
 	}
 	updateLintReport(null, 0);
 	return confirm(t('styleChangesNotSaved'));
-}
+};
 
 function addAppliesTo(list, name, value) {
 	var showingEverything = list.querySelector(".applies-to-everything") != null;
@@ -528,7 +535,11 @@ function removeSection(event) {
 }
 
 function removeAreaAndSetDirty(area) {
-	area.querySelectorAll('.style-contributor').some(function(node) {
+	var contributors = area.querySelectorAll('.style-contributor');
+	if(!contributors.length){
+		setCleanItem(area, false);
+	}
+	contributors.some(function(node) {
 		if (node.savedValue) {
 			// it's a saved section, so make it dirty and stop the enumeration
 			setCleanItem(area, false);
@@ -561,7 +572,7 @@ function setupGlobalSearch() {
 		findNext: CodeMirror.commands.findNext,
 		findPrev: CodeMirror.commands.findPrev,
 		replace: CodeMirror.commands.replace
-	}
+	};
 	var originalOpenDialog = CodeMirror.prototype.openDialog;
 	var originalOpenConfirm = CodeMirror.prototype.openConfirm;
 
@@ -986,6 +997,7 @@ function beautify(event) {
 		script.src = "beautify/beautify-css.js";
 		script.onload = doBeautify;
 	}
+	analyticsEventReport("Add_style", "sm_beautify");
 	function doBeautify() {
 		var tabs = prefs.get("editor.indentWithTabs");
 		var options = prefs.get("editor.beautify");
@@ -1132,8 +1144,15 @@ function initHooks() {
 	document.getElementById("cancel-button").addEventListener("click", goBackToManage);
 	document.getElementById("lint-help").addEventListener("click", showLintHelp);
 	document.getElementById("lint").addEventListener("click", gotoLintIssue);
+	document.getElementById("editor.lineWrapping").addEventListener("click", 
+	      function(){ analyticsEventReport("Add_style", "sm_word_wrap"); }, false);
+	document.getElementById("editor.smartIndent").addEventListener("click", 
+	      function(){ analyticsEventReport("Add_style", "sm_indentation"); }, false);
+	document.getElementById("editor.indentWithTabs").addEventListener("click", 
+	      function(){ analyticsEventReport("Add_style", "sm_tabs_indentation"); }, false);
+	
 	window.addEventListener("resize", resizeLintReport);
-
+  
 	// touch devices don't have onHover events so the element we'll be toggled via clicking (touching)
 	if ("ontouchstart" in document.body) {
 		document.querySelector("#lint h2").addEventListener("click", toggleLintReport);
@@ -1252,6 +1271,7 @@ function save() {
 		sections: getSectionsHashes()
 	};
 	chrome.runtime.sendMessage(request, saveComplete);
+	analyticsEventReport("Add_style", "sm_save");
 }
 
 function getSectionsHashes() {
@@ -1297,6 +1317,7 @@ function saveComplete(style) {
 }
 
 function showMozillaFormat() {
+	analyticsEventReport("Add_style", "sm_export_ff");
 	var popup = showCodeMirrorPopup(t("styleToMozillaFormatTitle"), "", {readOnly: true});
 	popup.codebox.setValue(toMozillaFormat());
 	popup.codebox.execCommand("selectAll");
@@ -1317,6 +1338,7 @@ function toMozillaFormat() {
 }
 
 function fromMozillaFormat() {
+	analyticsEventReport("Add_style", "sm_import_ff");
 	var popup = showCodeMirrorPopup(t("styleFromMozillaFormatPrompt"), tHTML("<div>\
 		<button name='import-append' i18n-text='importAppendLabel' i18n-title='importAppendTooltip'></button>\
 		<button name='import-replace' i18n-text='importReplaceLabel' i18n-title='importReplaceTooltip'></button>\
@@ -1616,12 +1638,13 @@ function getParams() {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	switch (request.method) {
 		case "styleUpdated":
-			if (styleId && styleId == request.style.id) {
+			if (styleId && styleId == request.id) {
 				initWithStyle(request.style);
 			}
 			break;
 		case "styleDeleted":
-			if (styleId && styleId == request.style.id) {
+			if (styleId && styleId == request.id) {
+				window.onbeforeunload = function() {};
 				window.close();
 				break;
 			}

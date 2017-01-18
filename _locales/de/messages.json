@@ -1,4 +1,7 @@
 {
+	"extName": {
+		"message": "Stylish- Benutzerdef. Motive f. jede Webseite"
+	},
 	"appliesToEverything": {
 		"message": "Alle",
 		"description": "Text displayed for styles that apply to all sites"
@@ -64,11 +67,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "Weitere Styles für diese Webseite finden.",
+		"message": "Finde mehr Designs für diese Seite",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "Installierte Styles",
+		"message": "Install. Designs",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -116,16 +119,25 @@
 			}
 		}
 	},
-	"manageText": {
-		"message": "<a href='https://userstyles.org'>Get styles on userstyles.org</a> | <a href='https://userstyles.org/help/stylish_chrome'>Get help</a> | <a href='https://userstyles.org/login/policy'>Read the privacy policy</a>",
-		"description": "Help text on the manage page"
+	"manageTextGetStyles": {
+		"message": "Get styles on userstyles.org",
+		"description": "Help text on the manage page: get more styles"
 	},
+	"manageTextGetHelp": {
+		"message": "Get help",
+		"description": "Help text on the manage page: get help"
+	},
+	"manageTextReadPP": {
+		"message": "Read the privacy policy",
+		"description": "Help text on the manage page: read privacy policy"
+	},
+	
 	"searchStyles": {
 		"message": "Search contents",
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "Deaktivieren",
+		"message": "Deakt.",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,17 +235,21 @@
 		"message": "Discard contents of current style and overwrite it with the imported style",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "Im Menü der Symbolleisten-Schaltfläche die Styles vor den Bedienelementen auflisten ",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
+	"installButtonLabel": {
+		"message": "Designs ins.",
+		"description": "Label inside the install button"
 	},
 	"sectionHelp": {
 		"message": "Mit Bereichen können Sie unterschiedliche Code-Teile auf unterschiedliche URLs in dem gleichen Style anwenden. Beispielsweise kann über einen einzigen Style die Startseite der Website geändert werden, während für den Rest der Website andere Änderungen gelten.",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "Für diese Webseite sind keine Styles installiert.",
+		"message": "Anzahl der installierten Designs für diese Webseite",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "Anz. d. wöchent. Install.",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "und weitere",
@@ -264,8 +280,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "Installierte Styles verwalten.",
+		"message": "Designs verw.",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Designs erstell.",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "Aktualisierung fehlgeschlagen - Server hat den Fehler $code$ ausgegeben.",
@@ -325,7 +345,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "Style bearbeiten",
+		"message": "Bearb.",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -357,7 +377,7 @@
 		"description": "Label before the replace input field in the editor shown on 'replaceAll' hotkey"
 	},
 	"analyticsEnabled": {
-		"message": "Send anonymous data to Stylish developers for determining user counts",
+		"message": "Sende anonyme Daten zu den Stylish-Entwicklern",
 		"description": "Label for the enable analytics setting"
 	},
 	"editGotoLine": {
@@ -393,7 +413,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "Löschen",
+		"message": "Lösch.",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -417,7 +437,53 @@
 		"description": "Placeholder text of inputbox in keymap help popup on the edit style page. Must be very short"
 	},
 	"description": {
-		"message": "Gestalten Sie das Web mit Stylish, einem Manager für Benutzer-Styles, um. Stylish lässt Sie ganz einfach Themes und Skins für viele beliebte Webseiten installieren.",
+		"message": "Gestalte d. Web mit Stylish, dem Designmanager, neu. Mit Stylish kannst du Motive&Bilder f.  Webseiten install. u. Eigene erstellen.",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "Du hast dich abgemeldet u. siehst die verfüg. Designs für die Seite nicht mehr direkt auf Stylish. Gehe auf Userstyles.org, um d. verfüg. Designs zu sehen o. deine Einstell. zu aktualisieren, um diese zu sehen.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "Einstell.",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "Durch d. Abmeld.kannst du verfüg. Designs nicht mehr direkt bei den Stylish Add-Ons sehen. Gehe auf Userstyles.org, um auf diese zuzugr o. melde dich wieder an.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
+	},
+	"chooseStyleFromLib": {
+		"message": "Wähl ein Design aus d. Design-Sammlungy"
+	},
+	"createOwnStyle": {
+		"message": "Erstelle dein eigenes Design"
+	},
+	"ON": {
+		"message": "AN"
+	},
+	"OFF": {
+		"message": "AUS"
+	},
+	"styleActiveLabel": {
+		"message": "AKTIV"
+	},
+	"styleInactiveLabel": {
+		"message": "NICHT AK."
+	},
+	"sendFeedbackLabel": {
+		"message": "Feedback senden"
+	},
+	"bckpInstStyles": {
+		"message": "Alle installierten Designs sichern"
+	},
+	"retrieveBckp": {
+		"message": "Backup wiederherstell."
+	},
+	"stylesLibLabel": {
+		"message": "Designs Erhältlich"
 	}
 }

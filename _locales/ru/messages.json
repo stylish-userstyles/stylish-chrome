@@ -1,4 +1,7 @@
 {
+    "extName": {
+        "message": "Stylish – кастомные темы для любого сайта"
+    },
 	"appliesToEverything": {
 		"message": "Все",
 		"description": "Text displayed for styles that apply to all sites"
@@ -24,7 +27,7 @@
 		"description": "Label for the text box controlling tab size option for the style editor."
 	},
 	"enableStyleLabel": {
-		"message": "Включить",
+		"message": "Активир.",
 		"description": "Label for the button to enable a style"
 	},
 	"styleMissingName": {
@@ -64,11 +67,11 @@
 		"description": "'Yes' button in a confirm dialog"
 	},
 	"findStylesForSite": {
-		"message": "Найдите другие стили для этого веб-сайта.",
+		"message": "Найти больше стилей для этого сайта",
 		"description": "Text for a link that gets a list of styles for the current site"
 	},
 	"manageHeading": {
-		"message": "Установленные стили",
+		"message": "Установл. стили",
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
@@ -116,16 +119,24 @@
 			}
 		}
 	},
-	"manageText": {
-		"message": "<a href='https://userstyles.org'>Скачать стили с userstyles.org</a> | <a href='https://userstyles.org/help/stylish_chrome'>Справка</a> | <a href='https://userstyles.org/login/policy'>Политика конфиденциальности</a>",
-		"description": "Help text on the manage page"
+	"manageTextGetStyles": {
+		"message": "Скачать стили с  userstyles.org",
+		"description": "Help text on the manage page: get more styles"
+	},
+	"manageTextGetHelp": {
+		"message": "Справка",
+		"description": "Help text on the manage page: get help"
+	},
+	"manageTextReadPP": {
+		"message": "Политика конфиденциальности",
+		"description": "Help text on the manage page: read privacy policy"
 	},
 	"searchStyles": {
 		"message": "Искать по содержимому",
 		"description": "Label for the search filter textbox on the Manage styles page"
 	},
 	"disableStyleLabel": {
-		"message": "Отключить",
+		"message": "Деактивир.",
 		"description": "Label for the button to disable a style"
 	},
 	"prefShowBadge": {
@@ -223,17 +234,21 @@
 		"message": "Удалить содержимое редактируемого стиля и заменить его на импортируемый стиль",
 		"description": "Label for the button to import and overwrite current style"
 	},
-	"popupStylesFirst": {
-		"message": "Показывать список стилей перед командами в интерфейсе тулбара",
-		"description": "Label for the checkbox controlling section order in the toolbar button menu."
+	"installButtonLabel": {
+		"message": "Устан. стиль",
+		"description": "Label inside the install button"
 	},
 	"sectionHelp": {
 		"message": "Разделы позволяют задавать разный код для различных наборов URL в пределах одного стиля. Например, стиль может применяться к главной странице не так, как к остальным частям сайта.",
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "Для этого веб-сайта не установлено ни одного стиля.",
+		"message": "Для этой веб-страницы не установлены стили",
 		"description": "Text displayed when no styles are installed for the current site"
+	},
+	"numberOfWeeklyInstalls": {
+		"message": "Число еженед. инсталляций",
+		"description": "Text of popup when hovering over installs icon"
 	},
 	"appliesDisplayTruncatedSuffix": {
 		"message": "и другие",
@@ -264,8 +279,12 @@
 		"description": "Label for 'applies to' fields on the edit/add screen"
 	},
 	"openManage": {
-		"message": "Управление установленными стилями.",
+		"message": "Упр. стилями",
 		"description": "Link to open the manage page."
+	},
+	"openCreate": {
+		"message": "Создать стиль",
+		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
 		"message": "Ошибка обновления: сервер вернул код \"$code$\".",
@@ -325,7 +344,7 @@
 		"description": "Help text for 'applies to' section"
 	},
 	"editStyleHeading": {
-		"message": "Изменение стиля",
+		"message": "Изменить",
 		"description": "Title of the page for editing styles"
 	},
 	"appliesUrlOption": {
@@ -357,7 +376,7 @@
 		"description": "Label before the replace input field in the editor shown on 'replaceAll' hotkey"
 	},
 	"analyticsEnabled": {
-		"message": "Отправлять деперсонифицированные (анонимные) сведения разработчикам Stylish для участия в подсчете количества пользователей.",
+		"message": "Послать анонимные данные разработчикам Stylish",
 		"description": "Label for the enable analytics setting"
 	},
 	"editGotoLine": {
@@ -393,7 +412,7 @@
 		"description": "Label before the replace-with input field in the editor shown on Ctrl-H etc."
 	},
 	"deleteStyleLabel": {
-		"message": "Удалить",
+		"message": "Удал.",
 		"description": "Label for the button to delete a style"
 	},
 	"addStyleLabel": {
@@ -417,7 +436,53 @@
 		"description": "Placeholder text of inputbox in keymap help popup on the edit style page. Must be very short"
 	},
 	"description": {
-		"message": "Настраивайте стили веб-сайтов с помощью менеджера стилей Stylish. Он позволяет легко установить темы и изменить внешний вид сайтов Google, Facebook, YouTube, Orkut и множества других веб-страниц.",
+		"message": "Стильный интернет со Stylish, пользовательским менеджером стилей. Устанавливайте темы и скины для многих сайтов и создавайте свои.",
 		"description": "Extension description"
+	},
+	"noServerConnection": {
+		"message": "Вы можете отключить показ доступных стилей для этого сайта напрямую в Stylish. Зайдите на Userstyles.org, чтобы увидеть доступные стили, или измените ваши настройки, чтобы видеть их здесь.",
+		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
+	},
+	"noServerConnectionParam1": {
+		"message": "Userstyles.org",
+		"description": "text of link to website in noServerConnection"
+	},
+	"noServerConnectionParam2": {
+		"message": "Настройки",
+		"description": "text of link to settings in noServerConnection"
+	},
+	"statsDisabled": {
+		"message": "После отключения вы не будете видеть доступные стили напрямую в надстройке Stylish. Зайдите на Userstyles.com, чтобы их найти или включите показ в любой момент.",
+		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
+	},
+	"chooseStyleFromLib": {
+		"message": "Выберите стиль из Библиотеки стилей"
+	},
+	"createOwnStyle": {
+		"message": "Создайте свой стиль"
+	},
+	"ON": {
+		"message": "Вкл"
+	},
+	"OFF": {
+		"message": "Вык"
+	},
+	"styleActiveLabel": {
+		"message": "АКТИВ."
+	},
+	"styleInactiveLabel": {
+		"message": "НЕАКТИВ."
+	},
+	"sendFeedbackLabel": {
+		"message": "Послать отзыв"
+	},
+	"bckpInstStyles": {
+		"message": "Резерв. копия всех установл. стилей"
+	},
+	"retrieveBckp": {
+		"message": "Восстан. рез. копии"
+	},
+	"stylesLibLabel": {
+		"message": "Доступные стили"
 	}
 }

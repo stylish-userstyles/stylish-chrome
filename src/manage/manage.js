@@ -122,6 +122,8 @@ function createStyleElement(style) {
 					location.href = url;
 				});
 			}
+			var styleid = getGlobalId(event);
+			analyticsEventReport("Manage_installed_styles", "edit", styleid);
 		}
 	});
 	e.querySelector(".enable").addEventListener("click", function(event) { enable(event, true); }, false);
@@ -135,6 +137,8 @@ function createStyleElement(style) {
 function enable(event, enabled) {
 	var id = getId(event);
 	enableStyle(id, enabled);
+	var styleid = getGlobalId(event);
+	analyticsEventReport("Manage_installed_styles", (!!enabled ? "enable" : "disable"), styleid);
 }
 
 function doDelete() {
@@ -143,10 +147,21 @@ function doDelete() {
 	}
 	var id = getId(event);
 	deleteStyle(id);
+	analyticsEventReport("Manage_installed_styles", "delete", getGlobalId(event));
 }
 
 function getId(event) {
 	return getStyleElement(event).getAttribute("style-id");
+}
+
+function getGlobalId(event){
+	var murl = getStyleElement(event).getAttribute("style-md5-url");
+	var matches = /\/(\d+)\.(md5)/.exec(murl);
+	if (matches && matches.length == 3){
+	    return parseInt(matches[1]);
+	} else {
+	    return "local";
+	}
 }
 
 function getStyleElement(event) {
@@ -193,6 +208,8 @@ function handleDelete(id) {
 
 function doCheckUpdate(event) {
 	checkUpdate(getStyleElement(event));
+	var styleid = getGlobalId(event);
+	analyticsEventReport("Manage_installed_styles", "check_uptate", styleid);
 }
 
 function applyUpdateAll() {
@@ -206,9 +223,15 @@ function applyUpdateAll() {
 	Array.prototype.forEach.call(document.querySelectorAll(".can-update .update"), function(button) {
 		button.click();
 	});
+	analyticsEventReport("Manage_installed_styles", "sm_install_update");
+}
+
+function addNewStyle(){
+      analyticsEventReport("Manage_installed_styles", "sm_write_new");
 }
 
 function checkUpdateAll() {
+	analyticsEventReport("Manage_installed_styles", "sm_check_updates_all");
 	var btnCheck = document.getElementById("check-all-updates");
 	var btnApply = document.getElementById("apply-all-updates");
 	var noUpdates = document.getElementById("update-all-no-updates");
@@ -360,6 +383,7 @@ function doUpdate(event) {
 
 	// updating the UI will be handled by the general update listener
 	lastUpdatedStyleId = updatedCode.id;
+	analyticsEventReport("Manage_installed_styles", "installe_update", getGlobalId(event));
 	chrome.runtime.sendMessage(updatedCode, function () {});
 }
 
@@ -469,17 +493,36 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	document.getElementById("check-all-updates").addEventListener("click", checkUpdateAll);
+	document.getElementById("add-style-label").addEventListener("click", addNewStyle);
 	document.getElementById("apply-all-updates").addEventListener("click", applyUpdateAll);
 	document.getElementById("search").addEventListener("input", searchStyles);
+	
+	document.getElementById("get-styles-link").addEventListener("click", function(){
+	  analyticsEventReport("Manage_installed_styles", "sm_links", "get_styles"); });
+	document.getElementById("get-help-link").addEventListener("click", function(){ 
+	  analyticsEventReport("Manage_installed_styles", "sm_links", "get_help"); });
+	document.getElementById("get-pp-link").addEventListener("click", function(){
+	  analyticsEventReport("Manage_installed_styles", "sm_links", "read_pp"); });
+	
 	searchStyles(true); // re-apply filtering on history Back
 
 	setupLivePrefs([
 		"manage.onlyEnabled",
 		"manage.onlyEdited",
 		"show-badge",
-		"popup.stylesFirst",
 		"analyticsEnabled"
 	]);
 	initFilter("enabled-only", document.getElementById("manage.onlyEnabled"));
 	initFilter("edited-only", document.getElementById("manage.onlyEdited"));
+	document.querySelector("#analyticsEnabled").addEventListener("change", function(){
+		if (!this.checked && this.getAttribute("data-warned") != "1"){
+			this.setAttribute("data-warned", "1");
+			alert(chrome.i18n.getMessage("statsDisabled"));
+			prefs.get('popup.checkNewStyles').popupCheckDisable();
+		}else if (this.checked){
+			this.removeAttribute("data-warned");
+			prefs.get('popup.checkNewStyles').popupCheckEnable();
+		}
+	});
+	analyticsEventReport("Manage_installed_styles", "shown");
 });

@@ -155,16 +155,18 @@
 
 		<template data-id="styleHomepage">
 			<a target="_blank">
-				<img src="world_go.png" alt="*">
+				<img src="images/world_go.png" alt="*">
 			</a>
 		</template>
 
-		<script src="localization.js"></script>
-		<script src="health.js"></script>
-		<script src="storage.js"></script>
-		<script src="messaging.js"></script>
-		<script src="apply.js"></script>
-		<script src="manage.js"></script>
+		<script src="src/localization.js"></script>
+		<script src="src/health.js"></script>
+		<script src="src/storage.js"></script>
+		<script src="src/refilter.js"></script>
+		<script src="src/messaging.js"></script>
+		<script src="src/inject/apply.js"></script>
+		<script src="src/analytics.js"></script>
+		<script src="src/manage/manage.js"></script>
 	</head>
 	<body id="stylish-manage">
 		<div id="header">
@@ -181,14 +183,25 @@
 				<span id="update-all-no-updates" class="hidden" i18n-text="updateAllCheckSucceededNoUpdate"></span>
 			</p>
 			<p><a href="edit.html"><button id="add-style-label" i18n-text="addStyleLabel"></button></a></p>
+			<p>
+				<button id="file-all-styles" i18n-text="bckpInstStyles"></button>
+			</p>
+			<p>
+				<button id="unfile-all-styles" i18n-text="retrieveBckp"></button>
+			</p>
 			<div id="options">
 				<h2 id="options-heading" i18n-text="optionsHeading"></h2>
 				<div><input id="show-badge" type="checkbox"><label id="show-badge-label" for="show-badge" i18n-text="prefShowBadge"></label></div>
-				<div><input id="popup.stylesFirst" type="checkbox"><label id="stylesFirst-label" for="popup.stylesFirst" i18n-text="popupStylesFirst"></label></div>
 				<div><input id="analyticsEnabled" type="checkbox"><label id="analyticsEnabled-label" for="analyticsEnabled" i18n-text="analyticsEnabled"></label></div>
 			</div>
-			<p id="manage-text" i18n-html="manageText"></p>
+			<!--<p id="manage-text" i18n-html="manageText"></p>-->
+			<p id="manage-text">
+				<a href='https://userstyles.org' id='get-styles-link' i18n-text='manageTextGetStyles'></a> | <a href='https://userstyles.org/help/stylish_chrome' id='get-help-link' i18n-html='manageTextGetHelp'></a> | <a href='https://userstyles.org/login/policy' id='get-pp-link' i18n-html='manageTextReadPP'></a>
+			</p>
 		</div>
 		<div id="installed"></div>
+		<script src="src/fileSaveLoad.js"></script>
+		<script src="src/manage/moment.min.js"></script>
+		<script src="src/manage/fileSaveLoad.js"></script>
 	</body>
 </html>

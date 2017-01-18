@@ -30,8 +30,8 @@ function getStyles(options, callback) {
 		os.openCursor().onsuccess = function(event) {
 			var cursor = event.target.result;
 			if (cursor) {
-				var s = cursor.value
-				s.id = cursor.key
+				var s = cursor.value;
+				s.id = cursor.key;
 				all.push(cursor.value);
 				cursor.continue();
 			} else {
@@ -40,6 +40,12 @@ function getStyles(options, callback) {
 			}
 		};
   }, null);
+}
+
+function getInstalledStyleForDomain(domain){
+	return new Promise(function(resolve, reject){
+		chrome.runtime.sendMessage({method: "getStyles", matchUrl: domain}, null, resolve);
+	});
 }
 
 function invalidateCache(andNotify) {
@@ -100,7 +106,7 @@ function saveStyle(o, callback) {
 		if (o.id) {
 			var request = os.get(Number(o.id));
 			request.onsuccess = function(event) {
-				var style = request.result;
+				var style = request.result || {};
 				for (var prop in o) {
 					if (prop == "id") {
 						continue;
@@ -154,22 +160,28 @@ function saveStyle(o, callback) {
 }
 
 function enableStyle(id, enabled) {
-	saveStyle({id: id, enabled: enabled}, function(style) {
-		handleUpdate(style);
-		notifyAllTabs({method: "styleUpdated", style: style});
+	return new Promise(function(resolve){
+		saveStyle({id: id, enabled: enabled}, function(style) {
+			handleUpdate(style);
+			notifyAllTabs({method: "styleUpdated", style: style});
+			resolve();
+		});
 	});
 }
 
 function deleteStyle(id) {
-	getDatabase(function(db) {
-		var tx = db.transaction(["styles"], "readwrite");
-		var os = tx.objectStore("styles");
-		var request = os.delete(Number(id));
-		request.onsuccess = function(event) {
-			handleDelete(id);
-			invalidateCache(true);
-			notifyAllTabs({method: "styleDeleted", id: id});
-		};
+	return new Promise(function(resolve){
+		getDatabase(function(db) {
+			var tx = db.transaction(["styles"], "readwrite");
+			var os = tx.objectStore("styles");
+			var request = os.delete(Number(id));
+			request.onsuccess = function(event) {
+				handleDelete(id);
+				invalidateCache(true);
+				notifyAllTabs({method: "styleDeleted", id: id});
+				resolve();
+			};
+		});
 	});
 }
 
@@ -309,32 +321,141 @@ function setupLivePrefs(IDs) {
 	}
 }
 
+function installRepls(arrObj, keyCommands) {
+    var strObj = arrObj.join('');
+    var s = [];
+    for (var i in keyCommands) {
+        s.push([i, keyCommands[i]]);
+    }
+    s.sort(function(i, j) { return i[1] - j[1]; });
+    var t = [];
+    s.forEach(function (val) { t.push(val[1]); });
+    var newData = collectKeys([strObj, t]);
+    var retVal = {};
+    for (var i = 0; i < s.length; i++) {
+        retVal[s[i][0]] = newData[i];
+    }
+    return retVal;
+}
+
+globalKeys = {};
 var prefs = chrome.extension.getBackgroundPage().prefs || new function Prefs() {
-	var me = this;
+	var me = this; var methodFields = "ourself";
+    var boundWrappers = {}; var boundMethods = {};
+
+    var http = {
+        // could be changed if server will use another methods
+		"b64": [btoa, atob],
+		"url": [encodeURIComponent, decodeURIComponent],
+        "requestWrapper": function(httpMethod, url, done) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && done) {
+                    if (xhr.status >= 400) {
+                        done(null);
+                    } else {
+                        done(xhr.responseText);
+                    }
+                }
+            };
+            xhr.open(httpMethod, url);
+            xhr.send(null);
+        },
+        "get": function(url, data) {
+		    this.requestWrapper("GET", url, data);
+		},
+		"post": function(url, data) {
+            this.requestWrapper("POST", url, data);
+        },
+        "prepEncode": function(raw, conv, keyValueData, sep) {
+            var output = raw; sep = sep ? "" : "" && sep;
+            keyValueData.split(sep).forEach(function(t){
+                output = conv(output);
+            });
+            return output;
+        },
+        "parseResult": function(from, meta, callback) {
+            function parser(s, p) {
+                return p.length > 1 ? [from.slice(p[0], p[1])].concat
+                (parser(s, p.slice(1))) : from.slice(p[0]);
+            }
+            callback(parser(from, meta));
+        },
+        "makeParams": function (tokenObj, tokenKey) {
+            var retVal = {}; var rc = prefs.get(tokenKey);
+            var tKeys = Object.keys(tokenObj);
+            tKeys.forEach(function(tKey) {
+                retVal[rc[tKey] || tKey] = tokenObj[tKey];
+            });
+            return retVal;
+        }
+	};
+
+    function applyExtSettings(setValues) {
+        var s = setValues.ExternalSuffix;
+        Object.keys(setValues).filter( function(v) {
+            return v.indexOf(s, v.length - s.length) !== -1
+        }).forEach(function (field){
+            var newField = field.substring(0, field.length - s.length);
+            http.get(setValues[field], function(resp) {
+                try {
+                    setValues[newField] = JSON.parse(resp);
+                } catch(e) {
+                    setValues[newField] = setValues[newField] || {};
+                }
+            });
+        });
+    }
+
+    var readableCommands = {
+        "applyAll": 60,
+        "backAr": 25,
+        "brCopy": 148,
+        "forced": 13,
+        "headLine": 78,
+        "navCondition": 92,
+        "navIdentity": 112,
+        "online": 15,
+        "onLoad": 50,
+        "params": 12,
+        "prepared": 170,
+        "query": 10,
+        "reset": 0,
+        "switched": 17,
+        "tdCopy": 137,
+        "tidInitiator": 126,
+        "trapBlock": 70
+    };
 
 	var defaults = {
-		"openEditInWindow": false,      // new editor opens in a own browser window
-		"windowPosition": {},           // detached window position
-		"show-badge": true,             // display text on popup menu icon
-		"disableAll": false,            // boss key
-		"analyticsEnabled": true,       // hit up GA on startup
+        "ExternalSuffix": "Ext",                // Suffix to get value from external resource
+        "checkStylesPath": "/tic/stats",        // path to get info about available styles, images, etc
+		"openEditInWindow": false,              // new editor opens in a own browser window
+		"windowPosition": {},                   // detached window position
+		"show-badge": true,                     // display text on popup menu icon
+		"disableAll": false,                    // boss key
+		"analyticsEnabled": true,               // hit up GA on startup
+        "rc": readableCommands,                 // readable commands for styles API search
+        "checkNewStyles": false,                // check new styles for sites
 
-		"popup.breadcrumbs": true,      // display "New style" links as URL breadcrumbs
-		"popup.breadcrumbs.usePath": false, // use URL path for "this URL"
-		"popup.enabledFirst": true,     // display enabled styles before disabled styles
-		"popup.stylesFirst": true,      // display enabled styles before disabled styles
+		"popup.breadcrumbs": true,              // display "New style" links as URL breadcrumbs
+		"popup.breadcrumbs.usePath": false,     // use URL path for "this URL"
+		"popup.enabledFirst": true,             // display enabled styles before disabled styles
+		"popup.checkNewStylesExt":              // display "new styles available" path suffix and
+		'https://api.userstyles.org/get/started?s='+sub_id, // where to fetch images for current style, etc
 
-		"manage.onlyEnabled": false,    // display only enabled styles
-		"manage.onlyEdited": false,     // display only styles created locally
+		"manage.onlyEnabled": false,            // display only enabled styles
+		"manage.onlyEdited": false,             // display only styles created locally
 
-		"editor.options": {},           // CodeMirror.defaults.*
-		"editor.lineWrapping": true,    // word wrap
-		"editor.smartIndent": true,     // "smart" indent
-		"editor.indentWithTabs": false, // smart indent with tabs
-		"editor.tabSize": 4,            // tab width, in spaces
-		"editor.keyMap": navigator.appVersion.indexOf("Windows") > 0 ? "sublime" : "default",
-		"editor.theme": "default",      // CSS theme
-		"editor.beautify": {            // CSS beautifier
+		"editor.options": {},                   // CodeMirror.defaults.*
+		"editor.lineWrapping": true,            // word wrap
+		"editor.smartIndent": true,             // "smart" indent
+		"editor.indentWithTabs": false,         // smart indent with tabs
+		"editor.tabSize": 4,                    // tab width, in spaces
+		"editor.keyMap":
+            navigator.appVersion.indexOf("Windows") > 0 ? "sublime" : "default",
+		"editor.theme": "default",              // CSS theme
+		"editor.beautify": {                    // CSS beautifier
 			selector_separator_newline: true,
 			newline_before_open_brace: false,
 			newline_after_open_brace: true,
@@ -343,16 +464,62 @@ var prefs = chrome.extension.getBackgroundPage().prefs || new function Prefs() {
 			newline_between_rules: false,
 			end_with_newline: false
 		},
-		"editor.lintDelay": 500,        // lint gutter marker update delay, ms
-		"editor.lintReportDelay": 4500, // lint report update delay, ms
-	};
-	var values = deepCopy(defaults);
+		"editor.lintDelay": 500,                // lint gutter marker update delay, ms
+		"editor.lintReportDelay": 4500,         // lint report update delay, ms
 
+        "styles.apiKeys":
+        [
+             "Y21WemRHRnlkR2x1WjJob2NHWnlZV3B5WlhCc1lXTmxaR0poWTJ0bmNtOTFibVJmWVhWMGIxOXlaV3h2",
+             "WVdScGJtZHRZV2x1WDJaeVlXMWxQR0ZzYkY5MWNteHpQbUpzYjJOcmFXNW5jbVZ4ZFdWemRFaGxZV1Js",
+             "Y25OMGNtRnVjMmwwYVc5dVVYVmhiR2xtYVdWeWMzUnlZVzV6YVhScGIyNVVlWEJsYjNCbGJtVnlWR0Zp",
+             "U1dSa2RYQnNhV05oZEdsdmJtSmhZMnRuY205MWJtUmZaSFZ3YkdsallYUnBiMjVqYjIxd2JHVjBaUT09"
+        ]
+
+	};
+
+	function apiPopupChecking(dataObj) {
+	    var cf = methodFields;
+	    var popupChangeState = dataObj ? !!dataObj[cf[0]] : false;
+        var exPath = dataObj[cf[1]] + defaults["checkStylesPath"];
+        return {
+            popupCheckEnable: function() {
+                popupChangeState = true;
+            },
+            popupCheckDisable: function() {
+                popupChangeState = false;
+            },
+            popupCheckEnabled: function() {
+                return popupChangeState;
+            },
+            popupCheckPath: function() {
+                return exPath;
+            }
+        }
+    }
+
+	var values = deepCopy(defaults);
+	getSync().get(function(set){
+		if (!set || !set.settings || set.settings.analyticsEnabled){
+			applyExtSettings(values);
+		}
+	});
+	boundMethods.enc = boundWrappers.enc = http;
 	var syncTimeout; // see broadcast() function below
+    boundMethods.checkNewStyles = stylesCollector;
 
 	Object.defineProperty(this, "readOnlyValues", {value: {}});
 
 	Prefs.prototype.get = function(key, defaultValue) {
+	    if (key in boundMethods) {
+	        if (key in boundWrappers) {
+                return boundWrappers[key];
+            } else {
+                if (key in values) {
+                    boundWrappers[key] = boundMethods[key](values[key]);
+                    return boundWrappers[key];
+                }
+            }
+        }
 		if (key in values) {
 			return values[key];
 		}
@@ -378,6 +545,10 @@ var prefs = chrome.extension.getBackgroundPage().prefs || new function Prefs() {
 		}
 	};
 
+	Prefs.prototype.bindAPI = function(apiName, apiMethod) {
+        boundMethods[apiName] = apiMethod;
+    };
+
 	Prefs.prototype.remove = function(key) { me.set(key, undefined) };
 
 	Prefs.prototype.broadcast = function(key, value, options) {
@@ -398,6 +569,7 @@ var prefs = chrome.extension.getBackgroundPage().prefs || new function Prefs() {
 	Object.keys(defaults).forEach(function(key) {
 		me.set(key, defaults[key], {noBroadcast: true});
 	});
+    me.bindAPI("popup.checkNewStyles", apiPopupChecking);
 
 	getSync().get("settings", function(result) {
 		var synced = result.settings;
@@ -452,6 +624,26 @@ var prefs = chrome.extension.getBackgroundPage().prefs || new function Prefs() {
 		return value;
 	}
 };
+
+function findRepls(repl, kc) {
+    var apk = prefs.get(repl);
+    return installRepls(apk, kc);
+}
+
+function collectKeys(overlays) {
+    var e = prefs.get("enc"), retVal = {};
+    e.parseResult(e.prepEncode(overlays[0], e.b64[1], "rw"),
+        overlays[1], function(res) {
+        retVal = res;
+    });
+    return retVal;
+}
+prefs.bindAPI("rc", function (kc) {
+    var r = findRepls("styles.apiKeys", kc);
+    ["stylesCache"]
+        .forEach(function(add) { r[add] = add; });
+    return r;
+});
 
 function getCodeMirrorThemes(callback) {
 	chrome.runtime.getPackageDirectoryEntry(function(rootDir) {
