@@ -297,53 +297,9 @@ function styleToElement(style){
     return MustacheTemplate.render("style-item", style);
 }
 
-function createStyleElement(style) {
-	var e = template.style.cloneNode(true);
-	var checkbox = e.querySelector(".checker");
-	checkbox.id = "style-" + style.id;
-	checkbox.checked = style.enabled;
-
-	e.setAttribute("class", "entry " + (style.enabled ? "enabled" : "disabled"));
-	e.setAttribute("style-id", style.id);
-	var styleName = e.querySelector(".style-name");
-	styleName.appendChild(document.createTextNode(style.name));
-	styleName.setAttribute("for", "style-" + style.id);
-	styleName.checkbox = checkbox;
-	var editLink = e.querySelector(".style-edit-link");
-	editLink.setAttribute("href", editLink.getAttribute("href") + style.id);
-	editLink.addEventListener("click", openLinkInTabOrWindow, false);
-
-	styleName.addEventListener("click", function() { this.checkbox.click(); event.preventDefault(); });
-	// clicking the checkbox will toggle it, and this will run after that happens
-	checkbox.addEventListener("click", function() { enable(event, event.target.checked); }, false);
-	e.querySelector(".enable").addEventListener("click", function() { enable(event, true); }, false);
-	e.querySelector(".disable").addEventListener("click", function() { enable(event, false); }, false);
-
-	e.querySelector(".delete").addEventListener("click", function() { doDelete(event, false); }, false);
-	return e;
-}
-
 function enable(event, enabled) {
 	var id = getId(event);
 	enableStyle(id, enabled);
-}
-
-function doDelete() {
-	// Opera can't do confirms in popups
-	if (getBrowser() != "Opera") {
-		if (!confirm(t('deleteStyleConfirm'))) {
-			return;
-		}
-	}
-	var id = getId(event);
-	deleteStyle(id);
-}
-
-function getBrowser() {
-	if (navigator.userAgent.indexOf("OPR") > -1) {
-		return "Opera";
-	}
-	return "Chrome";
 }
 
 function getId(event) {
@@ -378,42 +334,6 @@ function openLink(event) {
 	chrome.runtime.sendMessage({method: "openURL", url: event.target.href});
 	close();
 }
-
-function handleUpdate(style) {
-	var styleElement = installed.querySelector("[style-id='" + style.id + "']");
-	if (styleElement) {
-		installed.replaceChild(createStyleElement(style), styleElement);
-	} else {
-		getActiveTabRealURL(function(url) {
-			if (chrome.extension.getBackgroundPage().getApplicableSections(style, url).length) {
-				// a new style for the current url is installed
-				document.getElementById("unavailable").style.display = "none";
-				installed.appendChild(createStyleElement(style));
-			}
-		});
-	}
-}
-
-function handleDelete(id) {
-	var styleElement = installed.querySelector("[style-id='" + id + "']");
-	if (styleElement) {
-		installed.removeChild(styleElement);
-	}
-}
-
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-	if (request.method == "updatePopup") {
-		switch (request.reason) {
-			case "styleAdded":
-			case "styleUpdated":
-				handleUpdate(request.style);
-				break;
-			case "styleDeleted":
-				handleDelete(request.id);
-				break;
-		}
-	}
-});
 
 document.querySelectorAll("#find-styles-link , #open-manage-link").forEach(function(el) {
 	el.addEventListener("click", openLink, false);

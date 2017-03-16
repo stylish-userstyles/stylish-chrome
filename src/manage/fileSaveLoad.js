@@ -7,10 +7,14 @@ saveButton.addEventListener('click', onSaveToFileClick);
 loadButton.addEventListener('click', onLoadFromFileClick);
 
 function onSaveToFileClick(){
-    getStyles({}, function(styles){
-        var text = JSON.stringify(styles);
-        saveAsFile(text, generateFileName());
-    });
+    chrome.permissions.request({permissions: ['downloads']}, function(granted){
+        if (granted){
+            getStyles({}, function(styles){
+                var text = JSON.stringify(styles);
+                saveAsFile(text, generateFileName());
+            });
+        }
+    })
 }
 
 function onLoadFromFileClick(){

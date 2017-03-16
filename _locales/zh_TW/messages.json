@@ -282,7 +282,7 @@
 		"message": "管理樣式",
 		"description": "Link to open the manage page."
 	},
-	"openCreate": {
+	"vopenCreate": {
 		"message": "建立新樣式",
 		"description": "Link to open the creation page."
 	},

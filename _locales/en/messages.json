@@ -136,7 +136,7 @@
 		"description": "Confirmation before deleting a style"
 	},
 	"description": {
-		"message": "Restyle the web with Stylish, a user styles manager. With Stylish you can install themes & skins for many sites and create your own.",
+		"message": "Customize any website to your color scheme in 1 click, thousands of user styles with beautiful themes, skins & free backgrounds.",
 		"description": "Extension description"
 	},
 	"disableAllStyles": {
@@ -500,5 +500,8 @@
     },
     "stylesLibLabel": {
         "message": "Styles Library"
-    }
+    },
+	"noStylesInstalled": {
+		"message": "You don’t have any styles installed for this site."
+	}
 }

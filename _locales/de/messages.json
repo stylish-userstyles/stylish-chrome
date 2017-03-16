@@ -75,7 +75,7 @@
 		"description": "Heading for the manage page"
 	},
 	"styleBeautify": {
-		"message": "Beautify",
+		"message": "Verzieren",
 		"description": "Label for the CSS-beautifier button on the edit style page"
 	},
 	"styleEnabledLabel": {
@@ -244,7 +244,7 @@
 		"description": "Help text for sections"
 	},
 	"noStylesForSite": {
-		"message": "Anzahl der installierten Designs für diese Webseite",
+		"message": "Anzahl der installierten Designs für diese WebseiteF",
 		"description": "Text displayed when no styles are installed for the current site"
 	},
 	"numberOfWeeklyInstalls": {
@@ -457,7 +457,7 @@
 		"description": "Alert message that is displayed when user hit on 'Send anonymous...' checkbox inside manage page"
 	},
 	"chooseStyleFromLib": {
-		"message": "Wähl ein Design aus d. Design-Sammlungy"
+		"message": "Wähl ein Design aus d. Design-Sammlung"
 	},
 	"createOwnStyle": {
 		"message": "Erstelle dein eigenes Design"

@@ -235,7 +235,7 @@
 		"description": "Label for the button to import and overwrite current style"
 	},
 	"installButtonLabel": {
-		"message": "Instala un estilo",
+		"message": "Instalar",
 		"description": "Label inside the install button"
 	},
 	"sectionHelp": {

@@ -61,13 +61,8 @@ function isDisabledAll(){
     return chrome.extension.getBackgroundPage().prefs.get("disableAll");
 }
 
-function buildDomainForFiltering(url){
-    var parsed = parseUrl(url);
-    return parsed.protocol + "//" + parsed.hostname + "/";
-}
-
 getActiveTabPromise().then(function(currentTab){
-    getInstalledStyleForDomain(buildDomainForFiltering(currentTab.url)).then(renderInstalledTab);
+    getInstalledStyleForUrl(currentTab.url).then(renderInstalledTab);
 });
 
 function renderInstalledTab(styles){
@@ -113,6 +108,7 @@ function preProcessLocalStyle(style){
     style.styleid = "local" + style.id;
     preProcessImage(style);
     style.screenshot = style.thumbnail;
+    style.additionalClass = "local";
 }
 
 function preProcessInstalledStyle(style){
@@ -123,7 +119,8 @@ function preProcessInstalledStyle(style){
     style.deactivateButtonLabel = chrome.i18n.getMessage("disableStyleLabel");
     style.deleteButtonLabel = chrome.i18n.getMessage("deleteStyleLabel");
     style.sendFeedbackLabel = chrome.i18n.getMessage("sendFeedbackLabel");
-    style.additionalClass = style.enabled ? "enabled" : "disabled";
+    style.additionalClass = style.additionalClass || "";
+    style.additionalClass += " " + (style.enabled ? "enabled" : "disabled");
     style.active_str = chrome.i18n.getMessage("styleActiveLabel");
     style.inactive_str = chrome.i18n.getMessage("styleInactiveLabel");
     style.style_edit_url = "edit.html?id=" + style.id;
@@ -162,7 +159,7 @@ function renderAllSwitch(){
 function getUserAuthStatus(){
     return new Promise(function(resolve){
         getSync().get(function(set){
-            if (!set.settings.analyticsEnabled){
+            if (set.settings && !set.settings.analyticsEnabled){
                 resolve(false);
             }else{
                 new Requester().get(USER_CHECK_AUTH_URL).then(function(text){

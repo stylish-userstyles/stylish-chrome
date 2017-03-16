@@ -36,16 +36,20 @@ function getStyles(options, callback) {
 				cursor.continue();
 			} else {
 				cachedStyles = all;
-				callback(filterStyles(all, options));
+				try{
+					callback(filterStyles(all, options));
+				} catch(e){
+					// no error in console, it works
+				}
 			}
 		};
   }, null);
 }
 
-function getInstalledStyleForDomain(domain){
-	return new Promise(function(resolve, reject){
-		chrome.runtime.sendMessage({method: "getStyles", matchUrl: domain}, null, resolve);
-	});
+function getInstalledStyleForUrl(url){
+    return new Promise(function(resolve){
+        chrome.runtime.sendMessage({method: "getStyles", matchUrl: url}, null, resolve);
+    });
 }
 
 function invalidateCache(andNotify) {
@@ -162,7 +166,6 @@ function saveStyle(o, callback) {
 function enableStyle(id, enabled) {
 	return new Promise(function(resolve){
 		saveStyle({id: id, enabled: enabled}, function(style) {
-			handleUpdate(style);
 			notifyAllTabs({method: "styleUpdated", style: style});
 			resolve();
 		});
@@ -176,7 +179,6 @@ function deleteStyle(id) {
 			var os = tx.objectStore("styles");
 			var request = os.delete(Number(id));
 			request.onsuccess = function(event) {
-				handleDelete(id);
 				invalidateCache(true);
 				notifyAllTabs({method: "styleDeleted", id: id});
 				resolve();

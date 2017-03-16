@@ -147,6 +147,7 @@ function doDelete() {
 	}
 	var id = getId(event);
 	deleteStyle(id);
+	handleDelete(id);
 	analyticsEventReport("Manage_installed_styles", "delete", getGlobalId(event));
 }
 
@@ -177,14 +178,18 @@ function getStyleElement(event) {
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	switch (request.method) {
-		case "styleUpdated":
-			handleUpdate(request.style);
-			break;
 		case "styleAdded":
 			installed.appendChild(createStyleElement(request.style));
 			break;
 		case "styleDeleted":
 			handleDelete(request.id);
+			break;
+		case "updatePopup":
+			switch (request.reason){
+				case "styleUpdated":
+					handleUpdate(request.style);
+					break;
+			}
 			break;
 	}
 });
@@ -514,15 +519,23 @@ document.addEventListener("DOMContentLoaded", function() {
 	]);
 	initFilter("enabled-only", document.getElementById("manage.onlyEnabled"));
 	initFilter("edited-only", document.getElementById("manage.onlyEdited"));
-	document.querySelector("#analyticsEnabled").addEventListener("change", function(){
+	document.querySelector("#analyticsEnabled").addEventListener("change", function(e){
+		// last-value is to fix multiple triggering of change event
+		// for some reasone change is triggered 4 times
+		if (this.getAttribute("last-value") === this.checked.toString()){
+			return;
+		}
 		if (!this.checked && this.getAttribute("data-warned") != "1"){
+			analyticsEventReport("Manage_installed_styles", "opt_mode", "unchecked");
 			this.setAttribute("data-warned", "1");
 			alert(chrome.i18n.getMessage("statsDisabled"));
 			prefs.get('popup.checkNewStyles').popupCheckDisable();
 		}else if (this.checked){
+			analyticsEventReport("Manage_installed_styles", "opt_mode", "checked");
 			this.removeAttribute("data-warned");
 			prefs.get('popup.checkNewStyles').popupCheckEnable();
 		}
+		this.setAttribute("last-value", this.checked);
 	});
 	analyticsEventReport("Manage_installed_styles", "shown");
 });

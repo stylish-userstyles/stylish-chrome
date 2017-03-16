@@ -235,7 +235,7 @@
 		"description": "Label for the button to import and overwrite current style"
 	},
 	"installButtonLabel": {
-		"message": "スタイルをインストールする",
+		"message": "インストール",
 		"description": "Label inside the install button"
 	},
 	"sectionHelp": {
@@ -283,7 +283,7 @@
 		"description": "Link to open the manage page."
 	},
 	"openCreate": {
-		"message": "新しいスタイルを作る",
+		"message": "スタイルを作る",
 		"description": "Link to open the creation page."
 	},
 	"updateCheckFailBadResponseCode": {
@@ -447,7 +447,7 @@
 		"message": "Userstyles.org",
 		"description": "text of link to website in noServerConnection"
 	},
-	"設定noServerConnectionParam2": {
+	"noServerConnectionParam2": {
 		"message": "設定",
 		"description": "text of link to settings in noServerConnection"
 	},

@@ -440,7 +440,7 @@
 		"description": "Extension description"
 	},
 	"noServerConnection": {
-		"message": "Вы можете отключить показ доступных стилей для этого сайта напрямую в Stylish. Зайдите на Userstyles.org, чтобы увидеть доступные стили, или измените ваши настройки, чтобы видеть их здесь.",
+		"message": "Вы отключили показ доступных стилей для этого сайта напрямую в Stylish. Зайдите на Userstyles.org, чтобы увидеть доступные стили, или измените ваши настройки, чтобы видеть их здесь.",
 		"description": "Message which is shown when user deselected sending anonymous data to server AND has some styles installed."
 	},
 	"noServerConnectionParam1": {
@@ -484,5 +484,8 @@
 	},
 	"stylesLibLabel": {
 		"message": "Доступные стили"
+	},
+	"noStylesInstalled": {
+		"message": "Для данного сайта у вас не установленно стилей."
 	}
 }
