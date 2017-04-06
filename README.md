@@ -12,6 +12,51 @@ See the [help docs](http://userstyles.org/help/stylish_chrome) or [ask in the fo
 
 The source is hosted on [GitHub](https://github.com/JasonBarnabe/stylish-chrome) and pull requests are welcome. Translations can be done on [Transifex](https://www.transifex.com/projects/p/stylish-for-chrome/) but are welcome as pull requests as well.
 
+## Advanced Usage
+
+### Building yourself
+
+If you wish to build the extension yourself and add it to chrome, simply clone the repository:
+
+```
+git clone https://github.com/JasonBarnabe/stylish-chrome
+```
+And add the extension to chrome:
+
+- Open "Extensions" Dialog
+- Click "Load Unpacked Extension..."
+- Navigate to the location of the repository
+
+That should do it.
+
+### Modifying Permissions
+
+If you wish to restrict the permissions the extension has, you can chose specific websites by editing `manifest.json`. the relevant key to change is the `content_scripts.*.matches` expressions.
+
+Full access (default):
+
+```js
+// ...
+    {
+      "matches": ["http://*/*", "https://*/*", "file:///*"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "js": ["apply.js"]
+    }
+```
+
+Restricted to all `foobar.com` subdomains:
+
+```js
+// ...
+    {
+      "matches": ["http://*.foobar.com/*", "https://*.foobar.com/*"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "js": ["apply.js"]
+    }
+```
+
 ## License
 
 For copyright status of the "codemirror" directory, see codemirror/LICENSE. Everything else is:
